@@ -1,40 +1,61 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    private InputManager inputManager;
-    private InputAction movement;
-    [SerializeField] private int walkSpeed;
+    [SerializeField] private float movementSpeed = 5f;
+    [SerializeField] private float jumpForce;
+
+    private CharacterController characterController;
+
+    private Vector3 inputVector; 
+    private Vector3 movementVector;
+    private float gravity = -10f;
+    [SerializeField] private bool isGrounded = true;
+
     private Rigidbody rb;
 
-
-    private void Awake()
+    private void Start()
     {
-        inputManager = new InputManager();
+        characterController = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
     }
 
-    private void OnEnable()
+    private void Update()
     {
-        if (rb == null)
-            rb = this.GetComponent<Rigidbody>();
+        GetInput(); //Récupère les inputs
+        MovePlayer(); //Déplace le joueurs
+        if (Input.GetButtonDown("Jump") && isGrounded) Jump(); //isGrounded = false;
 
-        movement = inputManager.Player.Move;
-        movement.Enable();
+    }
+    private void GetInput()
+    {
+        inputVector = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")); //Converti en Vector3 l'input Horizontal et Vertical
+        inputVector.Normalize(); //Permet un mouvement circulaire plutôt que linéaire
+        inputVector = transform.TransformDirection(inputVector);
 
-        //inputManager.Player.Reload.started += Reload();
-        //inputManager.Player.Reload.Enable();
+        movementVector = (inputVector * movementSpeed) + (Vector3.up * gravity);
     }
 
-    private void OnDisable()
+    private void MovePlayer()
     {
-        movement.Disable();
-        //inputManager.Player.Reload.Disable();
+        characterController.Move(movementVector * Time.deltaTime);
     }
 
-    private void FixedUpdate()
+    private void Jump()
     {
-        Debug.Log($"Movement Values {movement.ReadValue<Vector2>()}");
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Ground")) isGrounded = true;
+    }
+    
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground")) isGrounded = false;
     }
 }
