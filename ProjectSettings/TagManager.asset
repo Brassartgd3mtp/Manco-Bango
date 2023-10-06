@@ -4,16 +4,18 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Ground
+  - Destroyable
+  - Blue
+  - Red
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - 
-  - 
+  - Bullet
+  - Player
   - 
   - 
   - 
