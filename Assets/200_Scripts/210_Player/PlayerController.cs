@@ -31,26 +31,17 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
 
-    [SerializeField] private AudioSource movementSound;
-    [SerializeField] private AudioSource jumpSound;
-
-
-
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
         readyToJump = true;
-
-        // Obtenez les composants AudioSource de l'objet joueur
-        movementSound = GetComponentInChildren<AudioSource>();
-    
     }
 
     private void Update()
     {
-        //Je fait un Raycast qui part de mon personnage et qui va en direction du sol pour dï¿½tecter s'il est en contact avec le sol
+        //Je fait un Raycast qui part de mon personnage et qui va en direction du sol pour détecter s'il est en contact avec le sol
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
 
         GetInput();
@@ -79,31 +70,7 @@ public class PlayerController : MonoBehaviour
 
             Jump();
 
-            // Jouez le son de saut
-            if (jumpSound != null)
-            {
-                jumpSound.Play();
-            }
-
             Invoke(nameof(ResetJump), jumpCooldown);
-        }
-
-        // Movement sounds
-        if (horizontalInput != 0f || verticalInput != 0f)
-        {
-            // Jouez le son de mouvement
-            if (movementSound != null && !movementSound.isPlaying)
-            {
-                movementSound.Play();
-            }
-        }
-        else
-        {
-            // Arrï¿½tez le son de mouvement lorsque le joueur ne bouge pas
-            if (movementSound != null)
-            {
-                movementSound.Stop();
-            }
         }
     }
 

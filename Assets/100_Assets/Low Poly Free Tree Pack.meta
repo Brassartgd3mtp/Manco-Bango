@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/100_Assets/Low Poly Free Tree Pack.meta
 guid: a530ea706c45e724e922fa5e70acc8df
+========
+guid: 050fd0677496ade4395d875a3066cee8
+>>>>>>>> f988b23f7698967cb42255dbb6a07312e3e279b2:Assets/200_Scripts/210_Player.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -5,14 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Destroyable
-  - BlueDoor
-  - RedDoor
-  - BlueButton
-  - RedButton
-  - ArmeJoueur
-  - Wall
-  - StartZone
-  - StopZone
+  - Blue
+  - Red
   layers:
   - Default
   - TransparentFX
