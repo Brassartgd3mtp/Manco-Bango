@@ -28,16 +28,16 @@ public class SlotColor : MonoBehaviour
         {
             if (barrel.barrelStock.Count > i && barrel.barrelStock[i] != null)
             {
-                // Je met à jour la couleur de l'emplacement
+                //Je met à jour la couleur de l'emplacement
                 slotColors[slots[i]] = barrel.barrelStock[i];
             }
             else
             {
-                // je check si l'index n'existe plus dans barrel.barrelStock, alors je le met en noir
+                //Je check si l'index n'existe plus dans barrel.barrelStock, alors je le met en noir
                 slotColors[slots[i]] = Color.black;
             }
 
-            // J'applique la couleur à l'emplacement
+            //J'applique la couleur à l'emplacement
             slots[i].color = slotColors[slots[i]];
         }
     }

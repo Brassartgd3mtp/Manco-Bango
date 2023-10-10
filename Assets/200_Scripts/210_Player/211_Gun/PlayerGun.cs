@@ -9,7 +9,6 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private int magazineSize;
 
     [SerializeField] private Camera fpCam;
-    [SerializeField] private Transform attackPoint; //Je récupère un point dans ma scène qui correspond au bout de mon canon
 
     [SerializeField] private Barrel barrel;
 
@@ -19,7 +18,6 @@ public class PlayerGun : MonoBehaviour
     private void Start()
     {
         barrel = GetComponent<Barrel>();
-        particleManager.CanonColor.Stop();
     }
 
     private void Update()
@@ -47,7 +45,7 @@ public class PlayerGun : MonoBehaviour
                 }
 
                 //Je joue ma particule d'impacte à l'endroit du contact avec la couleur de l'élément
-                particleManager.Impact(barrel.barrelStock[0], targetPoint);
+                particleManager.Impact(barrel.barrelStock[0], targetPoint, hit.normal);
                 if (barrel.barrelStock.Count > 1) particleManager.NextBullet(barrel.barrelStock[1]);
             }
             else
