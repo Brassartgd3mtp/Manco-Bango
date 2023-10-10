@@ -38,8 +38,6 @@ public class ParticleManager : MonoBehaviour
 
     public void NextBullet(Color _color)
     {
-        canonColor.Stop(true);
         canonMain.startColor = new Color(_color.r, _color.g, _color.b, _color.a);
-        canonColor.Play(true);
     }
 }
