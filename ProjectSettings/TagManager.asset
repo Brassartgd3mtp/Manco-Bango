@@ -3,16 +3,25 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Destroyable
+  - BlueDoor
+  - RedDoor
+  - BlueButton
+  - RedButton
+  - ArmeJoueur
+  - Wall
+  - StartZone
+  - StopZone
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - 
-  - 
+  - Bullet
+  - Player
   - 
   - 
   - 

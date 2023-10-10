@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/TextMesh Pro/Examples & Extras/Scripts/TMP_TextInfoDebugTool.cs.meta
+guid: 21256c5b62f346f18640dad779911e20
+timeCreated: 1430348781
+licenseType: Store
+========
+guid: 5ac4ec58940799e49bc0b9d53a1d0b7a
+>>>>>>>> 28f2519d99584071369db5d5ca15ddb2c68c12fd:Assets/200_Scripts/BulletManager.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
