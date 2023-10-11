@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         else
             rb.drag = 0;
 
-        Debug.Log($"Velocity X : {rb.velocity.x}\nVelocity Z : {rb.velocity.z}");
+        
     }
 
     private void FixedUpdate()

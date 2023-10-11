@@ -22,4 +22,5 @@ public class PlayerDamageController : MonoBehaviour
             healthManager.DamageButton(damageAmount);
         }
     }
+
 }
