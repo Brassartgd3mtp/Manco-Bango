@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        //Je fait un Raycast qui part de mon personnage et qui va en direction du sol pour détecter s'il est en contact avec le sol
+        //Je fait un Raycast qui part de mon personnage et qui va en direction du sol pour dï¿½tecter s'il est en contact avec le sol
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
 
         GetInput();
@@ -78,15 +78,15 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        //Je crée des vecteurs de déplacement séparés pour l'horizontal (x) et le vertical (z)
+        //Je crï¿½e des vecteurs de dï¿½placement sï¿½parï¿½s pour l'horizontal (x) et le vertical (z)
         Vector3 horizontalMovement = orientation.right * horizontalInput;
         Vector3 verticalMovement = orientation.forward * verticalInput;
 
-        //Je vérifie si le personnage est en contact avec un mur dans la direction de chaque déplacement
+        //Je vï¿½rifie si le personnage est en contact avec un mur dans la direction de chaque dï¿½placement
         bool isTouchingWallHorizontal = Physics.Raycast(transform.position, horizontalMovement, 1.0f);
         bool isTouchingWallVertical = Physics.Raycast(transform.position, verticalMovement, 1.0f);
 
-        //J'ajoute la force de déplacement seulement si le personnage n'est pas en contact avec un mur dans cette direction
+        //J'ajoute la force de dï¿½placement seulement si le personnage n'est pas en contact avec un mur dans cette direction
         if (grounded && !isTouchingWallHorizontal)
         {
             rb.AddForce(horizontalMovement.normalized * moveSpeed * 10f, ForceMode.Force);
@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour
 
     private void SpeedControl()
     {
-        //Limite la vélocité max du joueur
+        //Limite la vï¿½locitï¿½ max du joueur
         if (rb.velocity.magnitude > moveSpeed)
         {
             Vector3 limitedVelHor = rb.velocity.normalized * moveSpeed;

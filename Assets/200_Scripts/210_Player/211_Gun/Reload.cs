@@ -37,6 +37,5 @@ public class Reload : MonoBehaviour
             }
             reloadTimeCountdown = reloadTimeSet;
         }
-        particleManager.CanonColor.Play();
     }
 }
