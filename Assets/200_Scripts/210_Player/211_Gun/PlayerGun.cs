@@ -23,6 +23,7 @@ public class PlayerGun : MonoBehaviour
     private void Update()
     {
         if (Input.GetButtonDown("Fire1")) Shoot();
+        if (Input.GetButtonDown("Dump")) Dump();
 
         if (barrel.barrelStock.Count == 0) particleManager.NextBullet(new Color(0, 0, 0, 0));
         else if (barrel.barrelStock.Count == 1) particleManager.NextBullet(barrel.barrelStock[0]);
@@ -55,5 +56,10 @@ public class PlayerGun : MonoBehaviour
         }
         else
             Debug.LogWarning("Il n'y a pas de balle dans le barillet !");
+    }
+
+    private void Dump()
+    {
+        barrel.barrelStock.Clear();
     }
 }
