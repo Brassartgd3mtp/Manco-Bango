@@ -39,9 +39,9 @@ public class PlayerGun : MonoBehaviour
             if (Physics.Raycast(ray, out hit)) //Je lance un Raycast avec comme point de départ ma variable Ray, et je check s'il touche quelque chose
             {
                 targetPoint = hit.point; //Je récupère le point de collision de mon Raycast
-                if (hit.transform.tag == "Destroyable")
+                if (hit.transform.tag == "Destroyable" && hit.collider.gameObject.layer == 0 || hit.collider.gameObject.layer == 10)
                 {
-                    Destroy(hit.transform.gameObject); //Je détruis l'objet touché s'il a le tag "Destroyable"
+                    Destroy(hit.transform.gameObject); //Je détruis l'objet touché s'il remplis les conditions
                 }
 
                 //Je joue ma particule d'impacte à l'endroit du contact avec la couleur de l'élément
