@@ -10,9 +10,10 @@ public class PlayerGun : MonoBehaviour
 
     [SerializeField] private Camera fpCam;
 
-    [SerializeField] private Barrel barrel;
+    [SerializeField] private Renderer nextBulletColor;
 
-    [SerializeField] private ParticleSystem impact;
+    private Barrel barrel;
+
     public ParticleManager particleManager;
 
     private void Start()
@@ -25,8 +26,8 @@ public class PlayerGun : MonoBehaviour
         if (Input.GetButtonDown("Fire1")) Shoot();
         if (Input.GetButtonDown("Dump")) Dump();
 
-        if (barrel.barrelStock.Count == 0) particleManager.NextBullet(new Color(0, 0, 0, 0));
-        else if (barrel.barrelStock.Count == 1) particleManager.NextBullet(barrel.barrelStock[0]);
+        if (barrel.barrelStock.Count == 0) nextBulletColor.material.color = Color.black;
+        else if (barrel.barrelStock.Count >= 1) nextBulletColor.material.color = barrel.barrelStock[0];
     }
 
     private void Shoot()
@@ -44,10 +45,8 @@ public class PlayerGun : MonoBehaviour
                 {
                     Destroy(hit.transform.gameObject); //Je détruis l'objet touché s'il remplis les conditions
                 }
-
                 //Je joue ma particule d'impacte à l'endroit du contact avec la couleur de l'élément
                 particleManager.Impact(barrel.barrelStock[0], targetPoint, hit.normal);
-                if (barrel.barrelStock.Count > 1) particleManager.NextBullet(barrel.barrelStock[1]);
             }
             else
                 targetPoint = ray.GetPoint(75); //S'il ne touche rien, je récupère un point vide pour éviter une erreur
