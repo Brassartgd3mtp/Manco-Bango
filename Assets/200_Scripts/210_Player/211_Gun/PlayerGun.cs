@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
-
+using TMPro;
 public class PlayerGun : MonoBehaviour
 {
     [SerializeField] private int shootForce, upwardForce;
@@ -14,7 +14,7 @@ public class PlayerGun : MonoBehaviour
 
     [SerializeField] private ParticleSystem impact;
     public ParticleManager particleManager;
-
+    [SerializeField] private TextMeshProUGUI textMesh;
     private void Start()
     {
         barrel = GetComponent<Barrel>();
@@ -23,15 +23,19 @@ public class PlayerGun : MonoBehaviour
     private void Update()
     {
         if (Input.GetButtonDown("Fire1")) Shoot();
-
+        if (barrel.barrelStock.Count > 0) textMesh.enabled = false;
         if (barrel.barrelStock.Count == 0) particleManager.NextBullet(new Color(0, 0, 0, 0));
+        if (barrel.barrelStock.Count == 0) textMesh.enabled = true;
         else if (barrel.barrelStock.Count == 1) particleManager.NextBullet(barrel.barrelStock[0]);
+
     }
 
     private void Shoot()
     {
         if (barrel.barrelStock.Count > 0)
         {
+            
+
             Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //Crée un point de référence au centre de l'écran (à ne pas confondre avec le pointeur)
             RaycastHit hit;
 
