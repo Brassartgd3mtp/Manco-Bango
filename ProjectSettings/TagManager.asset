@@ -7,6 +7,13 @@ TagManager:
   - Destroyable
   - Blue
   - Red
+  - BlueButton
+  - BlueDoor
+  - RedButton
+  - StopZone
+  - RedDoor
+  - ArmeJoueur
+  - StartZone
   layers:
   - Default
   - TransparentFX
@@ -16,9 +23,9 @@ TagManager:
   - UI
   - Bullet
   - Player
-  - 
-  - 
-  - 
+  - Blue
+  - Red
+  - Ennemy
   - 
   - 
   - 

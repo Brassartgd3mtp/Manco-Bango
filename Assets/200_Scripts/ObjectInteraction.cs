@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 public class ObjectInteraction : MonoBehaviour
 {
     public float interactRange = 10f;
     [SerializeField] private Camera fpCam;
+    [SerializeField] private Barrel barrel;
     public static List<GameObject> RedDoors = new List<GameObject>();
     public static List<GameObject> BlueDoors = new List<GameObject>();
 
@@ -14,34 +16,48 @@ public class ObjectInteraction : MonoBehaviour
         if (Input.GetButtonDown("Fire1")) // Le joueur tire
         {
             Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-            Debug.Log("Shoot"); 
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, interactRange))
+            if(barrel.barrelStock.Count > 0)
             {
-                if (hit.collider.CompareTag("BlueButton"))
+                if (Physics.Raycast(ray, out hit, interactRange))
                 {
-                    Debug.Log("BlueButton");
-                    // Le joueur a tiré sur un objet bleu, désactivez les portes bleues et les portes rouges
-                    foreach (GameObject door in RedDoors)
+                    if (barrel.barrelStock[0] == Color.blue)
                     {
-                        door.SetActive(true);
+                        if (hit.collider.CompareTag("BlueButton"))
+                        {
+                            // Le joueur a tiré sur un objet bleu, désactivez les portes bleues et réactiver les portes rouges
+                            foreach (GameObject door in RedDoors)
+                            {
+                                door.SetActive(true);
+                            }
+                            foreach (GameObject door in BlueDoors)
+                            {
+                                door.SetActive(false);
+                            }
+                        }
+                        else if (hit.collider.CompareTag("Destroyable") && hit.collider.gameObject.layer == 8)
+                        {
+                            Destroy(hit.collider.gameObject);
+                        }
                     }
-                    foreach (GameObject door in BlueDoors)
+                    else if (barrel.barrelStock[0] == Color.red)
                     {
-                        door.SetActive(false);
-                    }
-                }
-                else if (hit.collider.CompareTag("RedButton"))
-                {
-                    Debug.Log("Redbutton"); 
-                    // Le joueur a tiré sur un objet rouge, désactivez les portes rouges et les portes bleues
-                    foreach (GameObject door in RedDoors)
-                    {
-                        door.SetActive(false);
-                    }
-                    foreach (GameObject door in BlueDoors)
-                    {
-                        door.SetActive(true);
+                        if (hit.collider.CompareTag("RedButton"))
+                        {
+                            // Le joueur a tiré sur un objet rouge, désactivez les portes rouges et réactiver les portes bleues
+                            foreach (GameObject door in RedDoors)
+                            {
+                                door.SetActive(false);
+                            }
+                            foreach (GameObject door in BlueDoors)
+                            {
+                                door.SetActive(true);
+                            }
+                        }
+                        else if (hit.collider.CompareTag("Destroyable") && hit.collider.gameObject.layer == 9)
+                        {
+                            Destroy(hit.collider.gameObject);
+                        }
                     }
                 }
             }

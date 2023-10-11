@@ -52,6 +52,8 @@ public class PlayerController : MonoBehaviour
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+
+        Debug.Log($"Velocity X : {rb.velocity.x}\nVelocity Z : {rb.velocity.z}");
     }
 
     private void FixedUpdate()
@@ -76,27 +78,46 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        //Je calcul la direction de mon mouvement
-        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        //Je crée des vecteurs de déplacement séparés pour l'horizontal (x) et le vertical (z)
+        Vector3 horizontalMovement = orientation.right * horizontalInput;
+        Vector3 verticalMovement = orientation.forward * verticalInput;
 
-        //Je l'applique quand je suis au sol
-        if (grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+        //Je vérifie si le personnage est en contact avec un mur dans la direction de chaque déplacement
+        bool isTouchingWallHorizontal = Physics.Raycast(transform.position, horizontalMovement, 1.0f);
+        bool isTouchingWallVertical = Physics.Raycast(transform.position, verticalMovement, 1.0f);
 
-        //Et aussi quand je suis en l'air, avec un modifieur (airMultiplier)
-        else if (!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+        //J'ajoute la force de déplacement seulement si le personnage n'est pas en contact avec un mur dans cette direction
+        if (grounded && !isTouchingWallHorizontal)
+        {
+            rb.AddForce(horizontalMovement.normalized * moveSpeed * 10f, ForceMode.Force);
+        }
+        else if (!grounded && !isTouchingWallHorizontal)
+        {
+            rb.AddForce(horizontalMovement.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+        }
+
+        if (grounded && !isTouchingWallVertical)
+        {
+            rb.AddForce(verticalMovement.normalized * moveSpeed * 10f, ForceMode.Force);
+        }
+        else if (!grounded && !isTouchingWallVertical)
+        {
+            rb.AddForce(verticalMovement.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+        }
     }
 
     private void SpeedControl()
     {
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        // limit velocity if needed
-        if (flatVel.magnitude > moveSpeed)
+        //Limite la vélocité max du joueur
+        if (rb.velocity.magnitude > moveSpeed)
         {
-            Vector3 limitedVel = flatVel.normalized * moveSpeed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            Vector3 limitedVelHor = rb.velocity.normalized * moveSpeed;
+            rb.velocity = new Vector3(limitedVelHor.x, rb.velocity.y, limitedVelHor.z);
+        }
+        else if (rb.velocity.magnitude > jumpForce)
+        {
+            Vector3 limitedVelVer = rb.velocity.normalized * jumpForce;
+            rb.velocity = new Vector3(rb.velocity.x, limitedVelVer.y, rb.velocity.z);
         }
     }
 

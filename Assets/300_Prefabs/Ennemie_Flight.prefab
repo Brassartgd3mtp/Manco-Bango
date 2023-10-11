@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6984508361694275156}
   - component: {fileID: 6178137274804300181}
   - component: {fileID: 5262204619077676682}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Ennemie_Flight
   m_TagString: Destroyable
   m_Icon: {fileID: 0}
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d23fb2a8fe7e79949b8286a796d14065, type: 2}
+  - {fileID: 2100000, guid: 8c56b71d70f1ded40b157a81d99fe4bc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attractionSpeed: 5
-  detectionRadius: 5
+  detectionRadius: 40
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
