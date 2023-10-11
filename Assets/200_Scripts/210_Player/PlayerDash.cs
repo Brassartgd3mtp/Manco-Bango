@@ -1,30 +1,43 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerDash : MonoBehaviour
 {
     public float dashForce = 10.0f; // Force du dash
     public float dashDuration = 0.2f; // Durée du dash
     public float dashCooldown = 1.0f; // Temps de recharge entre les dashes
-
+    public float timer; 
     private bool canDash = true; // Indicateur permettant de savoir si le joueur peut effectuer un dash
     private Rigidbody rb; // Référence au Rigidbody du joueur
     [SerializeField] private Camera playerCamera; // Référence à la caméra du joueur
+    public Image DashBarImage;
 
     private void Start()
     {
+        timer = dashCooldown; 
         rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        if (canDash)
+        DashBarImage.fillAmount = timer;
+        if (timer <= 0)
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift)) // Changez la touche selon vos préférences
+            if (canDash)
+
             {
-                StartCoroutine(Dash());
+                if (Input.GetKeyDown(KeyCode.LeftShift)) // Changez la touche selon vos préférences
+                {
+                    StartCoroutine(Dash());
+                    timer = 1; 
+                }
             }
+             
         }
+        else timer -= Time.deltaTime;
     }
 
     private IEnumerator Dash()
@@ -33,6 +46,7 @@ public class PlayerDash : MonoBehaviour
 
         // Obtenez la direction de la caméra en convertissant l'angle de la caméra en direction
         Vector3 dashDirection = playerCamera.transform.forward;
+
         dashDirection.y = 0; // Ignorez la composante verticale (y)
 
         // Appliquez une force au Rigidbody pour le dash

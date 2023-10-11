@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
-
+using TMPro;
 public class PlayerGun : MonoBehaviour
 {
     [SerializeField] private int shootForce, upwardForce;
@@ -15,7 +15,7 @@ public class PlayerGun : MonoBehaviour
     private Barrel barrel;
 
     public ParticleManager particleManager;
-
+    [SerializeField] private TextMeshProUGUI textMesh;
     private void Start()
     {
         barrel = GetComponent<Barrel>();
@@ -24,9 +24,14 @@ public class PlayerGun : MonoBehaviour
     private void Update()
     {
         if (Input.GetButtonDown("Fire1")) Shoot();
+       
+
         if (Input.GetButtonDown("Dump")) Dump();
 
-        if (barrel.barrelStock.Count == 0) nextBulletColor.material.color = Color.black;
+     
+        if (barrel.barrelStock.Count > 0) textMesh.enabled = false;
+        if (barrel.barrelStock.Count == 0) textMesh.enabled = true;
+		if (barrel.barrelStock.Count == 0) nextBulletColor.material.color = Color.black;
         else if (barrel.barrelStock.Count >= 1) nextBulletColor.material.color = barrel.barrelStock[0];
     }
 
@@ -34,24 +39,26 @@ public class PlayerGun : MonoBehaviour
     {
         if (barrel.barrelStock.Count > 0)
         {
-            Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //Crée un point de référence au centre de l'écran (à ne pas confondre avec le pointeur)
+            
+
+            Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //Crï¿½e un point de rï¿½fï¿½rence au centre de l'ï¿½cran (ï¿½ ne pas confondre avec le pointeur)
             RaycastHit hit;
 
             Vector3 targetPoint;
-            if (Physics.Raycast(ray, out hit)) //Je lance un Raycast avec comme point de départ ma variable Ray, et je check s'il touche quelque chose
+            if (Physics.Raycast(ray, out hit)) //Je lance un Raycast avec comme point de dï¿½part ma variable Ray, et je check s'il touche quelque chose
             {
-                targetPoint = hit.point; //Je récupère le point de collision de mon Raycast
+                targetPoint = hit.point; //Je rï¿½cupï¿½re le point de collision de mon Raycast
                 if (hit.transform.tag == "Destroyable" && hit.collider.gameObject.layer == 0 || hit.collider.gameObject.layer == 10)
                 {
-                    Destroy(hit.transform.gameObject); //Je détruis l'objet touché s'il remplis les conditions
+                    Destroy(hit.transform.gameObject); //Je dï¿½truis l'objet touchï¿½ s'il remplis les conditions
                 }
-                //Je joue ma particule d'impacte à l'endroit du contact avec la couleur de l'élément
+                //Je joue ma particule d'impacte ï¿½ l'endroit du contact avec la couleur de l'ï¿½lï¿½ment
                 particleManager.Impact(barrel.barrelStock[0], targetPoint, hit.normal);
             }
             else
-                targetPoint = ray.GetPoint(75); //S'il ne touche rien, je récupère un point vide pour éviter une erreur
+                targetPoint = ray.GetPoint(75); //S'il ne touche rien, je rï¿½cupï¿½re un point vide pour ï¿½viter une erreur
 
-            barrel.RemoveStock(); //J'enlève de la liste la première couleur
+            barrel.RemoveStock(); //J'enlï¿½ve de la liste la premiï¿½re couleur
         }
         else
             Debug.LogWarning("Il n'y a pas de balle dans le barillet !");
