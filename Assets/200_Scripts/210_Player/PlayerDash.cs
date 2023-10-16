@@ -1,7 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using TMPro;
+using UnityEngine.EventSystems;
 
 public class PlayerDash : MonoBehaviour
 {
@@ -12,12 +14,14 @@ public class PlayerDash : MonoBehaviour
     private bool canDash = true; // Indicateur permettant de savoir si le joueur peut effectuer un dash
     private Rigidbody rb; // Référence au Rigidbody du joueur
     [SerializeField] private Camera playerCamera; // Référence à la caméra du joueur
+    private PlayerController playerController;
     public Image DashBarImage;
 
     private void Start()
     {
-        timer = dashCooldown;
+        timer = dashCooldown; 
         rb = GetComponent<Rigidbody>();
+        playerController = GetComponent<PlayerController>();
     }
 
     private void Update()
@@ -31,29 +35,46 @@ public class PlayerDash : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.LeftShift)) // Changez la touche selon vos préférences
                 {
                     StartCoroutine(Dash());
-                    timer = 1;
+                    timer = 1; 
                 }
             }
-
+             
         }
         else timer -= Time.deltaTime;
     }
 
     private IEnumerator Dash()
     {
-        canDash = false; // Désactivez le dash pendant la recharge
+        canDash = false; //Je désactive le dash pendant la recharge
 
-        // Obtenez la direction de la caméra en convertissant l'angle de la caméra en direction
-        Vector3 dashDirection = playerCamera.transform.forward;
+        Vector3 dashDirection = Vector3.zero;
 
-        dashDirection.y = 0; // Ignorez la composante verticale (y)
+        if (playerController.verticalInput > 0)
+        {
+            dashDirection = playerCamera.transform.forward;
+        }
+        else if (playerController.verticalInput < 0)
+        {
+            dashDirection = -playerCamera.transform.forward;
+        }
 
-        // Appliquez une force au Rigidbody pour le dash
+        if (playerController.horizontalInput > 0)
+        {
+            dashDirection = playerCamera.transform.right;
+        }
+        else if (playerController.horizontalInput < 0)
+        {
+            dashDirection = -playerCamera.transform.right;
+        }
+
+        //Je réinitialise la valeur Y de la direction pour éviter de modifier la hauteur du dash
+        dashDirection.y = 0;
+
         rb.AddForce(dashDirection.normalized * dashForce, ForceMode.Impulse);
 
         yield return new WaitForSeconds(dashDuration);
 
-        // Attendez la période de recharge
+        //J'attends la période de recharge
         yield return new WaitForSeconds(dashCooldown);
 
         canDash = true; // Réactivez le dash
@@ -61,11 +82,11 @@ public class PlayerDash : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Si le joueur entre en collision avec un objet pendant le dash, arrêtez le dash
+        //Si le joueur entre en collision avec un objet pendant le dash, arrêtez le dash
         if (collision.gameObject.tag == "Wall")
         {
             canDash = true;
-            rb.velocity = Vector3.zero; // Arrêtez le mouvement du joueur
+            rb.velocity = Vector3.zero; //Je stop le joueur
         }
     }
 }

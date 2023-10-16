@@ -7,16 +7,18 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed = 10;
-
+    public float airMultiplier = 1;
     public float groundDrag = 5;
 
+    [Header("Jump")]
     public float jumpForce = 8;
     public float jumpCooldown = 0.25f;
-    public float airMultiplier = 1;
     private bool readyToJump;
 
-    [Header("Keybinds")]
-    public KeyCode jumpKey = KeyCode.Space;
+    [Header("Slide")]
+    public float slideSpeed = 1;
+    public float slideCooldown = 1;
+    private bool readyToSlide;
 
     [Header("Ground Check")]
     [SerializeField] private float playerHeight = 2;
@@ -24,8 +26,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform orientation;
     private bool grounded;
 
-    private float horizontalInput;
-    private float verticalInput;
+    [HideInInspector] public float horizontalInput;
+    [HideInInspector] public float verticalInput;
 
     private Vector3 moveDirection;
 
@@ -37,6 +39,7 @@ public class PlayerController : MonoBehaviour
         rb.freezeRotation = true;
 
         readyToJump = true;
+        readyToSlide = true;
     }
 
     private void Update()
@@ -52,8 +55,6 @@ public class PlayerController : MonoBehaviour
             rb.drag = groundDrag;
         else
             rb.drag = 0;
-
-        
     }
 
     private void FixedUpdate()
@@ -66,13 +67,22 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
+        if (Input.GetButtonDown("Jump") && readyToJump && grounded)
         {
             readyToJump = false;
 
             Jump();
 
             Invoke(nameof(ResetJump), jumpCooldown);
+        }
+
+        if (Input.GetButtonDown("Slide") && readyToSlide)
+        {
+            readyToSlide = false;
+
+            Slide();
+
+            Invoke(nameof(ResetSlide), slideCooldown);
         }
     }
 
@@ -114,11 +124,6 @@ public class PlayerController : MonoBehaviour
             Vector3 limitedVelHor = rb.velocity.normalized * moveSpeed;
             rb.velocity = new Vector3(limitedVelHor.x, rb.velocity.y, limitedVelHor.z);
         }
-        else if (rb.velocity.magnitude > jumpForce)
-        {
-            Vector3 limitedVelVer = rb.velocity.normalized * jumpForce;
-            rb.velocity = new Vector3(rb.velocity.x, limitedVelVer.y, rb.velocity.z);
-        }
     }
 
     private void Jump()
@@ -128,8 +133,23 @@ public class PlayerController : MonoBehaviour
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
+
     private void ResetJump()
     {
         readyToJump = true;
+    }
+
+    private void Slide()
+    {
+        rb.AddForce(transform.forward * slideSpeed, ForceMode.Impulse);
+        //while (slideSpeed > 1)
+        //{
+        //    rb.velocity -= Vector3.forward * slideSpeed * Time.deltaTime;
+        //}
+    }
+
+    private void ResetSlide()
+    {
+        readyToSlide = true;
     }
 }

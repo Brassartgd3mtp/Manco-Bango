@@ -18,7 +18,7 @@ public class TimerController : MonoBehaviour
         {
             // Incrémente le timer
             timer += Time.deltaTime;
-            Debug.Log("Temps écoulé : " + timer.ToString("F2")); // Affiche le temps écoulé
+            //Debug.Log("Temps écoulé : " + timer.ToString("F2")); // Affiche le temps écoulé
 
             // Ici, vous pouvez ajouter d'autres actions à effectuer pendant le timer
         }
@@ -35,7 +35,7 @@ public class TimerController : MonoBehaviour
         {
             // Le joueur entre dans la zone d'arrêt, arrête le timer
             isTimerRunning = false;
-            Debug.Log("Temps total : " + timer.ToString("F2")); // Affiche le temps total
+            //Debug.Log("Temps total : " + timer.ToString("F2")); // Affiche le temps total
         }
     }
     public bool IsRunning()
