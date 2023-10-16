@@ -11,7 +11,7 @@ public class HealthManager : MonoBehaviour
     public Image healthBarImage;
     public TextMeshProUGUI healthText;
     public GameObject gameOverPanel; // Référence au panneau Game Over
-
+    public bool Escape = false;
     private bool isGameOver = false;
 
     void Update()
@@ -25,8 +25,13 @@ public class HealthManager : MonoBehaviour
 
             if (health <= 0)
             {
-                // La santé est tombée à 0, mettez le jeu en pause et affichez le panneau Game Over
-                PauseGame();
+                // La santé est tombée à 0, désactivez la touche "Echap"
+                DisableEscapeKey();
+                gameOverPanel.SetActive(true);
+                Escape = true;
+                Time.timeScale = 0f;
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
             }
         }
     }
@@ -47,22 +52,12 @@ public class HealthManager : MonoBehaviour
         }
     }
 
-    void PauseGame()
+    void DisableEscapeKey()
     {
-        Time.timeScale = 0f; // Mettez le temps à zéro pour mettre le jeu en pause
-        isGameOver = true;
-
-        // Affichez le panneau Game Over
-        gameOverPanel.SetActive(true);
-    }
-
-    // Vous pouvez ajouter une méthode pour reprendre le jeu si nécessaire
-    public void ResumeGame()
-    {
-        Time.timeScale = 1f; // Rétablissez le temps normal pour reprendre le jeu
-        isGameOver = false;
-
-        // Désactivez le panneau Game Over
-        gameOverPanel.SetActive(false);
+        // Désactivez la touche "Echap" en désactivant le composant Input.GetKey(KeyCode.Escape)
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            return;
+        }
     }
 }

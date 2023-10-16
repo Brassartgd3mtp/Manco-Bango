@@ -1,15 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using System.Collections;
 
 public class PlayerDash : MonoBehaviour
 {
     public float dashForce = 10.0f; // Force du dash
     public float dashDuration = 0.2f; // Durée du dash
     public float dashCooldown = 1.0f; // Temps de recharge entre les dashes
-    public float timer; 
+    public float timer;
     private bool canDash = true; // Indicateur permettant de savoir si le joueur peut effectuer un dash
     private Rigidbody rb; // Référence au Rigidbody du joueur
     [SerializeField] private Camera playerCamera; // Référence à la caméra du joueur
@@ -17,7 +16,7 @@ public class PlayerDash : MonoBehaviour
 
     private void Start()
     {
-        timer = dashCooldown; 
+        timer = dashCooldown;
         rb = GetComponent<Rigidbody>();
     }
 
@@ -32,10 +31,10 @@ public class PlayerDash : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.LeftShift)) // Changez la touche selon vos préférences
                 {
                     StartCoroutine(Dash());
-                    timer = 1; 
+                    timer = 1;
                 }
             }
-             
+
         }
         else timer -= Time.deltaTime;
     }

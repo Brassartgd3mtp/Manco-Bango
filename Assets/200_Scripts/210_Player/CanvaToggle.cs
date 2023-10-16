@@ -4,6 +4,7 @@ public class CanvasToggle : MonoBehaviour
 {
     public Canvas canvas; // Référence au Canvas que vous souhaitez activer/désactiver
     private bool isGamePaused = false;
+    public HealthManager healthManager;
     private void Start()
     {
         // Cachez le curseur de la souris au démarrage du jeu
@@ -33,7 +34,7 @@ public class CanvasToggle : MonoBehaviour
         if (canvas != null)
         {
             // Vérifiez si la touche "Echap" est enfoncée
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) && !healthManager.Escape)
             {
                 // Inversez l'état du Canvas (activé ou désactivé) lorsque la touche "Echap" est enfoncée
                 canvas.enabled = !canvas.enabled;
