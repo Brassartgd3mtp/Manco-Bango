@@ -15,11 +15,6 @@ public class PlayerController : MonoBehaviour
     public float jumpCooldown = 0.25f;
     private bool readyToJump;
 
-    [Header("Slide")]
-    public float slideSpeed = 1;
-    public float slideCooldown = 1;
-    private bool readyToSlide;
-
     [Header("Ground Check")]
     [SerializeField] private float playerHeight = 2;
     [SerializeField] private LayerMask whatIsGround;
@@ -29,7 +24,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float horizontalInput;
     [HideInInspector] public float verticalInput;
 
-    private Vector3 moveDirection;
+    [HideInInspector] public Vector3 moveDirection;
 
     private Rigidbody rb;
 
@@ -39,7 +34,6 @@ public class PlayerController : MonoBehaviour
         rb.freezeRotation = true;
 
         readyToJump = true;
-        readyToSlide = true;
     }
 
     private void Update()
@@ -75,15 +69,6 @@ public class PlayerController : MonoBehaviour
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
-
-        if (Input.GetButtonDown("Slide") && readyToSlide)
-        {
-            readyToSlide = false;
-
-            Slide();
-
-            Invoke(nameof(ResetSlide), slideCooldown);
-        }
     }
 
     private void MovePlayer()
@@ -91,6 +76,8 @@ public class PlayerController : MonoBehaviour
         //Je cr�e des vecteurs de d�placement s�par�s pour l'horizontal (x) et le vertical (z)
         Vector3 horizontalMovement = orientation.right * horizontalInput;
         Vector3 verticalMovement = orientation.forward * verticalInput;
+
+        moveDirection = horizontalMovement + verticalMovement;
 
         //Je v�rifie si le personnage est en contact avec un mur dans la direction de chaque d�placement
         bool isTouchingWallHorizontal = Physics.Raycast(transform.position, horizontalMovement, 1.0f);
@@ -137,19 +124,5 @@ public class PlayerController : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
-    }
-
-    private void Slide()
-    {
-        rb.AddForce(transform.forward * slideSpeed, ForceMode.Impulse);
-        //while (slideSpeed > 1)
-        //{
-        //    rb.velocity -= Vector3.forward * slideSpeed * Time.deltaTime;
-        //}
-    }
-
-    private void ResetSlide()
-    {
-        readyToSlide = true;
     }
 }
