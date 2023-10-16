@@ -39,8 +39,6 @@ public class PlayerGun : MonoBehaviour
     {
         if (barrel.barrelStock.Count > 0)
         {
-            
-
             Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //Cr�e un point de r�f�rence au centre de l'�cran (� ne pas confondre avec le pointeur)
             RaycastHit hit;
 
@@ -60,7 +58,7 @@ public class PlayerGun : MonoBehaviour
 
             barrel.RemoveStock(); //J'enl�ve de la liste la premi�re couleur
         }
-        else
+        else if (!Cursor.visible)
             Debug.LogWarning("Il n'y a pas de balle dans le barillet !");
     }
 
