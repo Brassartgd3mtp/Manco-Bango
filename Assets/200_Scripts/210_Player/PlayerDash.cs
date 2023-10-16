@@ -13,7 +13,7 @@ public class PlayerDash : MonoBehaviour
     public float timer;
     private bool canDash = true; // Indicateur permettant de savoir si le joueur peut effectuer un dash
     private Rigidbody rb; // Référence au Rigidbody du joueur
-    [SerializeField] private Camera playerCamera; // Référence à la caméra du joueur
+    [SerializeField] private Camera fovEffect; // Référence à la caméra du joueur
     private PlayerController playerController;
     public Image DashBarImage;
 
@@ -47,46 +47,25 @@ public class PlayerDash : MonoBehaviour
     {
         canDash = false; //Je désactive le dash pendant la recharge
 
-        Vector3 dashDirection = Vector3.zero;
+        playerController.moveDirection.y = 0;
 
-        if (playerController.verticalInput > 0)
-        {
-            dashDirection = playerCamera.transform.forward;
-        }
-        else if (playerController.verticalInput < 0)
-        {
-            dashDirection = -playerCamera.transform.forward;
-        }
-
-        if (playerController.horizontalInput > 0)
-        {
-            dashDirection = playerCamera.transform.right;
-        }
-        else if (playerController.horizontalInput < 0)
-        {
-            dashDirection = -playerCamera.transform.right;
-        }
-
-        //Je réinitialise la valeur Y de la direction pour éviter de modifier la hauteur du dash
-        dashDirection.y = 0;
-
-        rb.AddForce(dashDirection.normalized * dashForce, ForceMode.Impulse);
+        rb.AddForce(playerController.moveDirection * dashForce, ForceMode.Impulse);
 
         yield return new WaitForSeconds(dashDuration);
 
         //J'attends la période de recharge
         yield return new WaitForSeconds(dashCooldown);
 
-        canDash = true; // Réactivez le dash
+        canDash = true; //Je réactive le dash
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        //Si le joueur entre en collision avec un objet pendant le dash, arrêtez le dash
+        //Si le joueur entre en collision avec un objet pendant le dash, j'arrête le dash
         if (collision.gameObject.tag == "Wall")
         {
             canDash = true;
-            rb.velocity = Vector3.zero; //Je stop le joueur
+            rb.velocity = Vector3.zero;
         }
     }
 }
