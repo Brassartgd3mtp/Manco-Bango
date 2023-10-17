@@ -8,9 +8,10 @@ public class PickupItem : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) // Assurez-vous que l'objet qui entre en collision est le joueur
+        if (other.gameObject.CompareTag("Player")) // Assurez-vous que l'objet qui entre en collision est le joueur
         {
-            TimeSlowdown playerTimeSlowdown = other.GetComponent<TimeSlowdown>();
+            TimeSlowdown playerTimeSlowdown = other.gameObject.GetComponent<TimeSlowdown>();
+            Debug.Log(playerTimeSlowdown);
 
             if (playerTimeSlowdown != null)
             {

@@ -39,29 +39,37 @@ public class PlayerGun : MonoBehaviour
     {
         if (barrel.barrelStock.Count > 0)
         {
-            Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //Cr�e un point de r�f�rence au centre de l'�cran (� ne pas confondre avec le pointeur)
+            Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
 
-            Vector3 targetPoint;
-            if (Physics.Raycast(ray, out hit)) //Je lance un Raycast avec comme point de d�part ma variable Ray, et je check s'il touche quelque chose
+            if (Physics.Raycast(ray, out hit))
             {
-                targetPoint = hit.point; //Je r�cup�re le point de collision de mon Raycast
-                if (hit.transform.tag == "Destroyable" && hit.collider.gameObject.layer == 0 || hit.collider.gameObject.layer == 10)
+                if (hit.transform.CompareTag("Enemy"))
                 {
-                    Destroy(hit.transform.gameObject); //Je d�truis l'objet touch� s'il remplis les conditions
-                }
-                //Je joue ma particule d'impacte � l'endroit du contact avec la couleur de l'�l�ment
-                particleManager.Impact(barrel.barrelStock[0], targetPoint, hit.normal);
-            }
-            else
-                targetPoint = ray.GetPoint(75); //S'il ne touche rien, je r�cup�re un point vide pour �viter une erreur
+                    // Obtenez la référence à l'ennemi s'il est touché par le raycast
+                    EnemyHealth enemyHealth = hit.transform.GetComponent<EnemyHealth>();
 
-            barrel.RemoveStock(); //J'enl�ve de la liste la premi�re couleur
+                    if (enemyHealth != null)
+                    {
+                        // Appel de la fonction TakeDamage pour réduire les points de vie de l'ennemi
+                        enemyHealth.TakeDamage(10);
+                        Debug.Log("-10PV"); 
+                    }
+                }
+
+                if (hit.transform.CompareTag("Destroyable") && (hit.collider.gameObject.layer == 0 || hit.collider.gameObject.layer == 10))
+                {
+                    Destroy(hit.transform.gameObject);
+                }
+
+                //Je joue ma particule d'impacte à l'endroit du contact avec la couleur de l'élément
+                particleManager.Impact(barrel.barrelStock[0], hit.point, hit.normal);
+            }
+            barrel.RemoveStock();
         }
         else if (!Cursor.visible)
             Debug.LogWarning("Il n'y a pas de balle dans le barillet !");
     }
-
     private void Dump()
     {
         barrel.barrelStock.Clear();

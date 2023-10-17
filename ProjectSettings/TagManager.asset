@@ -15,6 +15,7 @@ TagManager:
   - ArmeJoueur
   - StartZone
   - Wall
+  - Enemy
   layers:
   - Default
   - TransparentFX

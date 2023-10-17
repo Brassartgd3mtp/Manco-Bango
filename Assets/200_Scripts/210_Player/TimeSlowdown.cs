@@ -16,9 +16,10 @@ public class TimeSlowdown : MonoBehaviour
     public int modifySensibilityY = 2; // Sensibilité de la souris en mode ralenti
 
     private bool isSlowingDown = false;
-    private int currentSlowdowns = 0;
+    [SerializeField] private int currentSlowdowns = 0;
     private int originalMouseSensitivityX;
     private int originalMouseSensitivityY;
+    public CanvasToggle canvasToggle; 
 
     private void Start()
     {
@@ -28,7 +29,7 @@ public class TimeSlowdown : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && !canvasToggle.isGamePaused ) 
         {
             if (!isSlowingDown && currentSlowdowns < maxSlowdowns)
             {
@@ -47,7 +48,7 @@ public class TimeSlowdown : MonoBehaviour
 
     public void AddSlowdowns(int amount)
     {
-        currentSlowdowns += amount;
+        currentSlowdowns -= amount;
         currentSlowdowns = Mathf.Clamp(currentSlowdowns, 0, maxSlowdowns);
     }
 
