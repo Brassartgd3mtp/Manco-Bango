@@ -18128,22 +18128,23 @@ MonoBehaviour:
   moveSpeed: 10
   airMultiplier: 1
   groundDrag: 5
-  angleHorizontalLimit: 30
-  angleVerticalLimit: 3
+  whatIsWall:
+    serializedVersion: 2
+    m_Bits: 2816
+  capsuleCollider: {fileID: 1394393609}
+  orientation: {fileID: 1421457774}
   jumpForce: 8
   jumpCooldown: 0.25
+  coyotteTimer: 0.1
+  maxCoyotteTime: 1
   playerHeight: 2
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
-  orientation: {fileID: 1421457774}
+  grounded: 0
   horizontalInput: 0
   verticalInput: 0
   moveDirection: {x: 0, y: 0, z: 0}
-  capsuleCollider: {fileID: 1394393609}
-  wallLayerMask:
-    serializedVersion: 2
-    m_Bits: 2816
 --- !u!114 &475556593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18226,7 +18227,7 @@ MonoBehaviour:
   maxSlideTime: 0.75
   slideForce: 200
   slideYScale: 0.5
-  fovModifier: 50
+  fovModifier: 0
   fovEffect: {fileID: 2134811352}
 --- !u!1001 &476508113
 PrefabInstance:
@@ -61411,6 +61412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1459259474}
+  isGamePaused: 0
   healthManager: {fileID: 475556590}
 --- !u!114 &1459259472
 MonoBehaviour:

@@ -11,32 +11,29 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 10;
     public float airMultiplier = 1;
     public float groundDrag = 5;
-    [SerializeField] private float angleHorizontalLimit;
-    [SerializeField] private float angleVerticalLimit;
+    [SerializeField] LayerMask whatIsWall;
+    [SerializeField] CapsuleCollider capsuleCollider;
+    [SerializeField] private Transform orientation;
 
     [Header("Jump")]
     public float jumpForce = 8;
     public float jumpCooldown = 0.25f;
     private bool readyToJump;
+    [SerializeField] private float coyotteTimer = 0.25f;
+    [SerializeField] private float maxCoyotteTime = 0.25f;
 
     [Header("Ground Check")]
     [SerializeField] private float playerHeight = 2;
     [SerializeField] private LayerMask whatIsGround;
-    [SerializeField] private Transform orientation;
-    private bool grounded;
+    [SerializeField] private bool grounded;
 
     [HideInInspector] public float horizontalInput;
     [HideInInspector] public float verticalInput;
 
     [HideInInspector] public Vector3 moveDirection;
 
-    [SerializeField] CapsuleCollider capsuleCollider;
-    [SerializeField] LayerMask wallLayerMask;
 
     private Rigidbody rb;
-
-    //bool isTouchingWall;
-    Transform wallColliding;
 
     private void Start()
     {
@@ -71,22 +68,32 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetButtonDown("Jump") && readyToJump && grounded)
+        if (Input.GetButtonDown("Jump") && readyToJump && (grounded || coyotteTimer > 0))
         {
             readyToJump = false;
-
+            
             Jump();
-
+            
             Invoke(nameof(ResetJump), jumpCooldown);
+        }
+
+        if (grounded)
+        {
+            coyotteTimer = maxCoyotteTime;
+        }
+
+        else if (coyotteTimer > 0)
+        {
+            coyotteTimer -= Time.deltaTime;
         }
     }
 
     private void MovePlayer()
     {
-        Vector3 moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
         // Je vérifie si le personnage est en contact avec un mur dans la direction de déplacement
-        bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1.5f, wallLayerMask);
+        bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1.5f, whatIsWall);
 
         // Si le personnage est au sol, ajoutez la force de déplacement
         if (grounded)
@@ -128,8 +135,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        // reset y velocity
-        if(transform.position.y == 2) rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
@@ -137,11 +143,5 @@ public class PlayerController : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawCube(transform.position, capsuleCollider.bounds.extents * 2);
     }
 }

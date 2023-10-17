@@ -46,4 +46,9 @@ public class TimerController : MonoBehaviour
     {
         return timer;
     }
+
+    public void ResetTimer()
+    {
+        timer = 0.0f;
+    }
 }
