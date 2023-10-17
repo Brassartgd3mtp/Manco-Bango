@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 10;
     public float airMultiplier = 1;
     public float groundDrag = 5;
+    [SerializeField] private float angleHorizontalLimit;
+    [SerializeField] private float angleVerticalLimit;
 
     [Header("Jump")]
     public float jumpForce = 8;
@@ -26,7 +30,12 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public Vector3 moveDirection;
 
+    [SerializeField] CapsuleCollider capsuleCollider;
+
     private Rigidbody rb;
+
+    //bool isTouchingWall;
+    Transform wallColliding;
 
     private void Start()
     {
@@ -73,35 +82,49 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        //Je cr�e des vecteurs de d�placement s�par�s pour l'horizontal (x) et le vertical (z)
-        Vector3 horizontalMovement = orientation.right * horizontalInput;
-        Vector3 verticalMovement = orientation.forward * verticalInput;
+        Vector3 moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        moveDirection = horizontalMovement + verticalMovement;
+        // Je vérifie si le personnage est en contact avec un mur dans la direction de déplacement
+        bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1.0f);
 
-        //Je v�rifie si le personnage est en contact avec un mur dans la direction de chaque d�placement
-        bool isTouchingWallHorizontal = Physics.Raycast(transform.position, horizontalMovement, 1.0f);
-        bool isTouchingWallVertical = Physics.Raycast(transform.position, verticalMovement, 1.0f);
-
-        //J'ajoute la force de d�placement seulement si le personnage n'est pas en contact avec un mur dans cette direction
-        if (grounded && !isTouchingWallHorizontal)
+        // Si le personnage est au sol, ajoutez la force de déplacement
+        if (grounded)
         {
-            rb.AddForce(horizontalMovement.normalized * moveSpeed * 10f, ForceMode.Force);
+            if (!isTouchingWall)
+            {
+                rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            }
+            else
+            {
+                Vector3 moveDirectionWithoutWall = Vector3.ProjectOnPlane(moveDirection, hitInfo.normal).normalized;
+                rb.AddForce(moveDirectionWithoutWall * moveSpeed * 10f, ForceMode.Force);
+            }
         }
-        else if (!grounded && !isTouchingWallHorizontal)
+        else if (!grounded)
         {
-            rb.AddForce(horizontalMovement.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
-        }
-
-        if (grounded && !isTouchingWallVertical)
-        {
-            rb.AddForce(verticalMovement.normalized * moveSpeed * 10f, ForceMode.Force);
-        }
-        else if (!grounded && !isTouchingWallVertical)
-        {
-            rb.AddForce(verticalMovement.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            // Ajoutez la force en l'air en tenant compte de l'adhérence au mur
+            if (!isTouchingWall)
+            {
+                rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            }
+            else
+            {
+                Vector3 moveDirectionWithoutWall = Vector3.ProjectOnPlane(moveDirection, hitInfo.normal).normalized;
+                rb.AddForce(moveDirectionWithoutWall * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            }
         }
     }
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (collision.gameObject.layer == 11) isTouchingWall = true;
+    //    wallColliding = collision.gameObject.transform;
+    //}
+    //
+    //private void OnCollisionExit(Collision collision)
+    //{
+    //    if (collision.gameObject.layer == 11) isTouchingWall = false;
+    //}
 
     private void SpeedControl()
     {
