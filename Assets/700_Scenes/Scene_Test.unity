@@ -624,7 +624,7 @@ GameObject:
   - component: {fileID: 8709450}
   - component: {fileID: 8709449}
   - component: {fileID: 8709448}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1221,7 +1221,7 @@ GameObject:
   - component: {fileID: 25414384}
   - component: {fileID: 25414383}
   - component: {fileID: 25414382}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (25)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1423,7 +1423,7 @@ GameObject:
   - component: {fileID: 33460331}
   - component: {fileID: 33460330}
   - component: {fileID: 33460329}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere BLUE (3)
   m_TagString: BlueButton
   m_Icon: {fileID: 0}
@@ -1528,7 +1528,7 @@ GameObject:
   - component: {fileID: 35678471}
   - component: {fileID: 35678470}
   - component: {fileID: 35678469}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3858,7 +3858,7 @@ GameObject:
   - component: {fileID: 99425781}
   - component: {fileID: 99425780}
   - component: {fileID: 99425779}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5011,7 +5011,7 @@ GameObject:
   - component: {fileID: 128927100}
   - component: {fileID: 128927099}
   - component: {fileID: 128927102}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Door BLUE (4)
   m_TagString: BlueDoor
   m_Icon: {fileID: 0}
@@ -6259,7 +6259,7 @@ GameObject:
   - component: {fileID: 167485900}
   - component: {fileID: 167485899}
   - component: {fileID: 167485898}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6370,7 +6370,7 @@ GameObject:
   - component: {fileID: 170374594}
   - component: {fileID: 170374593}
   - component: {fileID: 170374592}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6487,7 +6487,7 @@ GameObject:
   - component: {fileID: 177305645}
   - component: {fileID: 177305644}
   - component: {fileID: 177305643}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (24)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6871,7 +6871,7 @@ GameObject:
   - component: {fileID: 184063450}
   - component: {fileID: 184063449}
   - component: {fileID: 184063448}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (39)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7753,7 +7753,7 @@ GameObject:
   - component: {fileID: 209159535}
   - component: {fileID: 209159534}
   - component: {fileID: 209159533}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8203,7 +8203,7 @@ GameObject:
   - component: {fileID: 215116311}
   - component: {fileID: 215116310}
   - component: {fileID: 215116309}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (32)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9083,7 +9083,7 @@ GameObject:
   - component: {fileID: 242875603}
   - component: {fileID: 242875602}
   - component: {fileID: 242875601}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10607,7 +10607,7 @@ GameObject:
   - component: {fileID: 272724824}
   - component: {fileID: 272724823}
   - component: {fileID: 272724822}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere RED (2)
   m_TagString: RedButton
   m_Icon: {fileID: 0}
@@ -10724,7 +10724,7 @@ GameObject:
   - component: {fileID: 274463590}
   - component: {fileID: 274463589}
   - component: {fileID: 274463588}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11055,7 +11055,7 @@ GameObject:
   - component: {fileID: 289579437}
   - component: {fileID: 289579436}
   - component: {fileID: 289579435}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11494,7 +11494,7 @@ GameObject:
   - component: {fileID: 299730663}
   - component: {fileID: 299730662}
   - component: {fileID: 299730661}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11714,7 +11714,7 @@ GameObject:
   - component: {fileID: 305409927}
   - component: {fileID: 305409926}
   - component: {fileID: 305409925}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (45)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12417,7 +12417,7 @@ GameObject:
   - component: {fileID: 325916068}
   - component: {fileID: 325916067}
   - component: {fileID: 325916066}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (47)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12794,7 +12794,7 @@ GameObject:
   - component: {fileID: 335995988}
   - component: {fileID: 335995987}
   - component: {fileID: 335995986}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13004,7 +13004,7 @@ GameObject:
   - component: {fileID: 338669757}
   - component: {fileID: 338669756}
   - component: {fileID: 338669755}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16154,7 +16154,7 @@ GameObject:
   - component: {fileID: 440935374}
   - component: {fileID: 440935373}
   - component: {fileID: 440935372}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (33)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16293,7 +16293,7 @@ GameObject:
   - component: {fileID: 443823526}
   - component: {fileID: 443823525}
   - component: {fileID: 443823524}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (48)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17665,7 +17665,7 @@ GameObject:
   - component: {fileID: 469932223}
   - component: {fileID: 469932222}
   - component: {fileID: 469932221}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18020,9 +18020,9 @@ GameObject:
   - component: {fileID: 475556587}
   - component: {fileID: 475556586}
   - component: {fileID: 475556595}
+  - component: {fileID: 475556592}
   - component: {fileID: 475556589}
   - component: {fileID: 475556590}
-  - component: {fileID: 475556592}
   - component: {fileID: 475556593}
   - component: {fileID: 475556597}
   - component: {fileID: 475556596}
@@ -18141,6 +18141,9 @@ MonoBehaviour:
   verticalInput: 0
   moveDirection: {x: 0, y: 0, z: 0}
   capsuleCollider: {fileID: 1394393609}
+  wallLayerMask:
+    serializedVersion: 2
+    m_Bits: 2816
 --- !u!114 &475556593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18153,8 +18156,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91d61d80b701b754d8111c815aec1331, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashForce: 20
-  dashDuration: 0.2
+  dashForce: 3
+  dashDuration: 1
   dashCooldown: 1
   timer: 0
   DashBarImage: {fileID: 845873166}
@@ -18731,7 +18734,7 @@ GameObject:
   - component: {fileID: 487752028}
   - component: {fileID: 487752027}
   - component: {fileID: 487752026}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18961,7 +18964,7 @@ GameObject:
   - component: {fileID: 505326034}
   - component: {fileID: 505326033}
   - component: {fileID: 505326032}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (29)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19922,7 +19925,7 @@ GameObject:
   - component: {fileID: 529451702}
   - component: {fileID: 529451701}
   - component: {fileID: 529451700}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20968,7 +20971,7 @@ GameObject:
   - component: {fileID: 559528767}
   - component: {fileID: 559528766}
   - component: {fileID: 559528765}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (23)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21955,7 +21958,7 @@ GameObject:
   - component: {fileID: 597400123}
   - component: {fileID: 597400122}
   - component: {fileID: 597400121}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere RED
   m_TagString: RedButton
   m_Icon: {fileID: 0}
@@ -22924,7 +22927,7 @@ GameObject:
   - component: {fileID: 618956165}
   - component: {fileID: 618956164}
   - component: {fileID: 618956163}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24939,7 +24942,7 @@ GameObject:
   - component: {fileID: 677735273}
   - component: {fileID: 677735272}
   - component: {fileID: 677735271}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere BLUE (6)
   m_TagString: BlueButton
   m_Icon: {fileID: 0}
@@ -26872,7 +26875,7 @@ GameObject:
   - component: {fileID: 718165312}
   - component: {fileID: 718165311}
   - component: {fileID: 718165310}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (41)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27373,7 +27376,7 @@ GameObject:
   - component: {fileID: 726815533}
   - component: {fileID: 726815532}
   - component: {fileID: 726815531}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29552,7 +29555,7 @@ GameObject:
   - component: {fileID: 764941837}
   - component: {fileID: 764941836}
   - component: {fileID: 764941835}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (26)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29989,7 +29992,7 @@ GameObject:
   - component: {fileID: 769484084}
   - component: {fileID: 769484083}
   - component: {fileID: 769484082}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (19)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37662,7 +37665,7 @@ GameObject:
   - component: {fileID: 852717081}
   - component: {fileID: 852717080}
   - component: {fileID: 852717079}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (27)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39324,7 +39327,7 @@ GameObject:
   - component: {fileID: 882070272}
   - component: {fileID: 882070271}
   - component: {fileID: 882070270}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (20)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42583,7 +42586,7 @@ GameObject:
   - component: {fileID: 981795958}
   - component: {fileID: 981795957}
   - component: {fileID: 981795956}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42717,7 +42720,7 @@ GameObject:
   - component: {fileID: 985045311}
   - component: {fileID: 985045310}
   - component: {fileID: 985045313}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Door BLUE (1)
   m_TagString: BlueDoor
   m_Icon: {fileID: 0}
@@ -44898,7 +44901,7 @@ GameObject:
   - component: {fileID: 1009497585}
   - component: {fileID: 1009497584}
   - component: {fileID: 1009497583}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45684,7 +45687,7 @@ GameObject:
   - component: {fileID: 1024230151}
   - component: {fileID: 1024230150}
   - component: {fileID: 1024230149}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (21)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45956,7 +45959,7 @@ GameObject:
   - component: {fileID: 1028069011}
   - component: {fileID: 1028069010}
   - component: {fileID: 1028069009}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (42)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46475,7 +46478,7 @@ GameObject:
   - component: {fileID: 1032889476}
   - component: {fileID: 1032889475}
   - component: {fileID: 1032889474}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47633,7 +47636,7 @@ GameObject:
   - component: {fileID: 1060106733}
   - component: {fileID: 1060106732}
   - component: {fileID: 1060106731}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (40)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49752,7 +49755,7 @@ GameObject:
   - component: {fileID: 1152235339}
   - component: {fileID: 1152235338}
   - component: {fileID: 1152235337}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50224,7 +50227,7 @@ GameObject:
   - component: {fileID: 1167295689}
   - component: {fileID: 1167295688}
   - component: {fileID: 1167295687}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (30)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51424,7 +51427,7 @@ GameObject:
   - component: {fileID: 1204787105}
   - component: {fileID: 1204787104}
   - component: {fileID: 1204787107}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: RedDoor
   m_TagString: RedDoor
   m_Icon: {fileID: 0}
@@ -51750,7 +51753,7 @@ GameObject:
   - component: {fileID: 1224679142}
   - component: {fileID: 1224679141}
   - component: {fileID: 1224679144}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Door BLUE (2)
   m_TagString: BlueDoor
   m_Icon: {fileID: 0}
@@ -53902,7 +53905,7 @@ GameObject:
   - component: {fileID: 1284666987}
   - component: {fileID: 1284666986}
   - component: {fileID: 1284666985}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54334,7 +54337,7 @@ GameObject:
   - component: {fileID: 1297306651}
   - component: {fileID: 1297306650}
   - component: {fileID: 1297306649}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere RED (4)
   m_TagString: RedButton
   m_Icon: {fileID: 0}
@@ -55064,7 +55067,7 @@ GameObject:
   - component: {fileID: 1315840256}
   - component: {fileID: 1315840255}
   - component: {fileID: 1315840254}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere BLUE (5)
   m_TagString: BlueButton
   m_Icon: {fileID: 0}
@@ -56517,7 +56520,7 @@ GameObject:
   - component: {fileID: 1347019513}
   - component: {fileID: 1347019512}
   - component: {fileID: 1347019511}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56910,7 +56913,7 @@ GameObject:
   - component: {fileID: 1368955113}
   - component: {fileID: 1368955112}
   - component: {fileID: 1368955111}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57971,7 +57974,7 @@ GameObject:
   - component: {fileID: 1387561160}
   - component: {fileID: 1387561159}
   - component: {fileID: 1387561158}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (43)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60564,7 +60567,7 @@ GameObject:
   - component: {fileID: 1444107582}
   - component: {fileID: 1444107581}
   - component: {fileID: 1444107580}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere BLUE (1)
   m_TagString: BlueButton
   m_Icon: {fileID: 0}
@@ -60897,7 +60900,7 @@ GameObject:
   - component: {fileID: 1449783422}
   - component: {fileID: 1449783421}
   - component: {fileID: 1449783420}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62084,7 +62087,7 @@ GameObject:
   - component: {fileID: 1477124519}
   - component: {fileID: 1477124518}
   - component: {fileID: 1477124517}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (31)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62909,7 +62912,7 @@ GameObject:
   - component: {fileID: 1508437059}
   - component: {fileID: 1508437058}
   - component: {fileID: 1508437057}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (28)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -68561,7 +68564,7 @@ GameObject:
   - component: {fileID: 1628605291}
   - component: {fileID: 1628605290}
   - component: {fileID: 1628605289}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -68722,7 +68725,7 @@ GameObject:
   - component: {fileID: 1632625501}
   - component: {fileID: 1632625500}
   - component: {fileID: 1632625499}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (44)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69374,7 +69377,7 @@ GameObject:
   - component: {fileID: 1639900746}
   - component: {fileID: 1639900745}
   - component: {fileID: 1639900744}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70075,7 +70078,7 @@ GameObject:
   - component: {fileID: 1651910353}
   - component: {fileID: 1651910352}
   - component: {fileID: 1651910355}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Door RED (3)
   m_TagString: RedDoor
   m_Icon: {fileID: 0}
@@ -73230,7 +73233,7 @@ GameObject:
   - component: {fileID: 1725031346}
   - component: {fileID: 1725031345}
   - component: {fileID: 1725031344}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (46)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73933,7 +73936,7 @@ GameObject:
   - component: {fileID: 1742687056}
   - component: {fileID: 1742687055}
   - component: {fileID: 1742687054}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (34)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74524,7 +74527,7 @@ GameObject:
   - component: {fileID: 1760150227}
   - component: {fileID: 1760150226}
   - component: {fileID: 1760150225}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere BLUE (7)
   m_TagString: BlueButton
   m_Icon: {fileID: 0}
@@ -75294,7 +75297,7 @@ GameObject:
   - component: {fileID: 1773088265}
   - component: {fileID: 1773088264}
   - component: {fileID: 1773088263}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere RED (3)
   m_TagString: RedButton
   m_Icon: {fileID: 0}
@@ -75427,7 +75430,7 @@ GameObject:
   - component: {fileID: 1776091330}
   - component: {fileID: 1776091329}
   - component: {fileID: 1776091328}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76421,7 +76424,7 @@ GameObject:
   - component: {fileID: 1806440065}
   - component: {fileID: 1806440064}
   - component: {fileID: 1806440063}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78192,7 +78195,7 @@ GameObject:
   - component: {fileID: 1845181226}
   - component: {fileID: 1845181225}
   - component: {fileID: 1845181228}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: RedDoor (1)
   m_TagString: RedDoor
   m_Icon: {fileID: 0}
@@ -81820,7 +81823,7 @@ GameObject:
   - component: {fileID: 1923076838}
   - component: {fileID: 1923076837}
   - component: {fileID: 1923076836}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (22)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81981,7 +81984,7 @@ GameObject:
   - component: {fileID: 1927266646}
   - component: {fileID: 1927266645}
   - component: {fileID: 1927266644}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82756,7 +82759,7 @@ GameObject:
   - component: {fileID: 1934718201}
   - component: {fileID: 1934718200}
   - component: {fileID: 1934718199}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (49)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87672,7 +87675,7 @@ GameObject:
   - component: {fileID: 2040015788}
   - component: {fileID: 2040015787}
   - component: {fileID: 2040015786}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89404,7 +89407,7 @@ GameObject:
   - component: {fileID: 2085155910}
   - component: {fileID: 2085155909}
   - component: {fileID: 2085155912}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Door BLUE (3)
   m_TagString: BlueDoor
   m_Icon: {fileID: 0}

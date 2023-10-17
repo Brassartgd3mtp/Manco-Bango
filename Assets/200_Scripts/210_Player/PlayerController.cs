@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public Vector3 moveDirection;
 
     [SerializeField] CapsuleCollider capsuleCollider;
+    [SerializeField] LayerMask wallLayerMask;
 
     private Rigidbody rb;
 
@@ -85,7 +86,7 @@ public class PlayerController : MonoBehaviour
         Vector3 moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
         // Je vérifie si le personnage est en contact avec un mur dans la direction de déplacement
-        bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1.0f);
+        bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1.5f, wallLayerMask);
 
         // Si le personnage est au sol, ajoutez la force de déplacement
         if (grounded)
@@ -100,7 +101,7 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(moveDirectionWithoutWall * moveSpeed * 10f, ForceMode.Force);
             }
         }
-        else if (!grounded)
+        else
         {
             // Ajoutez la force en l'air en tenant compte de l'adhérence au mur
             if (!isTouchingWall)
@@ -114,17 +115,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if (collision.gameObject.layer == 11) isTouchingWall = true;
-    //    wallColliding = collision.gameObject.transform;
-    //}
-    //
-    //private void OnCollisionExit(Collision collision)
-    //{
-    //    if (collision.gameObject.layer == 11) isTouchingWall = false;
-    //}
 
     private void SpeedControl()
     {
@@ -147,5 +137,11 @@ public class PlayerController : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(transform.position, capsuleCollider.bounds.extents * 2);
     }
 }
