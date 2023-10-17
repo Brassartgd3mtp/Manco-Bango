@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
 
+    public Animator animator;
+
     //bool isTouchingWall;
     Transform wallColliding;
 
@@ -41,6 +43,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
 
         readyToJump = true;
     }
@@ -58,6 +61,27 @@ public class PlayerController : MonoBehaviour
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+
+        if (moveDirection.x != 0 && rb.velocity.y <= 0)
+        {
+            animator.SetBool("IsMoving", true);
+            Debug.Log("Move");
+        }
+
+        else
+        {
+            animator.SetBool("IsMoving", false);
+            Debug.Log("Move pas");
+
+        }
+
+
+        if (moveDirection.y != 0)
+        {
+            animator.SetBool("IsMoving", false);
+            Debug.Log("Jump");
+
+        }
     }
 
     private void FixedUpdate()
@@ -82,7 +106,7 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        Vector3 moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
         // Je vérifie si le personnage est en contact avec un mur dans la direction de déplacement
         bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1.0f);
