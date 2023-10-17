@@ -34,32 +34,44 @@ public class PlayerDash : MonoBehaviour
         {
             if (canDash && Input.GetKeyDown(KeyCode.LeftShift)) // Changez la touche selon vos préférences
             {
-                Dash();
+                StartCoroutine(Dash());
                 timer = 1;
             }
         }
         else timer -= Time.deltaTime;
     }
 
-    private void Dash()
+    private bool isDashing = false; // Ajoutez une variable pour savoir si le joueur est en train de dasher
+
+    private IEnumerator Dash()
     {
-        canDash = false; //Je désactive le dash pendant la recharge
+        if (!canDash || isDashing) yield break; // Vérifiez si le dash est possible et si le joueur n'est pas déjà en train de dasher
 
-        //Vector3 forceToApply = orientation.forward * dashForce + orientation.up * dashUpward;
+        isDashing = true; // Le joueur commence à dasher
+        float dashTimer = 0f;
 
-        playerController.moveDirection.y = 0;
+        Vector3 initialVelocity = rb.velocity; // Vitesse actuelle du joueur
 
-        Vector3 velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        while (dashTimer < dashDuration)
+        {
+            float t = dashTimer / dashDuration;
+            // Interpolation linéaire entre la vitesse actuelle et la vitesse de dash
+            Vector3 dashVelocity = Vector3.Lerp(initialVelocity * dashForce, playerController.moveDirection, t);
 
-        rb.AddForce(playerController.moveDirection * dashForce + velocity, ForceMode.Impulse);
+            rb.velocity = new Vector3(dashVelocity.x, rb.velocity.y, dashVelocity.z);
+            dashTimer += Time.deltaTime;
+            // Attendre la prochaine frame
+            yield return null;
+        }
 
-        Invoke("ResetDash", dashCooldown + dashDuration);
+        isDashing = false; // Le dash est terminé
+        Invoke("ResetDash", dashCooldown); // Réactive le dash après le temps de recharge
     }
 
-    void ResetDash()
+    // Ajoutez cette méthode pour réinitialiser le dash
+    private void ResetDash()
     {
-        canDash = true;
-        //fovEffect.
+        canDash = true; // Réactive le dash
     }
 
     private void OnCollisionEnter(Collision collision)
