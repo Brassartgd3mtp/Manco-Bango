@@ -35,10 +35,12 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
 
+    public Animator animator;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
 
         readyToJump = true;
     }
@@ -56,6 +58,27 @@ public class PlayerController : MonoBehaviour
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+
+        if (moveDirection.x != 0 && rb.velocity.y <= 0)
+        {
+            animator.SetBool("IsMoving", true);
+            Debug.Log("Move");
+        }
+
+        else
+        {
+            animator.SetBool("IsMoving", false);
+            Debug.Log("Move pas");
+
+        }
+
+
+        if (moveDirection.y != 0)
+        {
+            animator.SetBool("IsMoving", false);
+            Debug.Log("Jump");
+
+        }
     }
 
     private void FixedUpdate()
