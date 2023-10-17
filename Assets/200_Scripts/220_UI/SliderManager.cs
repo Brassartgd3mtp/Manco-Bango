@@ -50,6 +50,7 @@ public class SliderManager : MonoBehaviour
     public void SensValueX(float newValue)
     {
         cameraMouseLook.sensX = (int)newValue * 60;
+        Debug.Log("Allo");
     }
 
     public void SensValueY(float newValue)

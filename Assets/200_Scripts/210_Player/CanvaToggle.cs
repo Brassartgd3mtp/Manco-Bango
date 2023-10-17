@@ -3,7 +3,7 @@ using UnityEngine;
 public class CanvasToggle : MonoBehaviour
 {
     public Canvas canvas; // Référence au Canvas que vous souhaitez activer/désactiver
-    private bool isGamePaused = false;
+    public bool isGamePaused = false;
     public HealthManager healthManager;
     private void Start()
     {
