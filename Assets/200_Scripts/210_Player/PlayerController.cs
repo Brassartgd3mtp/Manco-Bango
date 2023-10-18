@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
 
     public Animator animator;
+    public Animator CamAnimator;
+
 
     //bool isTouchingWall;
     Transform wallColliding;
@@ -63,24 +65,26 @@ public class PlayerController : MonoBehaviour
         else
             rb.drag = 0;
 
-        if (moveDirection.x != 0 && rb.velocity.y <= 0)
+        if (moveDirection.x != 0 && moveDirection.y <= 1.1)
         {
             animator.SetBool("IsMoving", true);
-            Debug.Log("Move");
+            CamAnimator.SetBool("IsMoving", true);
         }
 
         else
         {
             animator.SetBool("IsMoving", false);
-            Debug.Log("Move pas");
+            CamAnimator.SetBool("IsMoving", false);
 
         }
 
 
-        if (moveDirection.y != 0)
+        if (moveDirection.y >=1.1 )
         {
             animator.SetBool("IsMoving", false);
-            Debug.Log("Jump");
+            CamAnimator.SetBool("IsMoving", false);
+
+            Debug.Log(CamAnimator);
 
         }
     }
