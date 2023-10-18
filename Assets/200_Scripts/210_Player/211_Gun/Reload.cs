@@ -10,13 +10,10 @@ public class Reload : MonoBehaviour
     [SerializeField] private float reloadTimeSet = 0.15f;
     [SerializeField] private float reloadTimeCountdown;
 
-    [SerializeField] private ParticleManager particleManager;
-
     private Barrel barrel;
 
     private void Start()
     {
-        particleManager = gameObject.GetComponent<PlayerGun>().particleManager;
         barrel = gameObject.GetComponent<Barrel>();
         reloadTimeCountdown = reloadTimeSet;
     }

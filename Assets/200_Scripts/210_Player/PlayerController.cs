@@ -8,24 +8,24 @@ using UnityEditor.PackageManager;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 10;
-    public float airMultiplier = 1;
-    public float groundDrag = 5;
-    [SerializeField] LayerMask whatIsWall;
-    [SerializeField] CapsuleCollider capsuleCollider;
+    [SerializeField] private LayerMask whatIsWall;
+    [SerializeField] private CapsuleCollider capsuleCollider;
     [SerializeField] private Transform orientation;
+    private float moveSpeed = 10;
+    private float airMultiplier = 1;
+    private float groundDrag = 5;
 
     [Header("Jump")]
-    public float jumpForce = 8;
-    public float jumpCooldown = 0.25f;
-    private bool readyToJump;
     [SerializeField] private float coyotteTimer = 0.25f;
     [SerializeField] private float maxCoyotteTime = 0.25f;
+    private float jumpForce = 8;
+    private float jumpCooldown = 0.25f;
+    private bool readyToJump;
 
     [Header("Ground Check")]
-    [SerializeField] private float playerHeight = 2;
     [SerializeField] private LayerMask whatIsGround;
-    [SerializeField] private bool grounded;
+    public float playerHeight = 2;
+    private bool grounded;
 
     [HideInInspector] public float horizontalInput;
     [HideInInspector] public float verticalInput;
