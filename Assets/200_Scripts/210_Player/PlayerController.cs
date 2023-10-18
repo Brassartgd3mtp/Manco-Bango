@@ -32,10 +32,9 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public Vector3 moveDirection;
 
-
     private Rigidbody rb;
 
-    public Animator animator;
+    //public Animator animator;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -59,26 +58,26 @@ public class PlayerController : MonoBehaviour
         else
             rb.drag = 0;
 
-        if (moveDirection.x != 0 && rb.velocity.y <= 0)
-        {
-            animator.SetBool("IsMoving", true);
-            Debug.Log("Move");
-        }
-
-        else
-        {
-            animator.SetBool("IsMoving", false);
-            Debug.Log("Move pas");
-
-        }
-
-
-        if (moveDirection.y != 0)
-        {
-            animator.SetBool("IsMoving", false);
-            Debug.Log("Jump");
-
-        }
+        //if (moveDirection.x != 0 && rb.velocity.y <= 0)
+        //{
+        //    animator.SetBool("IsMoving", true);
+        //    Debug.Log("Move");
+        //}
+        //
+        //else
+        //{
+        //    animator.SetBool("IsMoving", false);
+        //    Debug.Log("Move pas");
+        //
+        //}
+        //
+        //
+        //if (moveDirection.y != 0)
+        //{
+        //    animator.SetBool("IsMoving", false);
+        //    Debug.Log("Jump");
+        //
+        //}
     }
 
     private void FixedUpdate()
