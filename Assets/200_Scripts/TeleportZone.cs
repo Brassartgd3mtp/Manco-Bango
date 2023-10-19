@@ -3,6 +3,7 @@ using UnityEngine;
 public class TeleportZone : MonoBehaviour
 {
     public Transform destination; // Référence à la zone de destination
+    private TimerController timerController;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -10,6 +11,7 @@ public class TeleportZone : MonoBehaviour
         {
             // Téléportez le joueur à la position de la zone de destination
             other.transform.position = destination.position;
+            timerController.timer = 0.0f;
         }
     }
 }

@@ -16,7 +16,7 @@ public class TimeSlowdown : MonoBehaviour
     public int modifySensibilityY = 2; // Sensibilité de la souris en mode ralenti
 
     private bool isSlowingDown = false;
-    [SerializeField] private int currentSlowdowns = 0;
+    [SerializeField] private int usedSlowdowns = 0;
     private int originalMouseSensitivityX;
     private int originalMouseSensitivityY;
     public CanvasToggle canvasToggle; 
@@ -29,27 +29,27 @@ public class TimeSlowdown : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1) && !canvasToggle.isGamePaused ) 
+        if (Input.GetButtonDown("Slowmotion") && !canvasToggle.isGamePaused ) 
         {
-            if (!isSlowingDown && currentSlowdowns < maxSlowdowns)
+            if (!isSlowingDown && usedSlowdowns < maxSlowdowns)
             {
                 StartCoroutine(SlowTime());
-                currentSlowdowns++;
+                usedSlowdowns++;
             }
-            else if (currentSlowdowns <= maxSlowdowns)
+            else if (usedSlowdowns <= maxSlowdowns)
             {
                 ResetTime();
             }
         }
 
         // Mettez à jour le texte de l'UI avec le nombre de ralentissements restants
-        slowdownText.text = $"Ralentissements restants : {(maxSlowdowns - currentSlowdowns)}";
+        slowdownText.text = $"Ralentissements restants : {(maxSlowdowns - usedSlowdowns)}";
     }
 
     public void AddSlowdowns(int amount)
     {
-        currentSlowdowns -= amount;
-        currentSlowdowns = Mathf.Clamp(currentSlowdowns, 0, maxSlowdowns);
+        usedSlowdowns -= amount;
+        usedSlowdowns = Mathf.Clamp(usedSlowdowns, 0, maxSlowdowns);
     }
 
     private IEnumerator SlowTime()
