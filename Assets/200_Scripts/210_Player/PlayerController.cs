@@ -37,7 +37,12 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
 
-    //public Animator animator;
+    public Animator animator;
+    public Animator CamAnimator;
+
+
+  
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -63,26 +68,28 @@ public class PlayerController : MonoBehaviour
         else
             rb.drag = 0;
 
-        //if (moveDirection.x != 0 && rb.velocity.y <= 0)
-        //{
-        //    animator.SetBool("IsMoving", true);
-        //    Debug.Log("Move");
-        //}
-        //
-        //else
-        //{
-        //    animator.SetBool("IsMoving", false);
-        //    Debug.Log("Move pas");
-        //
-        //}
-        //
-        //
-        //if (moveDirection.y != 0)
-        //{
-        //    animator.SetBool("IsMoving", false);
-        //    Debug.Log("Jump");
-        //
-        //}
+        if (moveDirection.x != 0 && moveDirection.y <= 1.1)
+        {
+            animator.SetBool("IsMoving", true);
+            CamAnimator.SetBool("IsMoving", true);
+        }
+
+        else
+        {
+            animator.SetBool("IsMoving", false);
+            CamAnimator.SetBool("IsMoving", false);
+
+        }
+
+
+        if (moveDirection.y >=1.1 )
+        {
+            animator.SetBool("IsMoving", false);
+            CamAnimator.SetBool("IsMoving", false);
+
+            Debug.Log(CamAnimator);
+
+        }
     }
 
     private void FixedUpdate()

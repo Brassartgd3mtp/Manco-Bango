@@ -14,8 +14,14 @@ public class HealthManager : MonoBehaviour
     public bool Escape = false;
     private bool isGameOver = false;
 
+    public int damageamount ;
+
+
+
+
     void Update()
     {
+
         if (!isGameOver)
         {
             healthBarImage.fillAmount = health / maxHealth;
@@ -35,6 +41,35 @@ public class HealthManager : MonoBehaviour
             }
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            DamageButton(10); // Vous pouvez ajuster la valeur de dégâts comme nécessaire.
+        }
+
+      
+
+
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.CompareTag("Heal"))
+        {
+            if (health != maxHealth)
+            {
+                HealButton(10); // Vous pouvez ajuster la valeur de dégâts comme nécessaire.
+                Destroy(collision.gameObject);
+
+            }
+
+        }
+    }
+
+
+
 
     public void DamageButton(int damageAmount)
     {

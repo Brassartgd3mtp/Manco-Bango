@@ -16,6 +16,7 @@ TagManager:
   - StartZone
   - Wall
   - Enemy
+  - Heal
   layers:
   - Default
   - TransparentFX
