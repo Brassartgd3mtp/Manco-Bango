@@ -8,7 +8,6 @@ using UnityEngine.EventSystems;
 public class PlayerDash : MonoBehaviour
 {
     public float dashForce = 10.0f; // Force du dash
-    //public float dashUpward = 0.0f; // Force du dash
     public float dashDuration = 0.2f; // Durée du dash
     public float dashCooldown = 1.0f; // Temps de recharge entre les dashes
     public float timer;
@@ -17,8 +16,9 @@ public class PlayerDash : MonoBehaviour
     [SerializeField] private Camera fovEffect; // Référence à la caméra du joueur
 
     private bool canDash = true; // Indicateur permettant de savoir si le joueur peut effectuer un dash
-    private Rigidbody rb; // Référence au Rigidbody du joueur
+
     private PlayerController playerController;
+    private Rigidbody rb;
 
     private void Start()
     {

@@ -8,24 +8,27 @@ using UnityEditor.PackageManager;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 10;
-    public float airMultiplier = 1;
-    public float groundDrag = 5;
-    [SerializeField] LayerMask whatIsWall;
-    [SerializeField] CapsuleCollider capsuleCollider;
+    [SerializeField] private LayerMask whatIsWall;
+    [SerializeField] private CapsuleCollider capsuleCollider;
     [SerializeField] private Transform orientation;
+    private float moveSpeed = 10;
+    private float airMultiplier = 1;
+    private float groundDrag = 5;
 
     [Header("Jump")]
-    public float jumpForce = 8;
-    public float jumpCooldown = 0.25f;
+    [SerializeField] private float jumpForce = 8;
+    [SerializeField] private float jumpCooldown = 0.25f;
     private bool readyToJump;
-    [SerializeField] private float coyotteTimer = 0.25f;
+
+    [Header("Coyotte")]
     [SerializeField] private float maxCoyotteTime = 0.25f;
+    [SerializeField] private bool canCoyotte;
+    [SerializeField] private float coyotteTimer = 0.25f;
 
     [Header("Ground Check")]
-    [SerializeField] private float playerHeight = 2;
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private bool grounded;
+    public float playerHeight = 2;
 
     [HideInInspector] public float horizontalInput;
     [HideInInspector] public float verticalInput;
@@ -45,8 +48,10 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
-
         readyToJump = true;
+
+        coyotteTimer = maxCoyotteTime;
+        canCoyotte = true;
     }
 
     private void Update()
@@ -97,10 +102,13 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetButtonDown("Jump") && readyToJump && (grounded || coyotteTimer > 0))
+        canCoyotte = coyotteTimer > 0;
+
+        if (Input.GetButtonDown("Jump") && readyToJump && (grounded || canCoyotte))
         {
+            StartCoroutine(CoyotteLimit());
             readyToJump = false;
-            
+
             Jump();
             
             Invoke(nameof(ResetJump), jumpCooldown);
@@ -109,6 +117,7 @@ public class PlayerController : MonoBehaviour
         if (grounded)
         {
             coyotteTimer = maxCoyotteTime;
+            canCoyotte = true;
         }
 
         else if (coyotteTimer > 0)
@@ -172,5 +181,11 @@ public class PlayerController : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
+    }
+
+    private IEnumerator CoyotteLimit()
+    {
+        yield return new WaitForSeconds(0.1f);
+        canCoyotte = false;
     }
 }

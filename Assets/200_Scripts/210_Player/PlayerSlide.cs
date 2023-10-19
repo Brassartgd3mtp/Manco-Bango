@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class PlayerSlide : MonoBehaviour
 {
+    [Header("Slide")]
     [SerializeField] private float maxSlideTime;
     [SerializeField] private float slideForce;
     [SerializeField] private float slideYScale;
-
-    [SerializeField] private int fovModifier;
-    [SerializeField] private float maxFOVTimer;
-    [SerializeField ]private float FOVTimer;
-    private float baseFOV;
-
     private float slideTimer;
     private float startYScale;
     private bool sliding;
 
+    [Header("FOV")]
+    [SerializeField] private int fovModifier;
+    [SerializeField] private float maxFOVTimer;
+    [SerializeField] private float FOVTimer;
     [SerializeField] private Camera fovEffect;
+    private float baseFOV;
+
+    [Header("Slope Slide")]
+    [SerializeField] private float maxSlopeAngle;
+
     private PlayerController playerController;
     private Rigidbody rb;
-
-    private bool onSlope;
-    [SerializeField] private double downwardSlidingStart;
-    [SerializeField] private double downwardSlidingEnd;
 
     private void Start()
     {
@@ -45,12 +45,14 @@ public class PlayerSlide : MonoBehaviour
         }
         else if (Input.GetButtonUp("Slide"))
         {
-            StopCoroutine(DownwardSlope());
             StopSlide();
         }
 
-        if (onSlope && downwardSlidingStart < downwardSlidingEnd)
-            StopSlide();
+        if (OnSlope())
+        {
+            if (!Input.GetButtonDown("Jump"))
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+        }
     }
 
     private void FixedUpdate()
@@ -74,22 +76,18 @@ public class PlayerSlide : MonoBehaviour
 
     private void Sliding()
     {
-        if (onSlope) StartCoroutine(DownwardSlope());
-
-        if (FOVTimer > 0) FOVTimer -= Time.deltaTime;
-
         rb.AddForce(playerController.moveDirection * slideForce, ForceMode.Force);
 
         slideTimer -= Time.deltaTime;
 
-        if (slideTimer <= 0 && !onSlope)
-        {
-            StopCoroutine(DownwardSlope());
+        if (slideTimer <= 0 && !OnSlope())
             StopSlide();
-        }
 
         if (FOVTimer > 0)
+        {
+            FOVTimer -= Time.deltaTime;
             fovEffect.fieldOfView += fovModifier * Time.deltaTime;
+        }
 
         else if (fovEffect.fieldOfView != baseFOV)
             fovEffect.fieldOfView -= fovModifier * Time.deltaTime;
@@ -110,22 +108,17 @@ public class PlayerSlide : MonoBehaviour
         FOVTimer = maxFOVTimer;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public bool OnSlope()
     {
-        if(collision.gameObject.layer == 12) onSlope = true;
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.layer == 12) onSlope = false;
-    }
-
-    private IEnumerator DownwardSlope()
-    {
-        downwardSlidingStart = gameObject.transform.position.y;
-
-        yield return new WaitForSeconds(0.001f);
-
-        downwardSlidingEnd = gameObject.transform.position.y;
+        RaycastHit slopeHit;
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerController.playerHeight * 0.5f + 0.3f))
+        {
+            if (slopeHit.collider.gameObject.layer == 12)
+            {
+                float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+                return angle < maxSlopeAngle && angle != 0;
+            }
+        }
+        return false;
     }
 }

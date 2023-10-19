@@ -28,7 +28,7 @@ TagManager:
   - Player
   - Blue
   - Red
-  - Ennemy
+  - Enemy
   - Wall
   - Slope
   - 
