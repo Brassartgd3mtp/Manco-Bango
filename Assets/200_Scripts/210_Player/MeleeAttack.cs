@@ -27,10 +27,18 @@ public class MeleeAttack : MonoBehaviour
         foreach (Collider hitCollider in hitColliders)
         {
             // Vérifiez si l'objet a le tag "Destroyable" et le layer "Enemy"
-            if (hitCollider.CompareTag("Destroyable") && hitCollider.gameObject.layer == LayerMask.NameToLayer("Ennemy"))
+            if (hitCollider.CompareTag("Enemy") && hitCollider.gameObject.layer == LayerMask.NameToLayer("Ennemy"))
             {
                 // Détruisez immédiatement l'ennemi
-                Destroy(hitCollider.gameObject);
+                // Obtenez la référence à l'ennemi s'il est touché par le raycast
+                EnemyHealth enemyHealth = transform.GetComponent<EnemyHealth>();
+
+                if (enemyHealth != null)
+                {
+                    // Appel de la fonction TakeDamage pour réduire les points de vie de l'ennemi
+                    enemyHealth.TakeDamage(10);
+                    Debug.Log("-10PV");
+                }
             }
         }
     }
