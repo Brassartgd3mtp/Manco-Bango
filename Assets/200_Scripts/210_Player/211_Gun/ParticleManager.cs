@@ -6,14 +6,15 @@ using UnityEngine;
 public class ParticleManager : MonoBehaviour
 {
     [SerializeField] private ParticleSystem impact;
-
-    [SerializeField] private CameraMouseLook cameraMouseLook;
+    [SerializeField] private ParticleSystem dash;
 
     private ParticleSystem.MainModule impactMain;
+    private ParticleSystem.MainModule dashMain;
 
     void Start()
     {
         impactMain = impact.main;
+        dashMain = dash.main;
     }
 
     public void Impact(Color _color, Vector3 _hitPoint, Vector3 _hitNormal)
@@ -22,5 +23,11 @@ public class ParticleManager : MonoBehaviour
         impact.transform.position = _hitPoint + _hitNormal;
         impact.transform.rotation = Quaternion.LookRotation(_hitNormal);
         impact.Play();
+    }
+
+    public void Dash(float _dashDuration)
+    {
+        dashMain.duration = _dashDuration;
+        dash.Play();
     }
 }

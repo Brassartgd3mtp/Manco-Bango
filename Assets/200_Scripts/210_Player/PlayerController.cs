@@ -22,12 +22,12 @@ public class PlayerController : MonoBehaviour
 
     [Header("Coyotte")]
     [SerializeField] private float maxCoyotteTime = 0.25f;
-    [SerializeField] private bool canCoyotte;
     [SerializeField] private float coyotteTimer = 0.25f;
+    private bool canCoyotte;
 
     [Header("Ground Check")]
     [SerializeField] private LayerMask whatIsGround;
-    [SerializeField] private bool grounded;
+    private bool grounded;
     public float playerHeight = 2;
 
     [HideInInspector] public float horizontalInput;
@@ -37,11 +37,8 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
 
-    public Animator animator;
-    public Animator CamAnimator;
-
-
-  
+    //public Animator animator;
+    //public Animator CamAnimator;
 
     private void Start()
     {
@@ -68,28 +65,28 @@ public class PlayerController : MonoBehaviour
         else
             rb.drag = 0;
 
-        if (moveDirection.x != 0 && moveDirection.y <= 1.1)
-        {
-            animator.SetBool("IsMoving", true);
-            CamAnimator.SetBool("IsMoving", true);
-        }
-
-        else
-        {
-            animator.SetBool("IsMoving", false);
-            CamAnimator.SetBool("IsMoving", false);
-
-        }
-
-
-        if (moveDirection.y >=1.1 )
-        {
-            animator.SetBool("IsMoving", false);
-            CamAnimator.SetBool("IsMoving", false);
-
-            Debug.Log(CamAnimator);
-
-        }
+        //if (moveDirection.x != 0 && moveDirection.y <= 1.1)
+        //{
+        //    animator.SetBool("IsMoving", true);
+        //    CamAnimator.SetBool("IsMoving", true);
+        //}
+        //
+        //else
+        //{
+        //    animator.SetBool("IsMoving", false);
+        //    CamAnimator.SetBool("IsMoving", false);
+        //
+        //}
+        //
+        //
+        //if (moveDirection.y >=1.1 )
+        //{
+        //    animator.SetBool("IsMoving", false);
+        //    CamAnimator.SetBool("IsMoving", false);
+        //
+        //    Debug.Log(CamAnimator);
+        //
+        //}
     }
 
     private void FixedUpdate()
