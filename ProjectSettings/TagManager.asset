@@ -17,6 +17,7 @@ TagManager:
   - Wall
   - Enemy
   - Heal
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
