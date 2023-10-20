@@ -4,7 +4,7 @@ using UnityEngine;
 public class TimerController : MonoBehaviour
 {
     private bool isTimerRunning = false;
-    private float timer = 0.0f;
+    [HideInInspector] public float timer = 0.0f;
 
     private void Start()
     {
