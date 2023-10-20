@@ -21,7 +21,6 @@ public class ScriptIntro : MonoBehaviour
 
     private string fullText;
     private string currentText = "";
-    private bool isTyping = false;
 
     // Start is called before the first frame update
     void Start()
@@ -44,16 +43,12 @@ public class ScriptIntro : MonoBehaviour
 
     IEnumerator TypeText(string textToType)
     {
-        isTyping = true;
-
         foreach (char letter in textToType)
         {
             currentText += letter;
             introText.text = currentText;
             yield return new WaitForSeconds(typingSpeed);
         }
-
-        isTyping = false;
 
         yield return new WaitForSeconds(preFadeOutDelay); // Délai avant de faire disparaître l'image
         StartCoroutine(FadeImage(false, fadeOutDuration));
