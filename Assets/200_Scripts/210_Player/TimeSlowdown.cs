@@ -19,7 +19,8 @@ public class TimeSlowdown : MonoBehaviour
     [SerializeField] private int currentSlowdowns = 0;
     private int originalMouseSensitivityX;
     private int originalMouseSensitivityY;
-    public CanvasToggle canvasToggle; 
+    public CanvasToggle canvasToggle;
+    public InteractableItem interactableItem;
 
     private void Start()
     {
@@ -29,7 +30,7 @@ public class TimeSlowdown : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1) && !canvasToggle.isGamePaused ) 
+        if (Input.GetMouseButtonDown(1) && !canvasToggle.isGamePaused && !interactableItem.buttonAlreadyPressed) 
         {
             if (!isSlowingDown && currentSlowdowns < maxSlowdowns)
             {

@@ -7,6 +7,10 @@ using UnityEditor.PackageManager;
 
 public class PlayerController : MonoBehaviour
 {
+
+    private CheckpointManager checkpointManager;
+
+
     [Header("Movement")]
     [SerializeField] private LayerMask whatIsWall;
     [SerializeField] private CapsuleCollider capsuleCollider;
@@ -45,6 +49,9 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        checkpointManager = FindObjectOfType<CheckpointManager>(); // Recherchez le gestionnaire de checkpoints dans la scène
+
+
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
@@ -56,6 +63,13 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            // Revenir au dernier checkpoint
+            checkpointManager.ReturnToCheckpoint();
+        }
+
         //Je fait un Raycast qui part de mon personnage et qui va en direction du sol pour d�tecter s'il est en contact avec le sol
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
 

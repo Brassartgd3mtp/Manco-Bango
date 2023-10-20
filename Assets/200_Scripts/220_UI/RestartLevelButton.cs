@@ -4,8 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class RestartLevelButton : MonoBehaviour
 {
-    private Scene sceneToRestart;
+    public string sceneToLoad;
 
+    private Scene sceneToRestart;
+    HealthManager healthManager;
     private void Awake()
     {
         Time.timeScale = 1.0f;
@@ -13,6 +15,7 @@ public class RestartLevelButton : MonoBehaviour
 
     void Start()
     {
+
        sceneToRestart = SceneManager.GetActiveScene();
         Debug.Log(sceneToRestart.ToString());
     }
@@ -20,6 +23,6 @@ public class RestartLevelButton : MonoBehaviour
     public void RestartLevel()
     {
         // Chargez à nouveau la scène actuelle
-        SceneManager.LoadScene(sceneToRestart.name);
+        SceneManager.LoadScene(sceneToLoad);
     }
 }

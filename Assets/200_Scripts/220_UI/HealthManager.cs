@@ -13,10 +13,9 @@ public class HealthManager : MonoBehaviour
     public GameObject gameOverPanel; // Référence au panneau Game Over
     public bool Escape = false;
     private bool isGameOver = false;
-
     public int damageamount ;
 
-
+    [SerializeField] CheckpointManager checkpointManager ;
 
 
     void Update()
@@ -29,15 +28,18 @@ public class HealthManager : MonoBehaviour
 
             health = Mathf.Clamp(health, 0f, maxHealth);
 
-            if (health <= 0)
+            if (health == 0)
             {
+                Debug.Log("Mort");
+                checkpointManager.ReturnToCheckpoint();
+                health = checkpointManager.SavedHealth; 
                 // La santé est tombée à 0, désactivez la touche "Echap"
-                DisableEscapeKey();
-                gameOverPanel.SetActive(true);
-                Escape = true;
-                Time.timeScale = 0f;
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+               // DisableEscapeKey();
+               // gameOverPanel.SetActive(true);
+               // Escape = true;
+               // Time.timeScale = 0f;
+               // Cursor.visible = true;
+               // Cursor.lockState = CursorLockMode.None;
             }
         }
     }
