@@ -5,10 +5,13 @@ using UnityEngine;
 
 public class Reload : MonoBehaviour
 {
-    [SerializeField] private RectTransform selector;
-
+    [Header("Reload")]
     [SerializeField] private float reloadTimeSet = 0.15f;
     [SerializeField] private float reloadTimeCountdown;
+
+    [Header("References")]
+    [SerializeField] private RectTransform selector;
+    [SerializeField] private CanvasToggle canvasToggle;
 
     private Barrel barrel;
 
@@ -20,19 +23,22 @@ public class Reload : MonoBehaviour
 
     void Update()
     {
-        if (reloadTimeCountdown > 0) reloadTimeCountdown -= Time.deltaTime;
-
-        if (Input.GetButtonDown("Reload") && barrel.barrelStock.Count < 6 && reloadTimeCountdown <=0) //Quand je recharge (et si le chargeur n'est pas déjà plein), je crée un balle, je lui change sa couleur et je l'ajoute au Stock
+        if (!canvasToggle.isGamePaused)
         {
-            if (selector.rotation.eulerAngles.z <= 180 && selector.rotation.eulerAngles.z > 0) 
+            if (reloadTimeCountdown > 0) reloadTimeCountdown -= Time.deltaTime;
+
+            if (Input.GetButtonDown("Reload") && barrel.barrelStock.Count < 6 && reloadTimeCountdown <= 0) //Quand je recharge (et si le chargeur n'est pas déjà plein), je crée un balle, je lui change sa couleur et je l'ajoute au Stock
             {
-                barrel.AddStock(Color.blue);
+                if (selector.rotation.eulerAngles.z <= 180 && selector.rotation.eulerAngles.z > 0)
+                {
+                    barrel.AddStock(Color.blue);
+                }
+                else /*if (selector.rotation.eulerAngles.z <= 0 && selector.rotation.eulerAngles.z > -180)*/
+                {
+                    barrel.AddStock(Color.red);
+                }
+                reloadTimeCountdown = reloadTimeSet;
             }
-            else /*if (selector.rotation.eulerAngles.z <= 0 && selector.rotation.eulerAngles.z > -180)*/
-            {
-                barrel.AddStock(Color.red);
-            }
-            reloadTimeCountdown = reloadTimeSet;
         }
     }
 }

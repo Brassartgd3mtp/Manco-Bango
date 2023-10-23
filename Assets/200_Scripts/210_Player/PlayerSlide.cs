@@ -39,19 +39,23 @@ public class PlayerSlide : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Slide"))
+        if (playerController.moveDirection != new Vector3(0, 0, 0))
         {
-            StartSlide();
-        }
-        else if (Input.GetButtonUp("Slide"))
-        {
-            StopSlide();
-        }
+            if (Input.GetButtonDown("Slide"))
+            {
+                StartSlide();
+            }
+            else if (Input.GetButtonUp("Slide"))
+            {
+                StopSlide();
+            }
 
-        if (OnSlope())
-        {
-            if (!Input.GetButtonDown("Jump"))
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            if (OnSlope())
+            {
+                if (!Input.GetButtonDown("Jump"))
+                    rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            }
+
         }
     }
 
@@ -64,31 +68,31 @@ public class PlayerSlide : MonoBehaviour
     private void StartSlide()
     {
         sliding = true;
-
+        
         Transform playerObj = gameObject.transform;
         playerObj.localScale = new Vector3(playerObj.localScale.x, slideYScale, playerObj.localScale.z);
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-
+        
         slideTimer = maxSlideTime;
-
+        
         baseFOV = fovEffect.fieldOfView;
     }
 
     private void Sliding()
     {
         rb.AddForce(playerController.moveDirection * slideForce, ForceMode.Force);
-
+        
         slideTimer -= Time.deltaTime;
-
+        
         if (slideTimer <= 0 && !OnSlope())
             StopSlide();
-
+        
         if (FOVTimer > 0)
         {
             FOVTimer -= Time.deltaTime;
             fovEffect.fieldOfView += fovModifier * Time.deltaTime;
         }
-
+        
         else if (fovEffect.fieldOfView != baseFOV)
             fovEffect.fieldOfView -= fovModifier * Time.deltaTime;
     }
