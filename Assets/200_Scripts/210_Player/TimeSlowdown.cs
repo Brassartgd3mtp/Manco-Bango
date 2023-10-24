@@ -6,27 +6,24 @@ using TMPro;
 
 public class TimeSlowdown : MonoBehaviour
 {
-    public float slowdownFactor = 0.05f; // Facteur de ralentissement du temps
-    public float slowdownDuration = 2f; // Dur�e du ralentissement du temps
-    public int maxSlowdowns = 3; // Nombre maximum de ralentissements autoris�s
-
-    public TextMeshProUGUI slowdownText; // Faites r�f�rence � l'objet Text (UI Text) dans l'inspecteur
-    public CameraMouseLook cameraMouseLook; // Faites r�f�rence au Transform de votre joueur FPS
-    public int modifySensibilityX = 2; // Sensibilit� de la souris en mode ralenti
-    public int modifySensibilityY = 2; // Sensibilit� de la souris en mode ralenti
-
-    private bool isSlowingDown = false;
+    [Header("Slowdown")]
+    [SerializeField] private float slowdownFactor = 0.05f; //Facteur de ralentissement du temps
+    [SerializeField] private float slowdownDuration = 2f;
+    [SerializeField] private int maxSlowdowns = 3;
     [SerializeField] private int usedSlowdowns = 0;
+
+    [Header("Sensibility")]
+    [SerializeField] private int modifySensibilityX = 2;
+    [SerializeField] private int modifySensibilityY = 2;
+    private bool isSlowingDown = false;
     private int originalMouseSensitivityX;
     private int originalMouseSensitivityY;
-    public CanvasToggle canvasToggle;
-    public InteractableItem interactableItem;
 
-    private void Start()
-    {
-        originalMouseSensitivityX = cameraMouseLook.sensX;
-        originalMouseSensitivityY = cameraMouseLook.sensY;
-    }
+    [Header("References")]
+    [SerializeField] private TextMeshProUGUI slowdownText;
+    [SerializeField] private CameraMouseLook cameraMouseLook;
+    [SerializeField] private CanvasToggle canvasToggle;
+    [SerializeField] private InteractableItem interactableItem;
 
     private void Update()
     {
@@ -55,6 +52,9 @@ public class TimeSlowdown : MonoBehaviour
 
     private IEnumerator SlowTime()
     {
+        originalMouseSensitivityX = cameraMouseLook.sensX;
+        originalMouseSensitivityY = cameraMouseLook.sensY;
+
         isSlowingDown = true;
 
         // Ralentissez le temps en ajustant Time.timeScale (pour d'autres scripts)

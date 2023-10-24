@@ -7,9 +7,7 @@ using UnityEditor.PackageManager;
 
 public class PlayerController : MonoBehaviour
 {
-
     private CheckpointManager checkpointManager;
-
 
     [Header("Movement")]
     [SerializeField] private LayerMask whatIsWall;
@@ -26,12 +24,11 @@ public class PlayerController : MonoBehaviour
 
     [Header("Coyotte")]
     [SerializeField] private float maxCoyotteTime = 0.25f;
-    [SerializeField] private float coyotteTimer = 0.25f;
-    private bool canCoyotte;
+    [SerializeField] private bool canCoyotte;
 
     [Header("Ground Check")]
     [SerializeField] private LayerMask whatIsGround;
-    private bool grounded;
+    [SerializeField] private bool grounded;
     public float playerHeight = 2;
 
     [HideInInspector] public float horizontalInput;
@@ -41,66 +38,66 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
 
-    //public Animator animator;
-    //public Animator CamAnimator;
+    public Animator animator;
+    public Animator CamAnimator;
 
     private void Start()
     {
-        checkpointManager = FindObjectOfType<CheckpointManager>(); // Recherchez le gestionnaire de checkpoints dans la scène
-
+        checkpointManager = FindObjectOfType<CheckpointManager>();
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
         readyToJump = true;
 
-        coyotteTimer = maxCoyotteTime;
         canCoyotte = true;
     }
 
     private void Update()
     {
+        //if (maxCoyotteTime != 0.25f) maxCoyotteTime = 0.25f;
 
         if (Input.GetKeyDown(KeyCode.F5))
         {
-            // Revenir au dernier checkpoint
+            //Je revient au dernier checkpoint
             checkpointManager.ReturnToCheckpoint();
         }
 
-        //Je fait un Raycast qui part de mon personnage et qui va en direction du sol pour d�tecter s'il est en contact avec le sol
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
+        //Je fait un Raycast qui part de mon personnage et qui va en direction du sol pour détecter s'il est en contact avec le sol
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.01f, whatIsGround);
 
-        GetInput();
-        SpeedControl();
-
-        // handle drag
+        //Je modifie l'attraction si le joueur est en l'air
         if (grounded)
             rb.drag = groundDrag;
         else
             rb.drag = 0;
 
-        //if (moveDirection.x != 0 && moveDirection.y <= 1.1)
-        //{
-        //    animator.SetBool("IsMoving", true);
-        //    CamAnimator.SetBool("IsMoving", true);
-        //}
-        //
-        //else
-        //{
-        //    animator.SetBool("IsMoving", false);
-        //    CamAnimator.SetBool("IsMoving", false);
-        //
-        //}
-        //
-        //
-        //if (moveDirection.y >=1.1 )
-        //{
-        //    animator.SetBool("IsMoving", false);
-        //    CamAnimator.SetBool("IsMoving", false);
-        //
-        //    Debug.Log(CamAnimator);
-        //
-        //}
+        GetInput();
+        SpeedControl();
+
+
+        //Je change mon animation de marche en fonction de si je suis au sol ou non
+        if (moveDirection.x != 0 && moveDirection.y <= 1.1)
+        {
+            animator.SetBool("IsMoving", true);
+            CamAnimator.SetBool("IsMoving", true);
+        }
+        
+        else
+        {
+            animator.SetBool("IsMoving", false);
+            CamAnimator.SetBool("IsMoving", false);
+        
+        }
+        
+        if (moveDirection.y >=1.1 )
+        {
+            animator.SetBool("IsMoving", false);
+            CamAnimator.SetBool("IsMoving", false);
+        
+            Debug.Log(CamAnimator);
+        
+        }
     }
 
     private void FixedUpdate()
@@ -108,32 +105,33 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
     }
 
+    private Coroutine _coyotteCoroutine;
     private void GetInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        canCoyotte = coyotteTimer > 0;
-
         if (Input.GetButtonDown("Jump") && readyToJump && (grounded || canCoyotte))
         {
-            StartCoroutine(CoyotteLimit());
             readyToJump = false;
 
+            canCoyotte = false;
+            Debug.Log(grounded);
+
             Jump();
-            
+
             Invoke(nameof(ResetJump), jumpCooldown);
+
+            return;
         }
 
-        if (grounded)
-        {
-            coyotteTimer = maxCoyotteTime;
-            canCoyotte = true;
-        }
+        if (!grounded)
+            _coyotteCoroutine = StartCoroutine(CoyotteLimit());
 
-        else if (coyotteTimer > 0)
+        else
         {
-            coyotteTimer -= Time.deltaTime;
+            if (_coyotteCoroutine is not null) StopCoroutine(_coyotteCoroutine);
+            ResetCoyotte();
         }
     }
 
@@ -141,10 +139,10 @@ public class PlayerController : MonoBehaviour
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        // Je vérifie si le personnage est en contact avec un mur dans la direction de déplacement
+        //Je vérifie si le personnage est en contact avec un mur dans la direction de déplacement
         bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1.5f, whatIsWall);
 
-        // Si le personnage est au sol, ajoutez la force de déplacement
+        //Si le personnage est au sol, je dépalce le joueur et j'ignore l'adhérence avec un mur
         if (grounded)
         {
             if (!isTouchingWall)
@@ -157,9 +155,8 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(moveDirectionWithoutWall * moveSpeed * 10f, ForceMode.Force);
             }
         }
-        else
+        else //J'ajoute la force en l'air en tenant compte de l'adhérence au mur
         {
-            // Ajoutez la force en l'air en tenant compte de l'adhérence au mur
             if (!isTouchingWall)
             {
                 rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
@@ -174,7 +171,7 @@ public class PlayerController : MonoBehaviour
 
     private void SpeedControl()
     {
-        //Limite la v�locit� max du joueur
+        //Je limite la vélocité max (sur l'axe X et Z) du joueur
         if (rb.velocity.magnitude > moveSpeed)
         {
             Vector3 limitedVelHor = rb.velocity.normalized * moveSpeed;
@@ -194,9 +191,14 @@ public class PlayerController : MonoBehaviour
         readyToJump = true;
     }
 
+    private void ResetCoyotte()
+    {
+        canCoyotte = true;
+    }
+
     private IEnumerator CoyotteLimit()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(maxCoyotteTime);
         canCoyotte = false;
     }
 }

@@ -36,17 +36,21 @@ public class PlayerDash : MonoBehaviour
     private void Update()
     {
         DashBarImage.fillAmount = cooldownTimer;
+
         if (cooldownTimer <= 0)
         {
-            if (canDash && Input.GetButtonDown("Dash")) // Changez la touche selon vos préférences
+            if (playerController.moveDirection != new Vector3(0, 0, 0))
             {
-                direction = playerController.moveDirection;
+                if (canDash && Input.GetButtonDown("Dash")) // Changez la touche selon vos préférences
+                {
+                    direction = playerController.moveDirection;
 
-                StartCoroutine(Dash());
-                particleManager.Dash(dashDuration);
+                    StartCoroutine(Dash());
+                    particleManager.Dash(dashDuration);
 
-                Invoke("ResetDash", dashCooldown + dashDuration); // Réactive le dash après le temps de recharge
-                cooldownTimer = dashCooldown + dashDuration;
+                    Invoke("ResetDash", dashCooldown + dashDuration); // Réactive le dash après le temps de recharge
+                    cooldownTimer = dashCooldown + dashDuration;
+                }
             }
         }
         else

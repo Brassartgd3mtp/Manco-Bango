@@ -28,7 +28,7 @@ public class CameraMouseLook : MonoBehaviour
 
         rotationY += mouseX;
 
-        rotationX -= mouseY * sensY;
+        rotationX -= mouseY;
         rotationX = Mathf.Clamp(rotationX, -90.0f, 90.0f); //Limite le degré maximal de rotation vertical
 
         transform.rotation = Quaternion.Euler(rotationX, rotationY, 0); //Rotation verticale

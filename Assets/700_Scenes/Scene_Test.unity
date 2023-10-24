@@ -18239,7 +18239,7 @@ Transform:
   m_GameObject: {fileID: 475556584}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.5, z: 0}
+  m_LocalPosition: {x: -5.63, y: 18.66, z: 22.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18283,6 +18283,7 @@ MonoBehaviour:
   gameOverPanel: {fileID: 871605543}
   Escape: 0
   damageamount: 0
+  checkpointManager: {fileID: 0}
 --- !u!114 &475556592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18311,6 +18312,8 @@ MonoBehaviour:
   horizontalInput: 0
   verticalInput: 0
   moveDirection: {x: 0, y: 0, z: 0}
+  animator: {fileID: 0}
+  CamAnimator: {fileID: 0}
 --- !u!114 &475556593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18395,6 +18398,7 @@ MonoBehaviour:
   modifySensibilityY: 5
   usedSlowdowns: 0
   canvasToggle: {fileID: 1459259471}
+  interactableItem: {fileID: 0}
 --- !u!1001 &476508113
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66232,6 +66236,7 @@ MonoBehaviour:
   canvas: {fileID: 1459259474}
   isGamePaused: 0
   healthManager: {fileID: 475556590}
+  interactableItem: {fileID: 0}
 --- !u!114 &1459259472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94513,13 +94518,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2104165422}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.31519806, y: -0, z: -0, w: 0.949026}
-  m_LocalPosition: {x: -434.12, y: -266.8, z: 31.8}
+  m_LocalRotation: {x: -0.13052624, y: 0, z: 0, w: 0.9914449}
+  m_LocalPosition: {x: -434.12, y: -262.67, z: 47.22}
   m_LocalScale: {x: 4.874151, y: 1, z: 87.67395}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1900130382}
-  m_LocalEulerAnglesHint: {x: -36.746, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -15, y: 0, z: 0}
 --- !u!65 &2104165424
 BoxCollider:
   m_ObjectHideFlags: 0
