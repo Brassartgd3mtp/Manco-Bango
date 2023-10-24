@@ -10,36 +10,34 @@ public class HealthManager : MonoBehaviour
     public float maxHealth = 100f;
     public Image healthBarImage;
     public TextMeshProUGUI healthText;
-    public GameObject gameOverPanel; // Référence au panneau Game Over
+    public GameObject gameOverPanel;
     public bool Escape = false;
     private bool isGameOver = false;
-    public int damageamount ;
+    public int damageamount;
 
-    [SerializeField] CheckpointManager checkpointManager ;
-
+    [SerializeField] CheckpointManager checkpointManager;
 
     void Update()
     {
-
         if (!isGameOver)
         {
             healthBarImage.fillAmount = health / maxHealth;
             healthText.text = health + " / " + maxHealth;
 
-            health = Mathf.Clamp(health, 0f, maxHealth);
-
-            if (health == 0)
+            if (health <= 0)
             {
-                Debug.Log("Mort");
+                Debug.Log("MORT");
+                // Sauvegardez la santé actuelle
+                health = checkpointManager.SavedHealth ;
+                // Téléportez le joueur au dernier checkpoint
                 checkpointManager.ReturnToCheckpoint();
-                health = checkpointManager.SavedHealth; 
-                // La santé est tombée à 0, désactivez la touche "Echap"
-               // DisableEscapeKey();
-               // gameOverPanel.SetActive(true);
-               // Escape = true;
-               // Time.timeScale = 0f;
-               // Cursor.visible = true;
-               // Cursor.lockState = CursorLockMode.None;
+                // Désactivez d'autres fonctionnalités, par exemple le panneau de Game Over
+                //gameOverPanel.SetActive(true);
+                //Escape = true;
+                //Time.timeScale = 0f;
+                //Cursor.visible = true;
+                //Cursor.lockState = CursorLockMode.None;
+                //isGameOver = true; // Marquez le jeu comme étant en cours de jeu terminé
             }
         }
     }
@@ -48,12 +46,8 @@ public class HealthManager : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            DamageButton(10); // Vous pouvez ajuster la valeur de dégâts comme nécessaire.
+            DamageButton(10);
         }
-
-      
-
-
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -62,16 +56,11 @@ public class HealthManager : MonoBehaviour
         {
             if (health != maxHealth)
             {
-                HealButton(10); // Vous pouvez ajuster la valeur de dégâts comme nécessaire.
+                HealButton(10);
                 Destroy(collision.gameObject);
-
             }
-
         }
     }
-
-
-
 
     public void DamageButton(int damageAmount)
     {
@@ -91,7 +80,6 @@ public class HealthManager : MonoBehaviour
 
     void DisableEscapeKey()
     {
-        // Désactivez la touche "Echap" en désactivant le composant Input.GetKey(KeyCode.Escape)
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             return;

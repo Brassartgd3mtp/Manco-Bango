@@ -18,6 +18,7 @@ public class PlayerDamageController : MonoBehaviour
         // Vérifiez si la collision a eu lieu avec un ennemi (vous pouvez définir des balises ou d'autres méthodes de détection)
         if (collision.gameObject.CompareTag("Destroyable") && collision.gameObject.layer == 10)
         {
+            Debug.Log("OUCH");
             // Infligez des dégâts au joueur en utilisant le script HealthManager
             healthManager.DamageButton(damageAmount);
         }

@@ -7,7 +7,8 @@ using Unity.VisualScripting;
 public class PlayerController : MonoBehaviour
 {
 
-    private CheckpointManager checkpointManager;
+    public CheckpointManager checkpointManager;
+    private HealthManager healthManager;
 
 
     [Header("Movement")]
@@ -47,6 +48,7 @@ public class PlayerController : MonoBehaviour
     {
         checkpointManager = FindObjectOfType<CheckpointManager>(); // Recherchez le gestionnaire de checkpoints dans la scène
 
+        healthManager = GetComponent<HealthManager>();
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
@@ -59,6 +61,13 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (healthManager != null)
+        {
+            // Accédez à la variable health depuis le script HealthManager
+            float playerHealth = healthManager.health;
+            // Vous pouvez maintenant utiliser playerHealth dans ce script
+        }
+
 
         if (Input.GetKeyDown(KeyCode.F5))
         {
