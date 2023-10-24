@@ -23,30 +23,29 @@ public class PlayerDash : MonoBehaviour
     private bool canDash = true; // Indicateur permettant de savoir si le joueur peut effectuer un dash
     private bool isDashing = false; // Ajoutez une variable pour savoir si le joueur est en train de dasher
 
-    private PlayerController playerController;
-    private Rigidbody rb;
-
     private void Start()
     {
-        cooldownTimer = dashCooldown + dashDuration; 
-        rb = GetComponent<Rigidbody>();
-        playerController = GetComponent<PlayerController>();
+        cooldownTimer = dashCooldown + dashDuration;
     }
 
     private void Update()
     {
         DashBarImage.fillAmount = cooldownTimer;
+
         if (cooldownTimer <= 0)
         {
-            if (canDash && Input.GetButtonDown("Dash")) // Changez la touche selon vos préférences
+            if (PlayerController.moveDirection != new Vector3(0, 0, 0))
             {
-                direction = playerController.moveDirection;
+                if (canDash && Input.GetButtonDown("Dash")) // Changez la touche selon vos préférences
+                {
+                    direction = PlayerController.moveDirection;
 
-                StartCoroutine(Dash());
-                particleManager.Dash(dashDuration);
+                    StartCoroutine(Dash());
+                    particleManager.Dash(dashDuration);
 
-                Invoke("ResetDash", dashCooldown + dashDuration); // Réactive le dash après le temps de recharge
-                cooldownTimer = dashCooldown + dashDuration;
+                    Invoke("ResetDash", dashCooldown + dashDuration); // Réactive le dash après le temps de recharge
+                    cooldownTimer = dashCooldown + dashDuration;
+                }
             }
         }
         else
@@ -64,9 +63,9 @@ public class PlayerDash : MonoBehaviour
 
         while (dashTimer < dashDuration)
         {
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            PlayerController.rb.velocity = new Vector3(PlayerController.rb.velocity.x, 0, PlayerController.rb.velocity.z);
 
-            rb.AddForce(direction * dashForce, ForceMode.Force);
+            PlayerController.rb.AddForce(direction * dashForce, ForceMode.Force);
             dashTimer += Time.deltaTime;
 
             // Attendre la prochaine frame
@@ -88,7 +87,7 @@ public class PlayerDash : MonoBehaviour
         if (collision.gameObject.tag == "Wall")
         {
             canDash = true;
-            rb.velocity = Vector3.zero;
+            PlayerController.rb.velocity = Vector3.zero;
         }
     }
 }

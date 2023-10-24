@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class CameraMouseLook : MonoBehaviour
 {
-    [SerializeField] public int sensX = 2;
-    [SerializeField] public int sensY = 2;
+    [SerializeField] public static int sensX = 2;
+    [SerializeField] public static int sensY = 2;
     
     public Transform orientation;
 
@@ -28,7 +28,7 @@ public class CameraMouseLook : MonoBehaviour
 
         rotationY += mouseX;
 
-        rotationX -= mouseY * sensY;
+        rotationX -= mouseY;
         rotationX = Mathf.Clamp(rotationX, -90.0f, 90.0f); //Limite le degré maximal de rotation vertical
 
         transform.rotation = Quaternion.Euler(rotationX, rotationY, 0); //Rotation verticale

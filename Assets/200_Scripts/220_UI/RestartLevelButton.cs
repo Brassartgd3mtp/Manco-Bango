@@ -17,7 +17,6 @@ public class RestartLevelButton : MonoBehaviour
     {
 
        sceneToRestart = SceneManager.GetActiveScene();
-        Debug.Log(sceneToRestart.ToString());
     }
 
     public void RestartLevel()

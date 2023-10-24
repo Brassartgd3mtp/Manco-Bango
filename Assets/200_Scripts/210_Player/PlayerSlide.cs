@@ -22,14 +22,8 @@ public class PlayerSlide : MonoBehaviour
     [Header("Slope Slide")]
     [SerializeField] private float maxSlopeAngle;
 
-    private PlayerController playerController;
-    private Rigidbody rb;
-
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        playerController = GetComponent<PlayerController>();
-
         startYScale = gameObject.transform.localScale.y;
 
         maxFOVTimer = maxSlideTime / 2f;
@@ -39,7 +33,7 @@ public class PlayerSlide : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerController.moveDirection != new Vector3(0, 0, 0))
+        if (PlayerController.moveDirection != new Vector3(0, 0, 0))
         {
             if (Input.GetButtonDown("Slide"))
             {
@@ -53,7 +47,7 @@ public class PlayerSlide : MonoBehaviour
             if (OnSlope())
             {
                 if (!Input.GetButtonDown("Jump"))
-                    rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+                    PlayerController.rb.AddForce(Vector3.down * 80f, ForceMode.Force);
             }
 
         }
@@ -71,7 +65,7 @@ public class PlayerSlide : MonoBehaviour
         
         Transform playerObj = gameObject.transform;
         playerObj.localScale = new Vector3(playerObj.localScale.x, slideYScale, playerObj.localScale.z);
-        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+        PlayerController.rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
         
         slideTimer = maxSlideTime;
         
@@ -80,7 +74,7 @@ public class PlayerSlide : MonoBehaviour
 
     private void Sliding()
     {
-        rb.AddForce(playerController.moveDirection * slideForce, ForceMode.Force);
+        PlayerController.rb.AddForce(PlayerController.moveDirection * slideForce, ForceMode.Force);
         
         slideTimer -= Time.deltaTime;
         
@@ -115,7 +109,7 @@ public class PlayerSlide : MonoBehaviour
     public bool OnSlope()
     {
         RaycastHit slopeHit;
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerController.playerHeight * 0.5f + 0.3f))
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, PlayerController.playerHeight * 0.5f + 0.3f))
         {
             if (slopeHit.collider.gameObject.layer == 12)
             {
