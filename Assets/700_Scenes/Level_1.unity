@@ -7038,8 +7038,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f172123305cecd43938e5374f4b4f30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensX: 5
-  sensY: 5
   orientation: {fileID: 438276929}
 --- !u!114 &300031720
 MonoBehaviour:
@@ -8645,16 +8643,12 @@ MonoBehaviour:
   orientation: {fileID: 438276929}
   jumpForce: 10
   jumpCooldown: 0
-  maxCoyotteTime: 0.25
-  canCoyotte: 0
+  maxCoyotteTime: 0.5
   whatIsGround:
     serializedVersion: 2
     m_Bits: 4104
-  grounded: 0
-  playerHeight: 2
   horizontalInput: 0
   verticalInput: 0
-  moveDirection: {x: 0, y: 0, z: 0}
   animator: {fileID: 1376853652}
   CamAnimator: {fileID: 11672857}
 --- !u!114 &378012355
@@ -8772,13 +8766,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slowdownFactor: 0.05
-  slowdownDuration: 20
+  slowdownDuration: 10
   maxSlowdowns: 6
   usedSlowdowns: 0
   modifySensibilityX: 30
-  modifySensibilityY: 5
+  modifySensibilityY: 30
   slowdownText: {fileID: 1023240855}
-  cameraMouseLook: {fileID: 300031719}
   canvasToggle: {fileID: 879238998}
   interactableItem: {fileID: 556946472}
 --- !u!114 &378012362
@@ -49110,7 +49103,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c590ef3e5fd7904183b24423df4adc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraMouseLook: {fileID: 300031719}
   elemWheel: {fileID: 384971756}
   SensXtxt: {fileID: 1382656245}
   SensYtxt: {fileID: 2089832833}

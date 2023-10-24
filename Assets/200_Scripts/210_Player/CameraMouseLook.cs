@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class CameraMouseLook : MonoBehaviour
 {
-    [SerializeField] public int sensX = 2;
-    [SerializeField] public int sensY = 2;
+    [SerializeField] public static int sensX = 2;
+    [SerializeField] public static int sensY = 2;
     
     public Transform orientation;
 

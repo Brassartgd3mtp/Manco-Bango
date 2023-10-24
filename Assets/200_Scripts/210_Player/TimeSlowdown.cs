@@ -21,7 +21,6 @@ public class TimeSlowdown : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private TextMeshProUGUI slowdownText;
-    [SerializeField] private CameraMouseLook cameraMouseLook;
     [SerializeField] private CanvasToggle canvasToggle;
     [SerializeField] private InteractableItem interactableItem;
 
@@ -52,8 +51,8 @@ public class TimeSlowdown : MonoBehaviour
 
     private IEnumerator SlowTime()
     {
-        originalMouseSensitivityX = cameraMouseLook.sensX;
-        originalMouseSensitivityY = cameraMouseLook.sensY;
+        originalMouseSensitivityX = CameraMouseLook.sensX;
+        originalMouseSensitivityY = CameraMouseLook.sensY;
 
         isSlowingDown = true;
 
@@ -62,15 +61,15 @@ public class TimeSlowdown : MonoBehaviour
         Time.timeScale = slowdownFactor;
 
         // Ralentissez la sensibilit� de la souris
-        cameraMouseLook.sensX *= modifySensibilityX; // R�glez la sensibilit� de la souris pour votre script FPS
-        cameraMouseLook.sensY *= modifySensibilityY;
+        CameraMouseLook.sensX *= modifySensibilityX; // R�glez la sensibilit� de la souris pour votre script FPS
+        CameraMouseLook.sensY *= modifySensibilityY;
 
         yield return new WaitForSecondsRealtime(slowdownDuration);
 
         // R�tablissez les valeurs originales
         Time.timeScale = originalTimeScale;
-        cameraMouseLook.sensX = originalMouseSensitivityX;
-        cameraMouseLook.sensY = originalMouseSensitivityY;
+        CameraMouseLook.sensX = originalMouseSensitivityX;
+        CameraMouseLook.sensY = originalMouseSensitivityY;
 
         isSlowingDown = false;
     }
@@ -79,8 +78,8 @@ public class TimeSlowdown : MonoBehaviour
     {
         // R�tablissez les valeurs originales
         Time.timeScale = 1f;
-        cameraMouseLook.sensX = originalMouseSensitivityX;
-        cameraMouseLook.sensY = originalMouseSensitivityY;
+        CameraMouseLook.sensX = originalMouseSensitivityX;
+        CameraMouseLook.sensY = originalMouseSensitivityY;
 
         isSlowingDown = false;
     }

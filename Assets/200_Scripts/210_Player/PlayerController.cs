@@ -24,19 +24,29 @@ public class PlayerController : MonoBehaviour
 
     [Header("Coyotte")]
     [SerializeField] private float maxCoyotteTime = 0.25f;
-    [SerializeField] private bool canCoyotte;
+    private bool canCoyotte;
+    
+    public bool CanCoyotte
+    {
+        get { return canCoyotte; }
+        private set
+        {
+            if (grounded && readyToJump) canCoyotte = true;
+            else canCoyotte = value;
+        }
+    }
 
     [Header("Ground Check")]
     [SerializeField] private LayerMask whatIsGround;
-    [SerializeField] private bool grounded;
-    public float playerHeight = 2;
+    public static float playerHeight = 2;
+    private bool grounded;
 
     [HideInInspector] public float horizontalInput;
     [HideInInspector] public float verticalInput;
 
-    [HideInInspector] public Vector3 moveDirection;
+    [HideInInspector] public static Vector3 moveDirection;
 
-    private Rigidbody rb;
+    [HideInInspector] public static Rigidbody rb;
 
     public Animator animator;
     public Animator CamAnimator;
@@ -50,13 +60,11 @@ public class PlayerController : MonoBehaviour
 
         readyToJump = true;
 
-        canCoyotte = true;
+        CanCoyotte = true;
     }
 
     private void Update()
     {
-        //if (maxCoyotteTime != 0.25f) maxCoyotteTime = 0.25f;
-
         if (Input.GetKeyDown(KeyCode.F5))
         {
             //Je revient au dernier checkpoint
@@ -70,7 +78,7 @@ public class PlayerController : MonoBehaviour
         if (grounded)
             rb.drag = groundDrag;
         else
-            rb.drag = 0;
+            rb.drag = 0; //Permet d'avoir un déplacement aérien agréable
 
         GetInput();
         SpeedControl();
@@ -95,8 +103,6 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("IsMoving", false);
             CamAnimator.SetBool("IsMoving", false);
         
-            Debug.Log(CamAnimator);
-        
         }
     }
 
@@ -111,12 +117,11 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetButtonDown("Jump") && readyToJump && (grounded || canCoyotte))
+        if (Input.GetButtonDown("Jump") && readyToJump && (grounded || CanCoyotte))
         {
             readyToJump = false;
 
-            canCoyotte = false;
-            Debug.Log(grounded);
+            CanCoyotte = false;
 
             Jump();
 
@@ -128,11 +133,8 @@ public class PlayerController : MonoBehaviour
         if (!grounded)
             _coyotteCoroutine = StartCoroutine(CoyotteLimit());
 
-        else
-        {
-            if (_coyotteCoroutine is not null) StopCoroutine(_coyotteCoroutine);
-            ResetCoyotte();
-        }
+        else if
+            (_coyotteCoroutine is not null) StopCoroutine(_coyotteCoroutine);
     }
 
     private void MovePlayer()
@@ -191,14 +193,9 @@ public class PlayerController : MonoBehaviour
         readyToJump = true;
     }
 
-    private void ResetCoyotte()
-    {
-        canCoyotte = true;
-    }
-
     private IEnumerator CoyotteLimit()
     {
         yield return new WaitForSeconds(maxCoyotteTime);
-        canCoyotte = false;
+        CanCoyotte = false;
     }
 }
