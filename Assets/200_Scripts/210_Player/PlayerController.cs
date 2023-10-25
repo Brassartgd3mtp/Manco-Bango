@@ -7,8 +7,8 @@ using Unity.VisualScripting;
 public class PlayerController : MonoBehaviour
 {
     private CheckpointManager checkpointManager;
-	private CheckpointManager checkpointManager;
-    public CheckpointManager checkpointManager;
+	
+    
     private HealthManager healthManager;
 
     [Header("Movement")]
