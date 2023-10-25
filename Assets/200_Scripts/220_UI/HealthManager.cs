@@ -30,12 +30,12 @@ public class HealthManager : MonoBehaviour
                 // Téléportez le joueur au dernier checkpoint
                 CheckpointManager.ReturnToCheckpoint(gameObject.transform);
                 // Désactivez d'autres fonctionnalités, par exemple le panneau de Game Over
-                gameOverPanel.SetActive(true);
-                Escape = true;
-                Time.timeScale = 0f;
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                isGameOver = true; // Marquez le jeu comme étant en cours de jeu terminé
+                //gameOverPanel.SetActive(true);
+                //Escape = true;
+                //Time.timeScale = 0f;
+                //Cursor.visible = true;
+                //Cursor.lockState = CursorLockMode.None;
+               // isGameOver = true; // Marquez le jeu comme étant en cours de jeu terminé
             }
         }
     }
@@ -46,10 +46,25 @@ public class HealthManager : MonoBehaviour
         {
             DamageButton(10);
         }
+
+        if (collision.gameObject.CompareTag("FloorKill"))
+        {
+            Debug.Log("Merjuezfipehjzfp"); 
+            DamageButton(100);
+        }
+
+
     }
 
     private void OnTriggerEnter(Collider collision)
     {
+
+        if (collision.gameObject.CompareTag("FloorKill"))
+        {
+            Debug.Log("Merjuezfipehjzfp");
+            DamageButton(100);
+        }
+
         if (collision.gameObject.CompareTag("Heal"))
         {
             if (health != maxHealth)
