@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,9 +16,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask whatIsWall;
     [SerializeField] private CapsuleCollider capsuleCollider;
     [SerializeField] private Transform orientation;
-    private float moveSpeed = 10;
-    private float airMultiplier = 1;
-    private float groundDrag = 5;
+    [SerializeField] private float moveSpeed = 10;
+    [SerializeField] private float airMultiplier = 1;
+    [SerializeField] private float groundDrag = 5;
 
     [Header("Jump")]
     [SerializeField] private float jumpForce = 8;
@@ -40,25 +41,17 @@ public class PlayerController : MonoBehaviour
 
     [Header("Ground Check")]
     [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private bool grounded;
     public static float playerHeight = 2;
-    private bool grounded;
 
     [HideInInspector] public float horizontalInput;
     [HideInInspector] public float verticalInput;
 
     [HideInInspector] public static Vector3 moveDirection;
-
     [HideInInspector] public static Rigidbody rb;
-
-    public Animator animator;
-    public Animator CamAnimator;
 
     private void Start()
     {
-        checkpointManager = FindObjectOfType<CheckpointManager>(); // Recherchez le gestionnaire de checkpoints dans la scène
-
-        healthManager = GetComponent<HealthManager>();
-
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
@@ -69,22 +62,14 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (healthManager != null)
-        {
-            // Accédez à la variable health depuis le script HealthManager
-            float playerHealth = healthManager.health;
-            // Vous pouvez maintenant utiliser playerHealth dans ce script
-        }
-
-
         if (Input.GetKeyDown(KeyCode.F5))
         {
             //Je revient au dernier checkpoint
-            checkpointManager.ReturnToCheckpoint();
+            CheckpointManager.ReturnToCheckpoint(gameObject.transform);
         }
 
-        //Je fait un Raycast qui part de mon personnage et qui va en direction du sol pour détecter s'il est en contact avec le sol
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.01f, whatIsGround);
+        //Je fais un Raycast qui part de mon personnage et qui va en direction du sol pour détecter s'il est en contact avec le sol
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
 
         //Je modifie l'attraction si le joueur est en l'air
         if (grounded)
@@ -94,28 +79,6 @@ public class PlayerController : MonoBehaviour
 
         GetInput();
         SpeedControl();
-
-
-        //Je change mon animation de marche en fonction de si je suis au sol ou non
-        if (moveDirection.x != 0 && moveDirection.y <= 1.1)
-        {
-            animator.SetBool("IsMoving", true);
-            CamAnimator.SetBool("IsMoving", true);
-        }
-        
-        else
-        {
-            animator.SetBool("IsMoving", false);
-            CamAnimator.SetBool("IsMoving", false);
-        
-        }
-        
-        if (moveDirection.y >=1.1 )
-        {
-            animator.SetBool("IsMoving", false);
-            CamAnimator.SetBool("IsMoving", false);
-        
-        }
     }
 
     private void FixedUpdate()
