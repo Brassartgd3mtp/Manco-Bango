@@ -109,7 +109,7 @@ public class PlayerSlide : MonoBehaviour
     public bool OnSlope()
     {
         RaycastHit slopeHit;
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, PlayerController.playerHeight * 0.5f + 0.3f))
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, PlayerController.playerHeight * 0.5f + 0.01f))
         {
             if (slopeHit.collider.gameObject.layer == 12)
             {

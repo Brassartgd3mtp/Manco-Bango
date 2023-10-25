@@ -6,7 +6,7 @@ using TMPro;
 
 public class HealthManager : MonoBehaviour
 {
-    public float health = 75f;
+    public static float health = 75f;
     public float maxHealth = 100f;
     public Image healthBarImage;
     public TextMeshProUGUI healthText;
@@ -14,8 +14,6 @@ public class HealthManager : MonoBehaviour
     public bool Escape = false;
     private bool isGameOver = false;
     public int damageamount;
-
-    [SerializeField] CheckpointManager checkpointManager;
 
     void Update()
     {
@@ -28,16 +26,16 @@ public class HealthManager : MonoBehaviour
             {
                 Debug.Log("MORT");
                 // Sauvegardez la santé actuelle
-                health = checkpointManager.SavedHealth ;
+                health = CheckpointManager.SavedHealth;
                 // Téléportez le joueur au dernier checkpoint
-                checkpointManager.ReturnToCheckpoint();
+                CheckpointManager.ReturnToCheckpoint(gameObject.transform);
                 // Désactivez d'autres fonctionnalités, par exemple le panneau de Game Over
-                //gameOverPanel.SetActive(true);
-                //Escape = true;
-                //Time.timeScale = 0f;
-                //Cursor.visible = true;
-                //Cursor.lockState = CursorLockMode.None;
-                //isGameOver = true; // Marquez le jeu comme étant en cours de jeu terminé
+                gameOverPanel.SetActive(true);
+                Escape = true;
+                Time.timeScale = 0f;
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                isGameOver = true; // Marquez le jeu comme étant en cours de jeu terminé
             }
         }
     }
