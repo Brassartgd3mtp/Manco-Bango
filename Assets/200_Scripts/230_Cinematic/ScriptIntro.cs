@@ -75,7 +75,9 @@ public class ScriptIntro : MonoBehaviour
     }
 
     public void FinAnim()
+
     {
+        introText.text = "";
         Player.SetActive(true);
         PlayerCam.SetActive(true);
         Ennemi.SetActive(true);

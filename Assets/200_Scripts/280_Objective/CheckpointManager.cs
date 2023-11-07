@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class CheckpointManager : MonoBehaviour
 {
+
+
     private static Vector3 checkpointPosition;
     public static float SavedHealth;
 
@@ -16,6 +18,8 @@ public class CheckpointManager : MonoBehaviour
     {
         SavedHealth = savedHealth;
         checkpointPosition = position;
+
+
     }
 
     // Fonction pour retourner au dernier checkpoint

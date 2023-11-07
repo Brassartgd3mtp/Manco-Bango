@@ -1,15 +1,49 @@
 using UnityEngine;
+using System.Collections;
+using TMPro;
 
 public class CheckpointTrigger : MonoBehaviour
 {
-    [SerializeField] private HealthManager healthManager;
+    public TextMeshProUGUI triggerText;
+    public float displayDuration = 3f; // Durï¿½e d'affichage du texte en secondes
+
+    private bool isDisplaying = false;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             CheckpointManager checkpointManager = FindAnyObjectByType<CheckpointManager>();
-            // Met à jour le dernier checkpoint du joueur en utilisant la position de ce checkpoint
-            checkpointManager.SetCheckpoint(transform.position, healthManager.health);
+            // Met ï¿½ jour le dernier checkpoint du joueur en utilisant la position de ce checkpoint
+            CheckpointManager.SetCheckpoint(transform.position, HealthManager.health);
+
+            // Affichez un message de checkpoint atteint
+            ShowTriggerText("Save...");
         }
+    }
+
+    private void Update()
+    {
+        if (isDisplaying)
+        {
+            displayDuration -= Time.deltaTime;
+
+            if (displayDuration <= 0)
+            {
+                // Dï¿½sactivez le texte lorsque la durï¿½e est ï¿½coulï¿½e
+                triggerText.text = "";
+                triggerText.enabled = false;
+                isDisplaying = false;
+            }
+        }
+    }
+
+    private void ShowTriggerText(string text)
+    {
+        // Affichez le texte
+        triggerText.text = text;
+        triggerText.enabled = true;
+        isDisplaying = true;
+        displayDuration = 3f; // Rï¿½initialisez la durï¿½e d'affichage
     }
 }

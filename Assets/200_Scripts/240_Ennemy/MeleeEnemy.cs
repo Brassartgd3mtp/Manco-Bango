@@ -8,6 +8,8 @@ public class MeleeEnemy : MonoBehaviour
     public float attackRange = 2f;
     public float attackCooldown = 2f;
     public int meleeDamage = 10;
+    public float playerDetectionRange = 5f; // Portée de détection du joueur
+    public LayerMask playerLayer; // Couche du joueur
 
     private Transform player;
     private NavMeshAgent navMeshAgent;
@@ -15,20 +17,42 @@ public class MeleeEnemy : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
         navMeshAgent = GetComponent<NavMeshAgent>();
+        lastAttackTime = -attackCooldown; // Pour permettre la première attaque
     }
 
     void Update()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        DetectPlayer();
 
-        if (distanceToPlayer <= attackRange && Time.time - lastAttackTime >= attackCooldown)
+        if (player != null)
         {
-            AttackMelee();
+            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+            if (distanceToPlayer <= attackRange && Time.time - lastAttackTime >= attackCooldown)
+            {
+                AttackMelee();
+            }
+
+            navMeshAgent.SetDestination(player.position);
+        }
+    }
+
+    void DetectPlayer()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, playerDetectionRange, playerLayer);
+
+        foreach (Collider hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("Player"))
+            {
+                player = hitCollider.transform;
+                return; // Arrêtez de chercher dès que le joueur est trouvé
+            }
         }
 
-        navMeshAgent.SetDestination(player.position);
+        // Si le joueur n'est pas détecté, effacez la référence au joueur
+        player = null;
     }
 
     void AttackMelee()
@@ -36,5 +60,12 @@ public class MeleeEnemy : MonoBehaviour
         // Gérer les dégâts au corps à corps ici
         Debug.Log("Melee enemy attack!");
         lastAttackTime = Time.time;
+    }
+
+    // Fonction pour dessiner un gizmo dans l'éditeur Unity
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, playerDetectionRange);
     }
 }

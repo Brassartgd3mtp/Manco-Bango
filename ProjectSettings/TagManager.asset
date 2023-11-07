@@ -18,6 +18,8 @@ TagManager:
   - Enemy
   - Heal
   - Checkpoint
+  - Projectile
+  - FloorKill
   layers:
   - Default
   - TransparentFX
