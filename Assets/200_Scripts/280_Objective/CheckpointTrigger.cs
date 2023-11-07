@@ -5,7 +5,7 @@ using TMPro;
 public class CheckpointTrigger : MonoBehaviour
 {
     public TextMeshProUGUI triggerText;
-    public float displayDuration = 3f; // Durée d'affichage du texte en secondes
+    public float displayDuration = 3f; // Durï¿½e d'affichage du texte en secondes
 
     private bool isDisplaying = false;
 
@@ -13,7 +13,8 @@ public class CheckpointTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // Met à jour le dernier checkpoint du joueur en utilisant la position de ce checkpoint
+            CheckpointManager checkpointManager = FindAnyObjectByType<CheckpointManager>();
+            // Met ï¿½ jour le dernier checkpoint du joueur en utilisant la position de ce checkpoint
             CheckpointManager.SetCheckpoint(transform.position, HealthManager.health);
 
             // Affichez un message de checkpoint atteint
@@ -29,7 +30,7 @@ public class CheckpointTrigger : MonoBehaviour
 
             if (displayDuration <= 0)
             {
-                // Désactivez le texte lorsque la durée est écoulée
+                // Dï¿½sactivez le texte lorsque la durï¿½e est ï¿½coulï¿½e
                 triggerText.text = "";
                 triggerText.enabled = false;
                 isDisplaying = false;
@@ -43,6 +44,6 @@ public class CheckpointTrigger : MonoBehaviour
         triggerText.text = text;
         triggerText.enabled = true;
         isDisplaying = true;
-        displayDuration = 3f; // Réinitialisez la durée d'affichage
+        displayDuration = 3f; // Rï¿½initialisez la durï¿½e d'affichage
     }
 }

@@ -9,6 +9,7 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private TextMeshProUGUI reloadText;
     [SerializeField] private CanvasToggle canvasToggle;
     public ParticleManager particleManager;
+    [SerializeField] private LayerMask ignoredColliders;
     private Barrel barrel;
     public GameObject bossRedParticlePrefab; // Préfab de l'effet de particules pour les objets "BossRed"
     public GameObject bossBlueParticlePrefab; // Préfab de l'effet de particules pour les objets "BossBlue"
@@ -60,8 +61,11 @@ public class PlayerGun : MonoBehaviour
             if (Input.GetButtonDown("Dump")) Dump();
 
             if (barrel.barrelStock.Count > 0) reloadText.enabled = false;
-            if (barrel.barrelStock.Count == 0) reloadText.enabled = true;
-            if (barrel.barrelStock.Count == 0) nextBulletColor.material.color = Color.black;
+            if (barrel.barrelStock.Count == 0)
+            {
+                reloadText.enabled = true;
+                nextBulletColor.material.color = Color.black;
+            }
             else if (barrel.barrelStock.Count >= 1) nextBulletColor.material.color = barrel.barrelStock[0];
         }
 
@@ -70,18 +74,27 @@ public class PlayerGun : MonoBehaviour
 
     private void Shoot()
     {
-        if (barrel.barrelStock.Count > 0)
+        if (barrel.barrelStock.Count > 0 && !Cursor.visible)
         {
             Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(ignoredColliders)))
             {
-                if (hit.transform.CompareTag("Enemy"))
+                if (hit.collider.gameObject.layer == 10)
                 {
-                    // Code pour infliger des dégâts à l'ennemi...
+                    // Obtenez la référence à l'ennemi s'il est touché par le raycast
+                    EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
+
+                    if (enemyHealth is not null)
+                    {
+                        // Appel de la fonction TakeDamage pour réduire les points de vie de l'ennemi
+                        enemyHealth.TakeDamage(10);
+                        Debug.Log("-10PV"); 
+                    }
                 }
-                else if (hit.transform.CompareTag("Destroyable") && (hit.collider.gameObject.layer == 0 || hit.collider.gameObject.layer == 10))
+
+                if (hit.transform.CompareTag("Destroyable") && hit.collider.gameObject.layer == 0)
                 {
                     Destroy(hit.transform.gameObject);
                 }
@@ -130,8 +143,6 @@ public class PlayerGun : MonoBehaviour
             }
             barrel.RemoveStock();
         }
-        else if (!Cursor.visible)
-            Debug.LogWarning("Il n'y a pas de balle dans le barillet !");
     }
 
     private void Dump()

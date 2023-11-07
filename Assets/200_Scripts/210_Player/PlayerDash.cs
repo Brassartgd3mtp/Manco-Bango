@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using UnityEngine.EventSystems;
 
 public class PlayerDash : MonoBehaviour
 {
@@ -19,24 +16,29 @@ public class PlayerDash : MonoBehaviour
     [SerializeField] private Transform orientation;
     [SerializeField] private Camera fovEffect;
     [SerializeField] private ParticleManager particleManager;
+    private PlayerSlide slide;
+    private TimeSlowdown slowdown;
 
     private bool canDash = true; // Indicateur permettant de savoir si le joueur peut effectuer un dash
-    private bool isDashing = false; // Ajoutez une variable pour savoir si le joueur est en train de dasher
+    [HideInInspector] public bool isDashing = false; // Ajoutez une variable pour savoir si le joueur est en train de dasher
 
     private void Start()
     {
         cooldownTimer = dashCooldown + dashDuration;
+        slide = GetComponent<PlayerSlide>();
+        slowdown = GetComponent<TimeSlowdown>();
     }
 
     private void Update()
     {
+        Debug.Log(PlayerController.rb.velocity.z);
         DashBarImage.fillAmount = cooldownTimer;
 
         if (cooldownTimer <= 0)
         {
             if (PlayerController.moveDirection != new Vector3(0, 0, 0))
             {
-                if (canDash && Input.GetButtonDown("Dash")) // Changez la touche selon vos préférences
+                if (canDash && !slide.sliding && Input.GetButtonDown("Dash")) // Changez la touche selon vos préférences
                 {
                     direction = PlayerController.moveDirection;
 
@@ -52,7 +54,6 @@ public class PlayerDash : MonoBehaviour
             cooldownTimer -= Time.deltaTime;
     }
 
-
     private IEnumerator Dash()
     {
         if (!canDash || isDashing) yield break; // Vérifiez si le dash est possible et si le joueur n'est pas déjà en train de dasher
@@ -61,12 +62,19 @@ public class PlayerDash : MonoBehaviour
         canDash = false;
         float dashTimer = 0f;
 
+        Vector3 velocityLock = direction * dashForce;
+
         while (dashTimer < dashDuration)
         {
             PlayerController.rb.velocity = new Vector3(PlayerController.rb.velocity.x, 0, PlayerController.rb.velocity.z);
 
-            PlayerController.rb.AddForce(direction * dashForce, ForceMode.Force);
+            PlayerController.rb.AddForce(velocityLock, ForceMode.Force);
             dashTimer += Time.deltaTime;
+
+            if (slowdown.isSlowingDown)
+            {
+                PlayerController.rb.velocity = new Vector3(velocityLock.x * 0.05f, 0, velocityLock.z * 0.05f);
+            }
 
             // Attendre la prochaine frame
             yield return null;

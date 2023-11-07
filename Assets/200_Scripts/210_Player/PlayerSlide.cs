@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerSlide : MonoBehaviour
@@ -8,9 +6,9 @@ public class PlayerSlide : MonoBehaviour
     [SerializeField] private float maxSlideTime;
     [SerializeField] private float slideForce;
     [SerializeField] private float slideYScale;
+    [HideInInspector] public bool sliding;
     private float slideTimer;
     private float startYScale;
-    private bool sliding;
 
     [Header("FOV")]
     [SerializeField] private int fovModifier;
@@ -22,18 +20,24 @@ public class PlayerSlide : MonoBehaviour
     [Header("Slope Slide")]
     [SerializeField] private float maxSlopeAngle;
 
+    private PlayerDash dash;
+
     private void Start()
     {
         startYScale = gameObject.transform.localScale.y;
 
         maxFOVTimer = maxSlideTime / 2f;
         FOVTimer = maxFOVTimer;
+
+        baseFOV = fovEffect.fieldOfView;
+
+        dash = GetComponent<PlayerDash>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (PlayerController.moveDirection != new Vector3(0, 0, 0))
+        if (PlayerController.moveDirection != new Vector3(0, 0, 0) && !dash.isDashing)
         {
             if (Input.GetButtonDown("Slide"))
             {
@@ -41,7 +45,8 @@ public class PlayerSlide : MonoBehaviour
             }
             else if (Input.GetButtonUp("Slide"))
             {
-                StopSlide();
+                if (!OnSlope())
+                    StopSlide();
             }
 
             if (OnSlope())
@@ -68,8 +73,6 @@ public class PlayerSlide : MonoBehaviour
         PlayerController.rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
         
         slideTimer = maxSlideTime;
-        
-        baseFOV = fovEffect.fieldOfView;
     }
 
     private void Sliding()
@@ -80,14 +83,14 @@ public class PlayerSlide : MonoBehaviour
         
         if (slideTimer <= 0 && !OnSlope())
             StopSlide();
-        
+
         if (FOVTimer > 0)
         {
             FOVTimer -= Time.deltaTime;
             fovEffect.fieldOfView += fovModifier * Time.deltaTime;
         }
-        
-        else if (fovEffect.fieldOfView != baseFOV)
+
+        else if (fovEffect.fieldOfView != baseFOV && !OnSlope())
             fovEffect.fieldOfView -= fovModifier * Time.deltaTime;
     }
 

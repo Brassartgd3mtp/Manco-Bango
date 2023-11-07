@@ -6,13 +6,15 @@ public class CheckpointManager : MonoBehaviour
 
     private static Vector3 checkpointPosition;
     public static float SavedHealth;
+
+    [SerializeField] private HealthManager healthManager;
     private void Start()
     {
         checkpointPosition = transform.position; // Le point de départ initial devient le premier checkpoint
     }
 
     // Fonction pour définir un nouveau checkpoint
-    public static void SetCheckpoint(Vector3 position, float savedHealth)
+    public void SetCheckpoint(Vector3 position, float savedHealth)
     {
         SavedHealth = savedHealth;
         checkpointPosition = position;
@@ -21,11 +23,11 @@ public class CheckpointManager : MonoBehaviour
     }
 
     // Fonction pour retourner au dernier checkpoint
-    public static void ReturnToCheckpoint(Transform _player)
+    public void ReturnToCheckpoint(Transform _player)
     {
         _player.position = checkpointPosition;
 
-        HealthManager.health = SavedHealth;
+        healthManager.health = SavedHealth;
 
         Debug.Log("TP");
     }
