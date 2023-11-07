@@ -114,6 +114,7 @@ public class PlayerGun : MonoBehaviour
                         if (bossRedParticlePrefab != null)
                         {
                             Instantiate(bossRedParticlePrefab, hit.point, Quaternion.identity);
+                                Debug.Log("Particule");
                         }
                     }
                 }
