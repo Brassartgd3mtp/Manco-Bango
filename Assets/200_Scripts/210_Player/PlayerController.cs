@@ -1,16 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
-    private CheckpointManager checkpointManager;
-	
-    
-    private HealthManager healthManager;
+    [SerializeField] private CheckpointManager checkpointManager;
 
     [Header("Movement")]
     [SerializeField] private LayerMask whatIsWall;
@@ -43,6 +36,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private bool grounded;
     public static float playerHeight = 2;
+    private bool dragUpdaterLock = false;
 
     [HideInInspector] public float horizontalInput;
     [HideInInspector] public float verticalInput;
@@ -64,8 +58,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F5))
         {
-            //Je revient au dernier checkpoint
-            CheckpointManager.ReturnToCheckpoint(gameObject.transform);
+            //Je reviens au dernier checkpoint
+            checkpointManager.ReturnToCheckpoint(gameObject.transform);
         }
 
         //Je fais un Raycast qui part de mon personnage et qui va en direction du sol pour détecter s'il est en contact avec le sol
@@ -73,9 +67,15 @@ public class PlayerController : MonoBehaviour
 
         //Je modifie l'attraction si le joueur est en l'air
         if (grounded)
+        {
             rb.drag = groundDrag;
-        else
+            dragUpdaterLock = false;
+        }
+        else if (!dragUpdaterLock)
+        {
             rb.drag = 0; //Permet d'avoir un déplacement aérien agréable
+            StartCoroutine(DragUpdater());
+        }
 
         GetInput();
         SpeedControl();
@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
         //Je vérifie si le personnage est en contact avec un mur dans la direction de déplacement
-        bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1.5f, whatIsWall);
+        bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1f, whatIsWall);
 
         //Si le personnage est au sol, je dépalce le joueur et j'ignore l'adhérence avec un mur
         if (grounded)
@@ -154,6 +154,18 @@ public class PlayerController : MonoBehaviour
             Vector3 limitedVelHor = rb.velocity.normalized * moveSpeed;
             rb.velocity = new Vector3(limitedVelHor.x, rb.velocity.y, limitedVelHor.z);
         }
+
+        if (rb.velocity.y > jumpForce * 10)
+        {
+            Vector3 limitedVelVer = rb.velocity.normalized * jumpForce * 10;
+            rb.velocity = new Vector3(rb.velocity.x,limitedVelVer.y, rb.velocity.z);
+        }
+
+        if (rb.velocity.y < -jumpForce * 10)
+        {
+            Vector3 limitedVelVer = rb.velocity.normalized * -jumpForce * 10;
+            rb.velocity = new Vector3(rb.velocity.x, -limitedVelVer.y, rb.velocity.z);
+        }
     }
 
     private void Jump()
@@ -172,5 +184,28 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(maxCoyotteTime);
         CanCoyotte = false;
+    }
+
+    private IEnumerator DragUpdater()
+    {
+        float yValueA = transform.position.y;
+        yield return new WaitForSeconds(0.01f);
+        float yValueB = transform.position.y;
+
+        if (yValueA > yValueB)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, whatIsGround))
+            {
+                float distanceY = Vector3.Distance(transform.position, hit.transform.position);
+            
+                if(distanceY > jumpForce * 5 - 1) yield return new WaitForSeconds(distanceY / jumpForce * 5 - 1);
+                else
+                    yield return new WaitForSeconds(distanceY * 0.1f / jumpForce);
+
+                rb.drag = 1;
+                yield break;
+            }
+        }
     }
 }

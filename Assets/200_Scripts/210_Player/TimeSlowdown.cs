@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class TimeSlowdown : MonoBehaviour
@@ -15,7 +13,7 @@ public class TimeSlowdown : MonoBehaviour
     [Header("Sensibility")]
     [SerializeField] private int modifySensibilityX = 2;
     [SerializeField] private int modifySensibilityY = 2;
-    private bool isSlowingDown = false;
+    [HideInInspector] public bool isSlowingDown = false;
     private int originalMouseSensitivityX;
     private int originalMouseSensitivityY;
 
