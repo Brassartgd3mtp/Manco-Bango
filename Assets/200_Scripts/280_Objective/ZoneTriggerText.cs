@@ -15,6 +15,7 @@ public class ZoneTriggerText : MonoBehaviour
 
     void Start()
     {
+        textDisplay.text = "";
     }
 
     void OnTriggerEnter(Collider other)
@@ -28,18 +29,31 @@ public class ZoneTriggerText : MonoBehaviour
 
     IEnumerator AnimateDialogue()
     {
-        foreach (string sentence in sentences)
+        for (int i = 0; i < sentences.Length; i++)
         {
-            yield return StartCoroutine(TypeSentence(sentence));
+            yield return StartCoroutine(TypeSentence(sentences[i]));
+
+            if (i == 1) // Deuxième phrase
+            {
+                CameraShake cameraShake = CameraShake.instance;
+                if (cameraShake != null)
+                {
+                    cameraShake.Shake(); // Déclenche la secousse de la caméra
+                }
+                else
+                {
+                    Debug.LogError("CameraShake component not found on the camera.");
+                }
+            }
+
             yield return new WaitForSeconds(displayDuration);
             textDisplay.gameObject.SetActive(false);
             yield return new WaitForSeconds(interSentenceDelay);
             textDisplay.gameObject.SetActive(true);
         }
 
-        // Ajoute d'autres actions après la fin du dialogue
-        textDisplay.text = ""; // Assure que le texte est vide à la fin du dialogue
-        textDisplay.gameObject.SetActive(false); // Désactive complètement l'objet TextMeshProUGUI
+        textDisplay.text = "";
+        textDisplay.gameObject.SetActive(false);
     }
 
     IEnumerator TypeSentence(string sentence)

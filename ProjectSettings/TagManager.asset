@@ -20,6 +20,8 @@ TagManager:
   - Checkpoint
   - Projectile
   - FloorKill
+  - BossBlue
+  - BossRed
   layers:
   - Default
   - TransparentFX
