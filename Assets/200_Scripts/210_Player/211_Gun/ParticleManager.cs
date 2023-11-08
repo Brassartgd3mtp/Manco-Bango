@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
 
@@ -29,5 +30,11 @@ public class ParticleManager : MonoBehaviour
     {
         dashMain.duration = _dashDuration;
         dash.Play();
+    }
+
+    public void DashRate(int rateValue)
+    {
+        ParticleSystem.EmissionModule dashEmission = dash.emission;
+        dashEmission.rateOverTime = rateValue;
     }
 }

@@ -56,7 +56,9 @@ public class TimeSlowdown : MonoBehaviour
 
         // Ralentissez le temps en ajustant Time.timeScale (pour d'autres scripts)
         float originalTimeScale = Time.timeScale;
+        float originalFixedDeltaTime = Time.fixedDeltaTime;
         Time.timeScale = slowdownFactor;
+        Time.fixedDeltaTime = slowdownFactor / 10;
 
         // Ralentissez la sensibilit� de la souris
         CameraMouseLook.sensX *= modifySensibilityX; // R�glez la sensibilit� de la souris pour votre script FPS
@@ -66,6 +68,7 @@ public class TimeSlowdown : MonoBehaviour
 
         // R�tablissez les valeurs originales
         Time.timeScale = originalTimeScale;
+        Time.fixedDeltaTime = originalFixedDeltaTime;
         CameraMouseLook.sensX = originalMouseSensitivityX;
         CameraMouseLook.sensY = originalMouseSensitivityY;
 
@@ -76,6 +79,7 @@ public class TimeSlowdown : MonoBehaviour
     {
         // R�tablissez les valeurs originales
         Time.timeScale = 1f;
+        Time.fixedDeltaTime = 0.02f;
         CameraMouseLook.sensX = originalMouseSensitivityX;
         CameraMouseLook.sensY = originalMouseSensitivityY;
 

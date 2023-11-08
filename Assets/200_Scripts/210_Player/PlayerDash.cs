@@ -5,10 +5,10 @@ using UnityEngine.UI;
 public class PlayerDash : MonoBehaviour
 {
     [Header("Dash")]
-    [SerializeField] private float dashForce = 10.0f; // Force du dash
-    [SerializeField] private float dashCooldown = 1.0f; // Temps de recharge entre les dashes
+    [SerializeField] private float dashForce = 10.0f;
+    [SerializeField] private float dashCooldown = 1.0f;
     [SerializeField] private float cooldownTimer;
-    public float dashDuration = 0.5f; // Durée du dash
+    public float dashDuration = 0.5f;
     private Vector3 direction;
 
     [Header("References")]
@@ -16,11 +16,12 @@ public class PlayerDash : MonoBehaviour
     [SerializeField] private Transform orientation;
     [SerializeField] private Camera fovEffect;
     [SerializeField] private ParticleManager particleManager;
+    [SerializeField] private GameObject dashParticle;
     private PlayerSlide slide;
     private TimeSlowdown slowdown;
 
-    private bool canDash = true; // Indicateur permettant de savoir si le joueur peut effectuer un dash
-    [HideInInspector] public bool isDashing = false; // Ajoutez une variable pour savoir si le joueur est en train de dasher
+    private bool canDash = true;
+    [HideInInspector] public bool isDashing = false;
 
     private void Start()
     {
@@ -31,21 +32,20 @@ public class PlayerDash : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(PlayerController.rb.velocity.z);
         DashBarImage.fillAmount = cooldownTimer;
 
         if (cooldownTimer <= 0)
         {
             if (PlayerController.moveDirection != new Vector3(0, 0, 0))
             {
-                if (canDash && !slide.sliding && Input.GetButtonDown("Dash")) // Changez la touche selon vos préférences
+                if (canDash && !slide.sliding && Input.GetButtonDown("Dash"))
                 {
                     direction = PlayerController.moveDirection;
 
                     StartCoroutine(Dash());
                     particleManager.Dash(dashDuration);
 
-                    Invoke("ResetDash", dashCooldown + dashDuration); // Réactive le dash après le temps de recharge
+                    Invoke("ResetDash", dashCooldown + dashDuration);
                     cooldownTimer = dashCooldown + dashDuration;
                 }
             }
@@ -56,37 +56,106 @@ public class PlayerDash : MonoBehaviour
 
     private IEnumerator Dash()
     {
-        if (!canDash || isDashing) yield break; // Vérifiez si le dash est possible et si le joueur n'est pas déjà en train de dasher
+        if (!canDash || isDashing) yield break; //Je vérifie si le joueur peut dasher et s'il n'est pas déjà en train de dasher
 
-        isDashing = true; // Le joueur commence à dasher
+        isDashing = true;
         canDash = false;
         float dashTimer = 0f;
 
         Vector3 velocityLock = direction * dashForce;
 
-        while (dashTimer < dashDuration)
+        DashEffectDirection(); //Je positionne mon effet de particule en fonction des inputs de déplacement de mon joueur
+
+        while (dashTimer < dashDuration) //J'applique mon dash
         {
             PlayerController.rb.velocity = new Vector3(PlayerController.rb.velocity.x, 0, PlayerController.rb.velocity.z);
 
             PlayerController.rb.AddForce(velocityLock, ForceMode.Force);
             dashTimer += Time.deltaTime;
 
-            if (slowdown.isSlowingDown)
-            {
-                PlayerController.rb.velocity = new Vector3(velocityLock.x * 0.05f, 0, velocityLock.z * 0.05f);
-            }
-
-            // Attendre la prochaine frame
             yield return null;
         }
 
-        isDashing = false; // Le dash est terminé
+        isDashing = false;
     }
 
-    // Ajoutez cette méthode pour réinitialiser le dash
     private void ResetDash()
     {
-        canDash = true; // Réactive le dash
+        canDash = true;
+    }
+
+    private void DashEffectDirection()
+    {
+        switch (PlayerController.verticalInput)
+        {
+            case 1:
+                switch (PlayerController.horizontalInput)
+                {
+                    case 1:
+                        dashParticle.transform.localPosition = DashEffectPos.FrontRightPos;
+                        dashParticle.transform.localRotation = Quaternion.Euler(DashEffectPos.FrontRightRot);
+                        particleManager.DashRate(15);
+                        break;
+
+                    case -1:
+                        dashParticle.transform.localPosition = DashEffectPos.FrontLeftPos;
+                        dashParticle.transform.localRotation = Quaternion.Euler(DashEffectPos.FrontLeftRot);
+                        particleManager.DashRate(15);
+                        break;
+
+                    default:
+                        dashParticle.transform.localPosition = DashEffectPos.FrontPos;
+                        dashParticle.transform.localRotation = Quaternion.Euler(DashEffectPos.FrontRot);
+                        particleManager.DashRate(15);
+                        break;
+                }
+                break;
+
+            case -1:
+                switch (PlayerController.horizontalInput)
+                {
+                    case 1:
+                        dashParticle.transform.localPosition = DashEffectPos.BackRightPos;
+                        dashParticle.transform.localRotation = Quaternion.Euler(DashEffectPos.BackRightRot);
+                        particleManager.DashRate(30);
+                        break;
+
+                    case -1:
+                        dashParticle.transform.localPosition = DashEffectPos.BackLeftPos;
+                        dashParticle.transform.localRotation = Quaternion.Euler(DashEffectPos.BackLeftRot);
+                        particleManager.DashRate(30);
+                        break;
+
+                    default:
+                        dashParticle.transform.localPosition = DashEffectPos.BackPos;
+                        dashParticle.transform.localRotation = Quaternion.Euler(DashEffectPos.BackRot);
+                        particleManager.DashRate(30);
+                        break;
+                }
+                break;
+
+            default:
+                switch (PlayerController.horizontalInput)
+                {
+                    case 1:
+                        dashParticle.transform.localPosition = DashEffectPos.RightPos;
+                        dashParticle.transform.localRotation = Quaternion.Euler(DashEffectPos.RightRot);
+                        particleManager.DashRate(30);
+                        break;
+
+                    case -1:
+                        dashParticle.transform.localPosition = DashEffectPos.LeftPos;
+                        dashParticle.transform.localRotation = Quaternion.Euler(DashEffectPos.LeftRot);
+                        particleManager.DashRate(30);
+                        break;
+
+                    default:
+                        Debug.Log("Player is not moving !");
+                        particleManager.DashRate(15);
+                        break;
+                }
+                break;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
