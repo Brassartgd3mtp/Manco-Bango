@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using UnityEngine;
 
@@ -35,11 +36,11 @@ public class PlayerController : MonoBehaviour
     [Header("Ground Check")]
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private bool grounded;
+    private bool jumpGrounded;
     public static float playerHeight = 2;
-    private bool dragUpdaterLock = false;
 
-    [HideInInspector] public float horizontalInput;
-    [HideInInspector] public float verticalInput;
+    [HideInInspector] public static float horizontalInput;
+    [HideInInspector] public static float verticalInput;
 
     [HideInInspector] public static Vector3 moveDirection;
     [HideInInspector] public static Rigidbody rb;
@@ -65,19 +66,16 @@ public class PlayerController : MonoBehaviour
         //Je fais un Raycast qui part de mon personnage et qui va en direction du sol pour détecter s'il est en contact avec le sol
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
 
+        //Et un deuxième me permettant de sauter un peu avant de toucher le sol
+        jumpGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.6f, whatIsGround);
+
         //Je modifie l'attraction si le joueur est en l'air
         if (grounded)
-        {
             rb.drag = groundDrag;
-            dragUpdaterLock = false;
-        }
-        else if (!dragUpdaterLock)
-        {
+        else
             rb.drag = 0; //Permet d'avoir un déplacement aérien agréable
-            StartCoroutine(DragUpdater());
-        }
 
-        GetInput();
+        JumpAction();
         SpeedControl();
     }
 
@@ -87,12 +85,12 @@ public class PlayerController : MonoBehaviour
     }
 
     private Coroutine _coyotteCoroutine;
-    private void GetInput()
+    private void JumpAction()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetButtonDown("Jump") && readyToJump && (grounded || CanCoyotte))
+        if (Input.GetButtonDown("Jump") && readyToJump && (jumpGrounded || CanCoyotte))
         {
             readyToJump = false;
 
@@ -106,18 +104,18 @@ public class PlayerController : MonoBehaviour
         }
 
         if (!grounded)
-            _coyotteCoroutine = StartCoroutine(CoyotteLimit());
+            _coyotteCoroutine = StartCoroutine(CoyotteLimit()); //Je lance mon timer durant lequel j'ai le droit de coyotte
 
-        else if
-            (_coyotteCoroutine is not null) StopCoroutine(_coyotteCoroutine);
+        else if (_coyotteCoroutine is not null)
+            StopCoroutine(_coyotteCoroutine); //Si je rentre en contact avec le sol, j'arrête de force ma coroutine
     }
 
     private void MovePlayer()
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        //Je vérifie si le personnage est en contact avec un mur dans la direction de déplacement
-        bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1f, whatIsWall);
+        //Je vérifie si le personnage est en contact avec un mur dans la direction vers laquelle is se déplace
+        bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 0.8f, whatIsWall);
 
         //Si le personnage est au sol, je dépalce le joueur et j'ignore l'adhérence avec un mur
         if (grounded)
@@ -148,13 +146,14 @@ public class PlayerController : MonoBehaviour
 
     private void SpeedControl()
     {
-        //Je limite la vélocité max (sur l'axe X et Z) du joueur
+        //Je limite la vélocité max sur l'axe X et Z du joueur
         if (rb.velocity.magnitude > moveSpeed)
         {
             Vector3 limitedVelHor = rb.velocity.normalized * moveSpeed;
             rb.velocity = new Vector3(limitedVelHor.x, rb.velocity.y, limitedVelHor.z);
         }
 
+        //Je limite la vélocité max sur l'axe Y du joueur
         if (rb.velocity.y > jumpForce * 10)
         {
             Vector3 limitedVelVer = rb.velocity.normalized * jumpForce * 10;
@@ -166,6 +165,10 @@ public class PlayerController : MonoBehaviour
             Vector3 limitedVelVer = rb.velocity.normalized * -jumpForce * 10;
             rb.velocity = new Vector3(rb.velocity.x, -limitedVelVer.y, rb.velocity.z);
         }
+
+        //J'utilise la permission de saut du jumpGrounded pour annuler la vélocité Y afin d'éviter de se bloquer dans le sol lorsque l'on chute
+        if (jumpGrounded && rb.velocity.y < -10)
+            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
     }
 
     private void Jump()
@@ -184,28 +187,5 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(maxCoyotteTime);
         CanCoyotte = false;
-    }
-
-    private IEnumerator DragUpdater()
-    {
-        float yValueA = transform.position.y;
-        yield return new WaitForSeconds(0.01f);
-        float yValueB = transform.position.y;
-
-        if (yValueA > yValueB)
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, whatIsGround))
-            {
-                float distanceY = Vector3.Distance(transform.position, hit.transform.position);
-            
-                if(distanceY > jumpForce * 5 - 1) yield return new WaitForSeconds(distanceY / jumpForce * 5 - 1);
-                else
-                    yield return new WaitForSeconds(distanceY * 0.1f / jumpForce);
-
-                rb.drag = 1;
-                yield break;
-            }
-        }
     }
 }
