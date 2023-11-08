@@ -31,7 +31,6 @@ public class PlayerDash : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(PlayerController.rb.velocity.z);
         DashBarImage.fillAmount = cooldownTimer;
 
         if (cooldownTimer <= 0)

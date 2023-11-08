@@ -57,7 +57,6 @@ public class VFXWithDebug : MonoBehaviour
             for (int i = 0; i < numberOfVFXToSpawn; i++)
             {
                 Vector3 randomPosition = GetRandomPositionInsideArea();
-                Debug.Log("Position du VFX : " + randomPosition); // Ajoutez un log pour afficher la position du VFX.
 
                 Quaternion rotation = Quaternion.Euler(0, 0, -90); // Rotation précise de -90 degrés sur l'axe Z.
                 GameObject vfxInstance = Instantiate(vfxPrefab, randomPosition, rotation);

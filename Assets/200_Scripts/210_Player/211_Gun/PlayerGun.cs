@@ -15,8 +15,6 @@ public class PlayerGun : MonoBehaviour
     public GameObject bossBlueParticlePrefab; // Préfab de l'effet de particules pour les objets "BossBlue"
     public TextMeshProUGUI bossRedCountText; // Référence au composant TextMeshPro pour le total "BossRed"
     public TextMeshProUGUI bossBlueCountText; // Référence au composant TextMeshPro pour le total "BossBlue"
-    private TextMeshProUGUI bossRedRemainingText; // Référence au composant TextMeshPro pour le nombre restant "BossRed"
-    private TextMeshProUGUI bossBlueRemainingText; // Référence au composant TextMeshPro pour le nombre restant "BossBlue"
 
     private int bossRedTotal = 0; // Total d'objets "BossRed" dans la scène
     private int bossBlueTotal = 0; // Total d'objets "BossBlue" dans la scène
@@ -28,7 +26,7 @@ public class PlayerGun : MonoBehaviour
         barrel = GetComponent < Barrel>();
 
         // Assurez-vous que les composants TextMeshPro sont correctement référencés
-        if (bossRedCountText == null || bossBlueCountText == null || bossRedRemainingText == null || bossBlueRemainingText == null)
+        if (bossRedCountText == null || bossBlueCountText == null)
         {
             Debug.LogError("Les composants TextMeshPro ne sont pas correctement référencés. Faites glisser et déposez-les dans l'Inspector Unity.");
         }
@@ -47,9 +45,6 @@ public class PlayerGun : MonoBehaviour
         // Mettez à jour le texte pour afficher le total et le nombre restant d'objets "BossRed" et "BossBlue"
         bossRedCountText.text = "BossRed: " + bossRedCount + " / " + bossRedTotal;
         bossBlueCountText.text = "BossBlue: " + bossBlueCount + " / " + bossBlueTotal;
-
-        bossRedRemainingText.text = "Remaining: " + (bossRedTotal - bossRedCount);
-        bossBlueRemainingText.text = "Remaining: " + (bossBlueTotal - bossBlueCount);
     }
 
     private void Update()
