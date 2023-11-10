@@ -5,17 +5,36 @@ using UnityEngine;
 public class Barrel : MonoBehaviour
 {
     public List<Color> barrelStock = new List<Color>(6);
-
-    public void AddStock(Color _color)
+    public static int selectedBullet;
+    private int selectedForReload
     {
-        if(barrelStock.Count < 6)
+        get => selectedForReload;
+        set
         {
-            barrelStock.Add(_color);
+            if (selectedForReload > 6)
+            {
+                selectedForReload = 0;
+            }
         }
     }
 
-    public void RemoveStock()
+    private void Awake()
     {
-        barrelStock.RemoveAt(0);
+        for (int i = 0; i < barrelStock.Count; i++)
+        {
+            barrelStock[i] = Color.black;
+        }
+    }
+
+    public void AddStock(Color _color)
+    {
+        if (barrelStock[5] != Color.black)
+        barrelStock[selectedForReload] = _color;
+        selectedForReload++;
+    }
+
+    public void NextBullet()
+    {
+        selectedBullet++;
     }
 }

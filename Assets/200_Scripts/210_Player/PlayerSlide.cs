@@ -1,4 +1,6 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerSlide : MonoBehaviour
 {
@@ -6,7 +8,7 @@ public class PlayerSlide : MonoBehaviour
     [SerializeField] private float maxSlideTime;
     [SerializeField] private float slideForce;
     [SerializeField] private float slideYScale;
-    [HideInInspector] public bool sliding;
+    [HideInInspector] public static bool sliding;
     private float slideTimer;
     private float startYScale;
 
@@ -64,8 +66,10 @@ public class PlayerSlide : MonoBehaviour
             Sliding();
     }
 
+        Vector3 direction;
     private void StartSlide()
     {
+        direction = new Vector3(PlayerController.moveDirection.x, 0, PlayerController.moveDirection.z);
         sliding = true;
         
         Transform playerObj = gameObject.transform;
@@ -77,7 +81,13 @@ public class PlayerSlide : MonoBehaviour
 
     private void Sliding()
     {
-        PlayerController.rb.AddForce(PlayerController.moveDirection * slideForce, ForceMode.Force);
+       if (!OnSlope())
+            PlayerController.rb.AddForce(direction * slideForce, ForceMode.Force);
+       else
+        {
+            direction = new Vector3(direction.x, -1, direction.z);
+            PlayerController.rb.AddForce(direction * slideForce, ForceMode.Force);
+        }
         
         slideTimer -= Time.deltaTime;
         

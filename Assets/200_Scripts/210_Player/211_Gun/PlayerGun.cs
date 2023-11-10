@@ -55,13 +55,13 @@ public class PlayerGun : MonoBehaviour
 
             if (Input.GetButtonDown("Dump")) Dump();
 
-            if (barrel.barrelStock.Count > 0) reloadText.enabled = false;
-            if (barrel.barrelStock.Count == 0)
+            if (barrel.barrelStock[Barrel.selectedBullet] != Color.black) reloadText.enabled = false;
+            if (barrel.barrelStock[Barrel.selectedBullet] == Color.black)
             {
                 reloadText.enabled = true;
                 nextBulletColor.material.color = Color.black;
             }
-            else if (barrel.barrelStock.Count >= 1) nextBulletColor.material.color = barrel.barrelStock[0];
+            else if (barrel.barrelStock[Barrel.selectedBullet + 1] != Color.black) nextBulletColor.material.color = barrel.barrelStock[Barrel.selectedBullet];
         }
 
         CheckMagicObjects();
@@ -69,7 +69,7 @@ public class PlayerGun : MonoBehaviour
 
     private void Shoot()
     {
-        if (barrel.barrelStock.Count > 0 && !Cursor.visible)
+        if (barrel.barrelStock[Barrel.selectedBullet] != Color.black && !Cursor.visible)
         {
             Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
@@ -78,6 +78,7 @@ public class PlayerGun : MonoBehaviour
             {
                 if (hit.collider.gameObject.layer == 10)
                 {
+                    Debug.DrawRay(ray.origin, ray.direction * 10, Color.green, 0.5f);
                     // Obtenez la référence à l'ennemi s'il est touché par le raycast
                     EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
 
@@ -85,8 +86,14 @@ public class PlayerGun : MonoBehaviour
                     {
                         // Appel de la fonction TakeDamage pour réduire les points de vie de l'ennemi
                         enemyHealth.TakeDamage(10);
-                        Debug.Log("-10PV"); 
+                        Debug.Log("-10PV");
                     }
+                }
+
+                else
+                {
+                    Debug.LogWarning(hit.collider.name);
+                    Debug.DrawRay(ray.origin, ray.direction * 10, Color.red, 0.5f);
                 }
 
                 if (hit.transform.CompareTag("Destroyable") && hit.collider.gameObject.layer == 0)
@@ -94,7 +101,7 @@ public class PlayerGun : MonoBehaviour
                     Destroy(hit.transform.gameObject);
                 }
 
-                if (barrel.barrelStock[0] == Color.red)
+                if (barrel.barrelStock[Barrel.selectedBullet] == Color.red)
                 {
                     if (hit.transform.CompareTag("BossRed") && hit.collider.gameObject.layer == 9)
                     {
@@ -114,7 +121,7 @@ public class PlayerGun : MonoBehaviour
                     }
                 }
                     
-                else if (barrel.barrelStock[0] == Color.blue)
+                else if (barrel.barrelStock[Barrel.selectedBullet] == Color.blue)
                 {
                     if (hit.transform.CompareTag("BossBlue") && hit.collider.gameObject.layer == 8)
                     {
@@ -135,9 +142,9 @@ public class PlayerGun : MonoBehaviour
                 }
 
                 // Je joue ma particule d'impact à l'endroit du contact avec la couleur de l'élément
-                particleManager.Impact(barrel.barrelStock[0], hit.point, hit.normal);
+                particleManager.Impact(barrel.barrelStock[Barrel.selectedBullet], hit.point, hit.normal);
             }
-            barrel.RemoveStock();
+            barrel.NextBullet();
         }
     }
 
@@ -147,7 +154,10 @@ public class PlayerGun : MonoBehaviour
         bossBlueCount = 0; // Réinitialisez le compteur pour les objets "BossBlue" à zéro
         UpdateBossCountsUI();
 
-        barrel.barrelStock.Clear();
+        for (int i = 0; i < barrel.barrelStock.Count; i++)
+        {
+            barrel.barrelStock[i] = Color.black;
+        }
     }
 
     private void CheckMagicObjects()
