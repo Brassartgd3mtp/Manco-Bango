@@ -55,13 +55,14 @@ public class PlayerGun : MonoBehaviour
 
             if (Input.GetButtonDown("Dump")) Dump();
 
-            if (barrel.barrelStock[Barrel.selectedBullet] != Color.black) reloadText.enabled = false;
-            if (barrel.barrelStock[Barrel.selectedBullet] == Color.black)
+            if (barrel.barrelStock[Barrel.SelectedBullet] != Color.black) reloadText.enabled = false;
+            if (barrel.barrelStock[Barrel.SelectedBullet] == Color.black)
             {
                 reloadText.enabled = true;
                 nextBulletColor.material.color = Color.black;
             }
-            else if (barrel.barrelStock[Barrel.selectedBullet + 1] != Color.black) nextBulletColor.material.color = barrel.barrelStock[Barrel.selectedBullet];
+            else
+                nextBulletColor.material.color = barrel.barrelStock[Barrel.SelectedBullet];
         }
 
         CheckMagicObjects();
@@ -69,7 +70,7 @@ public class PlayerGun : MonoBehaviour
 
     private void Shoot()
     {
-        if (barrel.barrelStock[Barrel.selectedBullet] != Color.black && !Cursor.visible)
+        if (barrel.barrelStock[Barrel.SelectedBullet] != Color.black && !Cursor.visible)
         {
             Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
@@ -101,7 +102,7 @@ public class PlayerGun : MonoBehaviour
                     Destroy(hit.transform.gameObject);
                 }
 
-                if (barrel.barrelStock[Barrel.selectedBullet] == Color.red)
+                if (barrel.barrelStock[Barrel.SelectedBullet] == Color.red)
                 {
                     if (hit.transform.CompareTag("BossRed") && hit.collider.gameObject.layer == 9)
                     {
@@ -121,7 +122,7 @@ public class PlayerGun : MonoBehaviour
                     }
                 }
                     
-                else if (barrel.barrelStock[Barrel.selectedBullet] == Color.blue)
+                else if (barrel.barrelStock[Barrel.SelectedBullet] == Color.blue)
                 {
                     if (hit.transform.CompareTag("BossBlue") && hit.collider.gameObject.layer == 8)
                     {
@@ -142,7 +143,7 @@ public class PlayerGun : MonoBehaviour
                 }
 
                 // Je joue ma particule d'impact à l'endroit du contact avec la couleur de l'élément
-                particleManager.Impact(barrel.barrelStock[Barrel.selectedBullet], hit.point, hit.normal);
+                particleManager.Impact(barrel.barrelStock[Barrel.SelectedBullet], hit.point, hit.normal);
             }
             barrel.NextBullet();
         }

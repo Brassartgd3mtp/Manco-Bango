@@ -16,11 +16,11 @@ public class ObjectInteraction : MonoBehaviour
         {
             Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
-            if(barrel.barrelStock[Barrel.selectedBullet] != Color.black)
+            if(barrel.barrelStock[Barrel.SelectedBullet] != Color.black)
             {
                 if (Physics.Raycast(ray, out hit, interactRange))
                 {
-                    if (barrel.barrelStock[Barrel.selectedBullet] == Color.blue)
+                    if (barrel.barrelStock[Barrel.SelectedBullet] == Color.blue)
                     {
                         if (hit.collider.CompareTag("BlueButton"))
                         {
@@ -39,7 +39,7 @@ public class ObjectInteraction : MonoBehaviour
                             Destroy(hit.collider.gameObject);
                         }
                     }
-                    else if (barrel.barrelStock[Barrel.selectedBullet] == Color.red)
+                    else if (barrel.barrelStock[Barrel.SelectedBullet] == Color.red)
                     {
                         if (hit.collider.CompareTag("RedButton"))
                         {

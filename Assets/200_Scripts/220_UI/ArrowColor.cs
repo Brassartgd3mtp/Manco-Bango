@@ -18,7 +18,7 @@ public class ArrowColor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (barrel.barrelStock[Barrel.selectedBullet] != Color.black) arrow.color = barrel.barrelStock[Barrel.selectedBullet];
+        if (barrel.barrelStock[Barrel.SelectedBullet] != Color.black) arrow.color = barrel.barrelStock[Barrel.SelectedBullet];
         else arrow.color = Color.black;
     }
 }
