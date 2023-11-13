@@ -15,9 +15,9 @@ public class Barrel : MonoBehaviour
         set
         {
             if (value > 5)
-            {
                 selectedBullet = 0;
-            }
+            else
+                selectedBullet = value;
         }
     }
 
@@ -27,9 +27,9 @@ public class Barrel : MonoBehaviour
         set
         {
             if (value > 5)
-            {
                 selectedForReload = 0;
-            }
+            else
+                selectedForReload = value;
         }
     }
 
@@ -41,31 +41,17 @@ public class Barrel : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (selectedForReload > 5)
-            selectedForReload = 0;
-        if (selectedBullet > 5)
-            selectedBullet = 0;
-    }
-
     public void AddStock(Color _color)
     {
-        barrelStock[selectedForReload] = _color;
+        barrelStock[SelectedForReload] = _color;
 
-        //if (selectedForReload < 6)
-            selectedForReload++;
-        //else
-        //    selectedForReload = 0;
+        SelectedForReload++;
     }
 
     public void NextBullet()
     {
        barrelStock[selectedBullet] = Color.black;
        
-       //if (selectedBullet < 6)
-           selectedBullet++;
-       //else
-       //    selectedBullet = 0;
+       SelectedBullet++;
     }
 }

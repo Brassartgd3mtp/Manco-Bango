@@ -79,7 +79,6 @@ public class PlayerGun : MonoBehaviour
             {
                 if (hit.collider.gameObject.layer == 10)
                 {
-                    Debug.DrawRay(ray.origin, ray.direction * 10, Color.green, 0.5f);
                     // Obtenez la référence à l'ennemi s'il est touché par le raycast
                     EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
 
@@ -89,12 +88,6 @@ public class PlayerGun : MonoBehaviour
                         enemyHealth.TakeDamage(10);
                         Debug.Log("-10PV");
                     }
-                }
-
-                else
-                {
-                    Debug.LogWarning(hit.collider.name);
-                    Debug.DrawRay(ray.origin, ray.direction * 10, Color.red, 0.5f);
                 }
 
                 if (hit.transform.CompareTag("Destroyable") && hit.collider.gameObject.layer == 0)
@@ -127,21 +120,19 @@ public class PlayerGun : MonoBehaviour
                     if (hit.transform.CompareTag("BossBlue") && hit.collider.gameObject.layer == 8)
                     {
                         // L'objet touché a le tag "BossBlue", détruisez-le
-                    Destroy(hit.transform.gameObject);
+                        Destroy(hit.transform.gameObject);
 
-                    // Mettez à jour le compteur pour les objets "BossBlue" et l'UI
-                    bossBlueCount++;
-                    UpdateBossCountsUI();
+                        // Mettez à jour le compteur pour les objets "BossBlue" et l'UI
+                        bossBlueCount++;
+                        UpdateBossCountsUI();
 
-                    // Créez un effet de particules pour les objets "BossBlue"
-                    if (bossBlueParticlePrefab != null)
-                    {
-                        Instantiate(bossBlueParticlePrefab, hit.point, Quaternion.identity);
+                        // Créez un effet de particules pour les objets "BossBlue"
+                        if (bossBlueParticlePrefab != null)
+                        {
+                            Instantiate(bossBlueParticlePrefab, hit.point, Quaternion.identity);
+                        }
                     }
-                    }
-                    
                 }
-
                 // Je joue ma particule d'impact à l'endroit du contact avec la couleur de l'élément
                 particleManager.Impact(barrel.barrelStock[Barrel.SelectedBullet], hit.point, hit.normal);
             }
