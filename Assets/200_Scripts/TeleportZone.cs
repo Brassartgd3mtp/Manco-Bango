@@ -3,7 +3,7 @@ using UnityEngine;
 public class TeleportZone : MonoBehaviour
 {
     public Transform destination; // Référence à la zone de destination
-    private TimerController timerController;
+    public TimerController timerController;
 
     private void OnTriggerEnter(Collider other)
     {

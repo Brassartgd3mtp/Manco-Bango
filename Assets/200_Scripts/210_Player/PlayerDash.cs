@@ -5,8 +5,8 @@ using UnityEngine.UI;
 public class PlayerDash : MonoBehaviour
 {
     [Header("Dash")]
-    [SerializeField] private float dashForce = 10.0f;
-    [SerializeField] private float dashCooldown = 1.0f;
+    public float dashForce = 10.0f;
+    public float dashCooldown = 1.0f;
     [SerializeField] private float cooldownTimer;
     public float dashDuration = 0.5f;
     private Vector3 direction;

@@ -10,23 +10,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask whatIsWall;
     [SerializeField] private CapsuleCollider capsuleCollider;
     [SerializeField] private Transform orientation;
-    [SerializeField] private float moveSpeed = 10;
-    [SerializeField] private float airMultiplier = 1;
-    [SerializeField] private float groundDrag = 5;
+    public float moveSpeed = 10;
+    public float airMultiplier = 1;
+    public float groundDrag = 5;
     //[SerializeField] private int fallSpeedModifier = 5; (voir ligne 151)
 
     [Header("Jump")]
-    [SerializeField] private float jumpForce = 8;
-    [SerializeField] private float jumpCooldown = 0.25f;
+    public float jumpForce = 8;
+    public float jumpCooldown = 0.25f;
     private bool readyToJump;
 
     [Header("Coyotte")]
-    [SerializeField] private float maxCoyotteTime = 0.25f;
+    public float maxCoyotteTime = 0.25f;
     private bool canCoyotte;
     
     public bool CanCoyotte
     {
-        get { return canCoyotte; }
+        get => canCoyotte;
         private set
         {
             if (grounded && readyToJump) canCoyotte = true;
@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Ground Check")]
     [SerializeField] private LayerMask whatIsGround;
-    [SerializeField] private bool grounded;
+    private bool grounded;
     private bool jumpGrounded;
     public static float playerHeight = 2;
 
@@ -46,8 +46,13 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public static Vector3 moveDirection;
     [HideInInspector] public static Rigidbody rb;
 
+    [HideInInspector] public PlayerDash playerDash;
+    [HideInInspector] public PlayerSlide playerSlide;
+
     private void Start()
     {
+        playerSlide = GetComponent<PlayerSlide>();
+        playerDash = GetComponent<PlayerDash>();
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
@@ -174,8 +179,8 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, -limitedVelVer.y, rb.velocity.z);
         }
 
-        //J'utilise la détéction du sol de jumpGrounded pour annuler la vélocité Y afin d'éviter de se bloquer dans le sol lorsque l'on chute
-        if (jumpGrounded && rb.velocity.y < -10)
+        //J'utilise la détéction du sol de grounded pour annuler la vélocité Y afin d'éviter de se bloquer dans le sol lorsque l'on chute
+        if (grounded && rb.velocity.y < 0 && !playerSlide.OnSlope())
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
     }
 
