@@ -9,7 +9,6 @@ public class ArrowColor : MonoBehaviour
 
     [SerializeField] private Barrel barrel;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +18,7 @@ public class ArrowColor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (barrel.barrelStock.Count > 0) arrow.color = barrel.barrelStock[0];
+        if (barrel.barrelStock[Barrel.SelectedBullet] != Color.black) arrow.color = barrel.barrelStock[Barrel.SelectedBullet];
         else arrow.color = Color.black;
     }
 }

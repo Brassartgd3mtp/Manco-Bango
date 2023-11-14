@@ -55,13 +55,14 @@ public class PlayerGun : MonoBehaviour
 
             if (Input.GetButtonDown("Dump")) Dump();
 
-            if (barrel.barrelStock.Count > 0) reloadText.enabled = false;
-            if (barrel.barrelStock.Count == 0)
+            if (barrel.barrelStock[Barrel.SelectedBullet] != Color.black) reloadText.enabled = false;
+            if (barrel.barrelStock[Barrel.SelectedBullet] == Color.black)
             {
                 reloadText.enabled = true;
                 nextBulletColor.material.color = Color.black;
             }
-            else if (barrel.barrelStock.Count >= 1) nextBulletColor.material.color = barrel.barrelStock[0];
+            else
+                nextBulletColor.material.color = barrel.barrelStock[Barrel.SelectedBullet];
         }
 
         CheckMagicObjects();
@@ -69,7 +70,7 @@ public class PlayerGun : MonoBehaviour
 
     private void Shoot()
     {
-        if (barrel.barrelStock.Count > 0 && !Cursor.visible)
+        if (barrel.barrelStock[Barrel.SelectedBullet] != Color.black && !Cursor.visible)
         {
             Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
@@ -85,7 +86,7 @@ public class PlayerGun : MonoBehaviour
                     {
                         // Appel de la fonction TakeDamage pour réduire les points de vie de l'ennemi
                         enemyHealth.TakeDamage(10);
-                        Debug.Log("-10PV"); 
+                        Debug.Log("-10PV");
                     }
                 }
 
@@ -94,7 +95,7 @@ public class PlayerGun : MonoBehaviour
                     Destroy(hit.transform.gameObject);
                 }
 
-                if (barrel.barrelStock[0] == Color.red)
+                if (barrel.barrelStock[Barrel.SelectedBullet] == Color.red)
                 {
                     if (hit.transform.CompareTag("BossRed") && hit.collider.gameObject.layer == 9)
                     {
@@ -114,30 +115,28 @@ public class PlayerGun : MonoBehaviour
                     }
                 }
                     
-                else if (barrel.barrelStock[0] == Color.blue)
+                else if (barrel.barrelStock[Barrel.SelectedBullet] == Color.blue)
                 {
                     if (hit.transform.CompareTag("BossBlue") && hit.collider.gameObject.layer == 8)
                     {
                         // L'objet touché a le tag "BossBlue", détruisez-le
-                    Destroy(hit.transform.gameObject);
+                        Destroy(hit.transform.gameObject);
 
-                    // Mettez à jour le compteur pour les objets "BossBlue" et l'UI
-                    bossBlueCount++;
-                    UpdateBossCountsUI();
+                        // Mettez à jour le compteur pour les objets "BossBlue" et l'UI
+                        bossBlueCount++;
+                        UpdateBossCountsUI();
 
-                    // Créez un effet de particules pour les objets "BossBlue"
-                    if (bossBlueParticlePrefab != null)
-                    {
-                        Instantiate(bossBlueParticlePrefab, hit.point, Quaternion.identity);
+                        // Créez un effet de particules pour les objets "BossBlue"
+                        if (bossBlueParticlePrefab != null)
+                        {
+                            Instantiate(bossBlueParticlePrefab, hit.point, Quaternion.identity);
+                        }
                     }
-                    }
-                    
                 }
-
                 // Je joue ma particule d'impact à l'endroit du contact avec la couleur de l'élément
-                particleManager.Impact(barrel.barrelStock[0], hit.point, hit.normal);
+                particleManager.Impact(barrel.barrelStock[Barrel.SelectedBullet], hit.point, hit.normal);
             }
-            barrel.RemoveStock();
+            barrel.NextBullet();
         }
     }
 
@@ -147,7 +146,10 @@ public class PlayerGun : MonoBehaviour
         bossBlueCount = 0; // Réinitialisez le compteur pour les objets "BossBlue" à zéro
         UpdateBossCountsUI();
 
-        barrel.barrelStock.Clear();
+        for (int i = 0; i < barrel.barrelStock.Count; i++)
+        {
+            barrel.barrelStock[i] = Color.black;
+        }
     }
 
     private void CheckMagicObjects()

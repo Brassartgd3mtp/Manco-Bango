@@ -5,8 +5,8 @@ using UnityEngine.UI;
 public class PlayerDash : MonoBehaviour
 {
     [Header("Dash")]
-    [SerializeField] private float dashForce = 10.0f;
-    [SerializeField] private float dashCooldown = 1.0f;
+    public float dashForce = 10.0f;
+    public float dashCooldown = 1.0f;
     [SerializeField] private float cooldownTimer;
     public float dashDuration = 0.5f;
     private Vector3 direction;
@@ -17,8 +17,6 @@ public class PlayerDash : MonoBehaviour
     [SerializeField] private Camera fovEffect;
     [SerializeField] private ParticleManager particleManager;
     [SerializeField] private GameObject dashParticle;
-    private PlayerSlide slide;
-    private TimeSlowdown slowdown;
 
     private bool canDash = true;
     [HideInInspector] public bool isDashing = false;
@@ -26,8 +24,6 @@ public class PlayerDash : MonoBehaviour
     private void Start()
     {
         cooldownTimer = dashCooldown + dashDuration;
-        slide = GetComponent<PlayerSlide>();
-        slowdown = GetComponent<TimeSlowdown>();
     }
 
     private void Update()
@@ -38,7 +34,7 @@ public class PlayerDash : MonoBehaviour
         {
             if (PlayerController.moveDirection != new Vector3(0, 0, 0))
             {
-                if (canDash && !slide.sliding && Input.GetButtonDown("Dash"))
+                if (canDash && !PlayerSlide.sliding && Input.GetButtonDown("Dash"))
                 {
                     direction = PlayerController.moveDirection;
 

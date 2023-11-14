@@ -63,9 +63,9 @@ public class MeleeEnemy : MonoBehaviour
     }
 
     // Fonction pour dessiner un gizmo dans l'éditeur Unity
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, playerDetectionRange);
-    }
+    //void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawWireSphere(transform.position, playerDetectionRange);
+    //}
 }

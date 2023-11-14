@@ -10,22 +10,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask whatIsWall;
     [SerializeField] private CapsuleCollider capsuleCollider;
     [SerializeField] private Transform orientation;
-    [SerializeField] private float moveSpeed = 10;
-    [SerializeField] private float airMultiplier = 1;
-    [SerializeField] private float groundDrag = 5;
+    public float moveSpeed = 10;
+    public float airMultiplier = 1;
+    public float groundDrag = 5;
+    //[SerializeField] private int fallSpeedModifier = 5; (voir ligne 151)
 
     [Header("Jump")]
-    [SerializeField] private float jumpForce = 8;
-    [SerializeField] private float jumpCooldown = 0.25f;
+    public float jumpForce = 8;
+    public float jumpCooldown = 0.25f;
     private bool readyToJump;
 
     [Header("Coyotte")]
-    [SerializeField] private float maxCoyotteTime = 0.25f;
+    public float maxCoyotteTime = 0.25f;
     private bool canCoyotte;
     
     public bool CanCoyotte
     {
-        get { return canCoyotte; }
+        get => canCoyotte;
         private set
         {
             if (grounded && readyToJump) canCoyotte = true;
@@ -35,7 +36,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Ground Check")]
     [SerializeField] private LayerMask whatIsGround;
-    [SerializeField] private bool grounded;
+    private bool grounded;
     private bool jumpGrounded;
     public static float playerHeight = 2;
 
@@ -45,8 +46,13 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public static Vector3 moveDirection;
     [HideInInspector] public static Rigidbody rb;
 
+    [HideInInspector] public PlayerDash playerDash;
+    [HideInInspector] public PlayerSlide playerSlide;
+
     private void Start()
     {
+        playerSlide = GetComponent<PlayerSlide>();
+        playerDash = GetComponent<PlayerDash>();
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
@@ -114,8 +120,12 @@ public class PlayerController : MonoBehaviour
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
+        //Je stop le joueur dès qu'il lâche ses inputs (seulement s'il est au sol)
+        if (horizontalInput == 0 && verticalInput == 0 && grounded && !PlayerSlide.sliding)
+            rb.velocity = new Vector3(0, rb.velocity.y, 0);
+
         //Je vérifie si le personnage est en contact avec un mur dans la direction vers laquelle is se déplace
-        bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 0.8f, whatIsWall);
+        bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1f, whatIsWall);
 
         //Si le personnage est au sol, je dépalce le joueur et j'ignore l'adhérence avec un mur
         if (grounded)
@@ -141,6 +151,9 @@ public class PlayerController : MonoBehaviour
                 Vector3 moveDirectionWithoutWall = Vector3.ProjectOnPlane(moveDirection, hitInfo.normal).normalized;
                 rb.AddForce(moveDirectionWithoutWall * moveSpeed * 10f * airMultiplier, ForceMode.Force);
             }
+
+            //J'augmente la vitesse de chute du joueur au moment où il commence à chuter (potentiellemnt une feature du style groundpound)
+            //if (!jumpGrounded && rb.velocity.y < 0 && rb.velocity.y > -fallSpeedModifier + 1) rb.velocity = new Vector3(rb.velocity.x, -fallSpeedModifier, rb.velocity.z);
         }
     }
 
@@ -166,9 +179,9 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, -limitedVelVer.y, rb.velocity.z);
         }
 
-        //J'utilise la permission de saut du jumpGrounded pour annuler la vélocité Y afin d'éviter de se bloquer dans le sol lorsque l'on chute
-        if (jumpGrounded && rb.velocity.y < -10)
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        //J'utilise la détéction du sol de grounded pour annuler la vélocité Y afin d'éviter de se bloquer dans le sol lorsque l'on chute
+        if (grounded && rb.velocity.y < 0 && !playerSlide.OnSlope())
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
     }
 
     private void Jump()

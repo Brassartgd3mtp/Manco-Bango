@@ -23,7 +23,6 @@ public class MeleeAttack : MonoBehaviour
 
     void PerformMeleeAttack()
     {
-        Debug.Log("on commence00");
         // Obtenez tous les colliders dans la portée de l'attaque
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
 
@@ -32,14 +31,12 @@ public class MeleeAttack : MonoBehaviour
             // Vérifiez si l'objet a le tag "Enemy" et le layer "Enemy"
             if (hitCollider.CompareTag("Enemy") && hitCollider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                Debug.Log("of course");
                 // Détruisez immédiatement l'ennemi
                 // Obtenez la référence à l'ennemi s'il est touché par le raycast
                 EnemyHealth enemyHealth = hitCollider.GetComponent<EnemyHealth>();
 
                 if (enemyHealth != null)
                 {
-                    Debug.Log("touched");
                     // Appel de la fonction TakeDamage pour réduire les points de vie de l'ennemi
                     enemyHealth.TakeDamage(10);
                     Debug.Log("-10PV");

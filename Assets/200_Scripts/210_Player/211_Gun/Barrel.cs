@@ -6,16 +6,52 @@ public class Barrel : MonoBehaviour
 {
     public List<Color> barrelStock = new List<Color>(6);
 
-    public void AddStock(Color _color)
+    private static int selectedBullet = 0;
+    private static int selectedForReload = 0;
+
+    public static int SelectedBullet
     {
-        if(barrelStock.Count < 6)
+        get => selectedBullet;
+        set
         {
-            barrelStock.Add(_color);
+            if (value > 5)
+                selectedBullet = 0;
+            else
+                selectedBullet = value;
         }
     }
 
-    public void RemoveStock()
+    public static int SelectedForReload
     {
-        barrelStock.RemoveAt(0);
+        get => selectedForReload;
+        set
+        {
+            if (value > 5)
+                selectedForReload = 0;
+            else
+                selectedForReload = value;
+        }
+    }
+
+    private void Awake()
+    {
+        for (int i = 0; i < barrelStock.Capacity; i++)
+        {
+            barrelStock.Add(Color.black);
+        }
+    }
+
+    public void AddStock(Color _color)
+    {
+        barrelStock[SelectedForReload] = _color;
+
+        SelectedForReload++;
+    }
+
+    public void NextBullet()
+    {
+       barrelStock[selectedBullet] = Color.black;
+       
+       SelectedBullet++;
     }
 }

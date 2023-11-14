@@ -1,17 +1,18 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerSlide : MonoBehaviour
 {
     [Header("Slide")]
-    [SerializeField] private float maxSlideTime;
-    [SerializeField] private float slideForce;
-    [SerializeField] private float slideYScale;
-    [HideInInspector] public bool sliding;
+    public float maxSlideTime;
+    public float slideForce;
+    public float slideYScale;
+    [HideInInspector] public static bool sliding;
     private float slideTimer;
     private float startYScale;
 
     [Header("FOV")]
-    [SerializeField] private int fovModifier;
+    public int fovModifier;
     [SerializeField] private float maxFOVTimer;
     [SerializeField] private float FOVTimer;
     [SerializeField] private Camera fovEffect;
@@ -64,8 +65,10 @@ public class PlayerSlide : MonoBehaviour
             Sliding();
     }
 
+    Vector3 direction;
     private void StartSlide()
     {
+        direction = new Vector3(PlayerController.moveDirection.x, 0, PlayerController.moveDirection.z);
         sliding = true;
         
         Transform playerObj = gameObject.transform;
@@ -77,7 +80,13 @@ public class PlayerSlide : MonoBehaviour
 
     private void Sliding()
     {
-        PlayerController.rb.AddForce(PlayerController.moveDirection * slideForce, ForceMode.Force);
+       if (!OnSlope())
+            PlayerController.rb.AddForce(direction * slideForce, ForceMode.Force);
+       else
+        {
+            direction = new Vector3(direction.x, -1, direction.z);
+            PlayerController.rb.AddForce(direction * slideForce, ForceMode.Force);
+        }
         
         slideTimer -= Time.deltaTime;
         
@@ -112,7 +121,7 @@ public class PlayerSlide : MonoBehaviour
     public bool OnSlope()
     {
         RaycastHit slopeHit;
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, PlayerController.playerHeight * 0.5f + 0.01f))
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, PlayerController.playerHeight * 0.5f + 0.2f))
         {
             if (slopeHit.collider.gameObject.layer == 12)
             {
