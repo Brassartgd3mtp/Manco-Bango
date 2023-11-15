@@ -22,6 +22,8 @@ TagManager:
   - FloorKill
   - BossBlue
   - BossRed
+  - Magic
+  - EnemyBoss
   layers:
   - Default
   - TransparentFX
