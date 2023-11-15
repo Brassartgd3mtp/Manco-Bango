@@ -70,26 +70,26 @@ public class PlayerSlide : MonoBehaviour
     {
         direction = new Vector3(PlayerController.moveDirection.x, 0, PlayerController.moveDirection.z);
         sliding = true;
-        
+
         Transform playerObj = gameObject.transform;
         playerObj.localScale = new Vector3(playerObj.localScale.x, slideYScale, playerObj.localScale.z);
         PlayerController.rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-        
+
         slideTimer = maxSlideTime;
     }
 
     private void Sliding()
     {
-       if (!OnSlope())
+        if (!OnSlope())
             PlayerController.rb.AddForce(direction * slideForce, ForceMode.Force);
-       else
+        else
         {
             direction = new Vector3(direction.x, -1, direction.z);
             PlayerController.rb.AddForce(direction * slideForce, ForceMode.Force);
         }
-        
+
         slideTimer -= Time.deltaTime;
-        
+
         if (slideTimer <= 0 && !OnSlope())
             StopSlide();
 

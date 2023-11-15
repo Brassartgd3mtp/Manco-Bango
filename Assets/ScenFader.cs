@@ -8,6 +8,7 @@ public class SceneFader : MonoBehaviour
 {
     public Image fadeImage;
     public float fadeSpeed = 1.0f;
+    public Canvas endCanva;
 
     private bool isFading = false;
 
@@ -29,10 +30,12 @@ public class SceneFader : MonoBehaviour
         fadeImage.canvasRenderer.SetAlpha(1.0f);
         fadeImage.CrossFadeAlpha(0, fadeSpeed, false);
         yield return new WaitForSeconds(fadeSpeed);
+        endCanva.enabled = false;
     }
 
     IEnumerator FadeOut(string sceneName)
     {
+        endCanva.enabled = true;
         fadeImage.canvasRenderer.SetAlpha(0.0f);
         fadeImage.CrossFadeAlpha(1, fadeSpeed, false);
         yield return new WaitForSeconds(fadeSpeed);
