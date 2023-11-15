@@ -44,8 +44,8 @@ class PlayerControllerEditor : Editor
             #endregion
         }
 
-        if (GUILayout.Button("Preset 2"))
-            Debug.Log("It's alive: " + target.name);
+        //if (GUILayout.Button("Preset 2"))
+        //    Debug.Log("It's alive: " + target.name);
 
         GUILayout.EndVertical();
     }

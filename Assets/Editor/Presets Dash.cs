@@ -26,8 +26,8 @@ class PlayerDashEditor : Editor
             playerDash.dashDuration = .25f;
         }
 
-        if (GUILayout.Button("Preset 2"))
-            Debug.Log("It's alive: " + target.name);
+        //if (GUILayout.Button("Preset 2"))
+        //    Debug.Log("It's alive: " + target.name);
 
         GUILayout.EndVertical();
     }
