@@ -15,12 +15,6 @@ public class CameraMouseLook : MonoBehaviour
     private float rotationX;
     private float rotationY;
 
-    private void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked; //Bloque la souris au centre de l'écran
-        Cursor.visible = false; //Cache la souris
-    }
-
     private void Update()
     {
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;

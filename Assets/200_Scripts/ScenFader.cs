@@ -12,11 +12,6 @@ public class SceneFader : MonoBehaviour
 
     private bool isFading = false;
 
-    private void Start()
-    {
-        StartCoroutine(FadeIn());
-    }
-
     public void FadeToScene(string sceneName)
     {
         if (!isFading)
@@ -25,17 +20,23 @@ public class SceneFader : MonoBehaviour
         }
     }
 
+    public void FuncFadeIn()
+    {
+        StartCoroutine(FadeIn());
+    }
+
     IEnumerator FadeIn()
     {
         fadeImage.canvasRenderer.SetAlpha(1.0f);
         fadeImage.CrossFadeAlpha(0, fadeSpeed, false);
         yield return new WaitForSeconds(fadeSpeed);
-        endCanva.enabled = false;
+        endCanva.gameObject.SetActive(false);
+        yield break;
     }
 
     IEnumerator FadeOut(string sceneName)
     {
-        endCanva.enabled = true;
+        endCanva.gameObject.SetActive(true);
         fadeImage.canvasRenderer.SetAlpha(0.0f);
         fadeImage.CrossFadeAlpha(1, fadeSpeed, false);
         yield return new WaitForSeconds(fadeSpeed);
