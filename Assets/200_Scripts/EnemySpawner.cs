@@ -6,6 +6,7 @@ public class EnemySpawner : MonoBehaviour
     public float spawnInterval = 5.0f; // Intervalle de temps entre chaque spawn
     public int maxEnemies = 10; // Nombre maximal d'ennemis à instancier
     public Collider spawnZone; // Collider délimitant la zone de spawn
+    public Transform player; // Référence au joueur
 
     private void Start()
     {
@@ -19,6 +20,13 @@ public class EnemySpawner : MonoBehaviour
         if (GameObject.FindGameObjectsWithTag("EnemyBoss").Length >= maxEnemies)
         {
             Debug.Log("Nombre maximal d'ennemis atteint. Pas de spawn.");
+            return;
+        }
+
+        // Ne faites rien si le joueur n'est pas dans la zone de spawn
+        if (!IsPlayerInSpawnZone())
+        {
+            Debug.Log("Le joueur n'est pas dans la zone de spawn. Pas de spawn.");
             return;
         }
 
@@ -54,5 +62,15 @@ public class EnemySpawner : MonoBehaviour
         }
 
         return randomPoint;
+    }
+
+    // Vérifie si le joueur est dans la zone de spawn
+    private bool IsPlayerInSpawnZone()
+    {
+        if (spawnZone != null && player != null)
+        {
+            return spawnZone.bounds.Contains(player.position);
+        }
+        return false;
     }
 }

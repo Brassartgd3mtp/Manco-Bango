@@ -2,16 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class ObjectCounter : MonoBehaviour
 {
-    public TextMeshProUGUI countText; // Référence à l'objet TextMeshProUGUI
-    public GameObject objectToDisappear; // Référence à l'objet à faire disparaître
-    public TextMeshProUGUI displayText; // Référence au TextMeshProUGUI pour afficher le texte
-    public float fadeDuration = 1.0f; // Durée du fondu en secondes
-    public float displayDuration = 3.0f; // Durée d'affichage du texte
+    public TextMeshProUGUI countText;
+    public GameObject objectToDisappear;
+    public TextMeshProUGUI displayText;
+    public float fadeDuration = 1.0f;
+    public float displayDuration = 3.0f;
+    public Image blueBar;
+    public Image redBar;
+
     private int blueObjectCount = 0;
     private int redObjectCount = 0;
+    private int maxBlueObjects = 10; // Remplacez par votre nombre maximum d'objets bleus
+    private int maxRedObjects = 10; // Remplacez par votre nombre maximum d'objets rouges
 
     private void Start()
     {
@@ -24,27 +30,37 @@ public class ObjectCounter : MonoBehaviour
         CountObjectsByLayer();
         UpdateCountText();
 
-        // Si le compteur atteint 0, affichez le texte et démarrez la séquence de fondu
         if (blueObjectCount == 0 && redObjectCount == 0)
         {
             objectToDisappear.SetActive(false);
             displayText.gameObject.SetActive(true);
             StartCoroutine(FadeAndHideText());
         }
+
+        UpdateProgressBars();
     }
 
     private void CountObjectsByLayer()
     {
-        GameObject[] blueObjects = GameObject.FindGameObjectsWithTag("Destroyable");
+        GameObject[] blueObjects = GameObject.FindGameObjectsWithTag("BossBlue");
         blueObjectCount = blueObjects.Length;
 
-        GameObject[] redObjects = GameObject.FindGameObjectsWithTag("Destroyable");
+        GameObject[] redObjects = GameObject.FindGameObjectsWithTag("BossRed");
         redObjectCount = redObjects.Length;
     }
 
     private void UpdateCountText()
     {
-        countText.text = "Objets  : " + blueObjectCount;
+        countText.text = "Objets bleus : " + blueObjectCount + "\nObjets rouges : " + redObjectCount;
+    }
+
+    private void UpdateProgressBars()
+    {
+        float blueProgress = (float)blueObjectCount / maxBlueObjects;
+        float redProgress = (float)redObjectCount / maxRedObjects;
+
+        blueBar.fillAmount = Mathf.Lerp(blueBar.fillAmount, blueProgress, Time.deltaTime * 5f);
+        redBar.fillAmount = Mathf.Lerp(redBar.fillAmount, redProgress, Time.deltaTime * 5f);
     }
 
     private IEnumerator FadeAndHideText()
@@ -61,11 +77,9 @@ public class ObjectCounter : MonoBehaviour
             yield return null;
         }
 
-        // Assurez-vous que le texte est complètement transparent et désactivez-le
         displayText.color = new Color(startColor.r, startColor.g, startColor.b, 0.0f);
         displayText.gameObject.SetActive(false);
 
-        // Désactivez l'objet à faire disparaître
         objectToDisappear.SetActive(false);
     }
 }
