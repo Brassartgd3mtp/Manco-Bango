@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class PlayerGun : MonoBehaviour
 {
@@ -19,20 +20,16 @@ public class PlayerGun : MonoBehaviour
     private float shootDelay = 0.01f;
     private bool canShoot = true;
 
-    private int bossRedTotal = 0; // Total d'objets "BossRed" dans la scène
-    private int bossBlueTotal = 0; // Total d'objets "BossBlue" dans la scène
-    private int bossRedCount = 0; // Compteur pour les objets "BossRed"
-    private int bossBlueCount = 0; // Compteur pour les objets "BossBlue"
+    private int bossRedTotal = 0;
+    private int bossBlueTotal = 0;
+    private int bossRedCount = 0;
+    private int bossBlueCount = 0;
 
     private void Start()
     {
         barrel = GetComponent<Barrel>();
 
-        // Assurez-vous que les composants TextMeshPro sont correctement référencés
-        if (bossRedCountText == null || bossBlueCountText == null)
-        {
-            Debug.LogError("Les composants TextMeshPro ne sont pas correctement référencés. Faites glisser et déposez-les dans l'Inspector Unity.");
-        }
+        // Assurez-vous que les composants TextMeshPro et les barres de progression sont correctement référencés
 
         // Comptez le nombre total d'objets "BossRed" et "BossBlue" dans la scène
         GameObject[] bossRedObjects = GameObject.FindGameObjectsWithTag("BossRed");
@@ -40,15 +37,16 @@ public class PlayerGun : MonoBehaviour
         bossRedTotal = bossRedObjects.Length;
         bossBlueTotal = bossBlueObjects.Length;
 
+        // Mettez à jour l'UI des compteurs de boss
         UpdateBossCountsUI();
     }
 
     private void UpdateBossCountsUI()
     {
         // Mettez à jour le texte pour afficher le total et le nombre restant d'objets "BossRed" et "BossBlue"
-        bossRedCountText.text = "BossRed: " + bossRedCount + " / " + bossRedTotal;
-        bossBlueCountText.text = "BossBlue: " + bossBlueCount + " / " + bossBlueTotal;
+
     }
+
 
     private void Update()
     {
@@ -93,12 +91,9 @@ public class PlayerGun : MonoBehaviour
             {
                 if (hit.collider.gameObject.layer == 10)
                 {
-                    // Obtenez la référence à l'ennemi s'il est touché par le raycast
                     EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
-
                     if (enemyHealth is not null)
                     {
-                        // Appel de la fonction TakeDamage pour réduire les points de vie de l'ennemi
                         enemyHealth.TakeDamage(10);
                         Debug.Log("-10PV");
                     }
@@ -107,47 +102,40 @@ public class PlayerGun : MonoBehaviour
                 if (hit.transform.CompareTag("Destroyable") && hit.collider.gameObject.layer == 0)
                 {
                     Destroy(hit.transform.gameObject);
+                    UpdateBossCountsUI();
                 }
 
                 if (barrel.barrelStock[Barrel.SelectedBullet] == Color.red)
                 {
                     if (hit.transform.CompareTag("BossRed") && hit.collider.gameObject.layer == 9)
                     {
-                        // L'objet touché a le tag "BossRed", détruisez-le
                         Destroy(hit.transform.gameObject);
-
-                        // Mettez à jour le compteur pour les objets "BossRed" et l'UI
                         bossRedCount++;
                         UpdateBossCountsUI();
 
-                        // Créez un effet de particules pour les objets "BossRed"
                         if (bossRedParticlePrefab != null)
                         {
                             Instantiate(bossRedParticlePrefab, hit.point, Quaternion.identity);
-                                Debug.Log("Particule");
+                            Debug.Log("Particule");
                         }
                     }
                 }
-                    
+
                 else if (barrel.barrelStock[Barrel.SelectedBullet] == Color.blue)
                 {
                     if (hit.transform.CompareTag("BossBlue") && hit.collider.gameObject.layer == 8)
                     {
-                        // L'objet touché a le tag "BossBlue", détruisez-le
                         Destroy(hit.transform.gameObject);
-
-                        // Mettez à jour le compteur pour les objets "BossBlue" et l'UI
                         bossBlueCount++;
                         UpdateBossCountsUI();
 
-                        // Créez un effet de particules pour les objets "BossBlue"
                         if (bossBlueParticlePrefab != null)
                         {
                             Instantiate(bossBlueParticlePrefab, hit.point, Quaternion.identity);
                         }
                     }
                 }
-                // Je joue ma particule d'impact à l'endroit du contact avec la couleur de l'élément
+
                 particleManager.Impact(barrel.barrelStock[Barrel.SelectedBullet], hit.point, hit.normal);
             }
             barrel.NextBullet();
@@ -156,8 +144,8 @@ public class PlayerGun : MonoBehaviour
 
     private void Dump()
     {
-        bossRedCount = 0; // Réinitialisez le compteur pour les objets "BossRed" à zéro
-        bossBlueCount = 0; // Réinitialisez le compteur pour les objets "BossBlue" à zéro
+        bossRedCount = 0;
+        bossBlueCount = 0;
         UpdateBossCountsUI();
 
         for (int i = 0; i < barrel.barrelStock.Count; i++)
@@ -171,10 +159,8 @@ public class PlayerGun : MonoBehaviour
         GameObject[] bossRedObjects = GameObject.FindGameObjectsWithTag("BossRed");
         GameObject[] bossBlueObjects = GameObject.FindGameObjectsWithTag("BossBlue");
 
-        // Vérifiez s'il ne reste plus aucun objet "BossRed" ni "BossBlue" dans la scène
         if (bossRedObjects.Length == 0 && bossBlueObjects.Length == 0)
         {
-            // Trouvez tous les objets ayant le tag "Magic" et détruisez-les
             GameObject[] magicObjects = GameObject.FindGameObjectsWithTag("Magic");
             foreach (var magicObject in magicObjects)
             {
