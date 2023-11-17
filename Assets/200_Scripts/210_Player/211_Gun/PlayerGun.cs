@@ -14,27 +14,17 @@ public class PlayerGun : MonoBehaviour
     private Barrel barrel;
     public GameObject bossRedParticlePrefab;
     public GameObject bossBlueParticlePrefab;
-    public TextMeshProUGUI bossRedCountText;
-    public TextMeshProUGUI bossBlueCountText;
-    public Image bossRedProgressBar;
-    public Image bossBlueProgressBar;
 
     private int bossRedTotal = 0;
     private int bossBlueTotal = 0;
     private int bossRedCount = 0;
     private int bossBlueCount = 0;
-    private bool isBossRedDecreasing = false;
-    private bool isBossBlueDecreasing = false;
 
     private void Start()
     {
         barrel = GetComponent<Barrel>();
 
         // Assurez-vous que les composants TextMeshPro et les barres de progression sont correctement référencés
-        if (bossRedCountText == null || bossBlueCountText == null || bossRedProgressBar == null || bossBlueProgressBar == null)
-        {
-            Debug.LogError("Les composants TextMeshPro ou les barres de progression ne sont pas correctement référencés. Faites glisser et déposez-les dans l'Inspector Unity.");
-        }
 
         // Comptez le nombre total d'objets "BossRed" et "BossBlue" dans la scène
         GameObject[] bossRedObjects = GameObject.FindGameObjectsWithTag("BossRed");
@@ -49,50 +39,9 @@ public class PlayerGun : MonoBehaviour
     private void UpdateBossCountsUI()
     {
         // Mettez à jour le texte pour afficher le total et le nombre restant d'objets "BossRed" et "BossBlue"
-        bossRedCountText.text = "BossRed: " + bossRedCount + " / " + bossRedTotal;
-        bossBlueCountText.text = "BossBlue: " + bossBlueCount + " / " + bossBlueTotal;
 
-        // Mettez à jour les barres de progression
-        UpdateBossProgressBars();
     }
 
-    private void UpdateBossProgressBars()
-    {
-        // Calculez la proportion des boss rouges et bleus par rapport au nombre total
-        float bossRedProgress = (float)bossRedCount / bossRedTotal;
-        float bossBlueProgress = (float)bossBlueCount / bossBlueTotal;
-
-        // Mettez à jour les barres de progression en fonction de la proportion calculée
-        if (isBossRedDecreasing)
-        {
-            bossRedProgressBar.fillAmount = Mathf.Max(bossRedProgressBar.fillAmount - Time.deltaTime * 0.5f, bossRedProgress);
-            if (bossRedProgressBar.fillAmount == bossRedProgress)
-            {
-                isBossRedDecreasing = false;
-            }
-        }
-        else
-        {
-            bossRedProgressBar.fillAmount = Mathf.Lerp(bossRedProgressBar.fillAmount, bossRedProgress, Time.deltaTime * 5f);
-        }
-
-        if (isBossBlueDecreasing)
-        {
-            bossBlueProgressBar.fillAmount = Mathf.Max(bossBlueProgressBar.fillAmount - Time.deltaTime * 0.5f, bossBlueProgress);
-            if (bossBlueProgressBar.fillAmount == bossBlueProgress)
-            {
-                isBossBlueDecreasing = false;
-            }
-        }
-        else
-        {
-            bossBlueProgressBar.fillAmount = Mathf.Lerp(bossBlueProgressBar.fillAmount, bossBlueProgress, Time.deltaTime * 5f);
-        }
-
-        // Instructions de débogage
-        Debug.Log("BossRed Progress: " + bossRedProgress);
-        Debug.Log("BossBlue Progress: " + bossBlueProgress);
-    }
 
     private void Update()
     {
@@ -146,7 +95,6 @@ public class PlayerGun : MonoBehaviour
                     {
                         Destroy(hit.transform.gameObject);
                         bossRedCount++;
-                        isBossRedDecreasing = true;
                         UpdateBossCountsUI();
 
                         if (bossRedParticlePrefab != null)
@@ -163,7 +111,6 @@ public class PlayerGun : MonoBehaviour
                     {
                         Destroy(hit.transform.gameObject);
                         bossBlueCount++;
-                        isBossBlueDecreasing = true;
                         UpdateBossCountsUI();
 
                         if (bossBlueParticlePrefab != null)

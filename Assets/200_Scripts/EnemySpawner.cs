@@ -26,7 +26,6 @@ public class EnemySpawner : MonoBehaviour
         // Ne faites rien si le joueur n'est pas dans la zone de spawn
         if (!IsPlayerInSpawnZone())
         {
-            Debug.Log("Le joueur n'est pas dans la zone de spawn. Pas de spawn.");
             return;
         }
 

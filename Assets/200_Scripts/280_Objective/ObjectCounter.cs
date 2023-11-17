@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class ObjectCounter : MonoBehaviour
 {
-    public TextMeshProUGUI countText;
-    public GameObject objectToDisappear;
     public TextMeshProUGUI displayText;
     public float fadeDuration = 1.0f;
     public float displayDuration = 3.0f;
@@ -22,17 +20,14 @@ public class ObjectCounter : MonoBehaviour
     private void Start()
     {
         displayText.gameObject.SetActive(false);
-        UpdateCountText();
     }
 
     private void Update()
     {
         CountObjectsByLayer();
-        UpdateCountText();
 
         if (blueObjectCount == 0 && redObjectCount == 0)
         {
-            objectToDisappear.SetActive(false);
             displayText.gameObject.SetActive(true);
             StartCoroutine(FadeAndHideText());
         }
@@ -49,10 +44,6 @@ public class ObjectCounter : MonoBehaviour
         redObjectCount = redObjects.Length;
     }
 
-    private void UpdateCountText()
-    {
-        countText.text = "Objets bleus : " + blueObjectCount + "\nObjets rouges : " + redObjectCount;
-    }
 
     private void UpdateProgressBars()
     {
@@ -80,6 +71,5 @@ public class ObjectCounter : MonoBehaviour
         displayText.color = new Color(startColor.r, startColor.g, startColor.b, 0.0f);
         displayText.gameObject.SetActive(false);
 
-        objectToDisappear.SetActive(false);
     }
 }
