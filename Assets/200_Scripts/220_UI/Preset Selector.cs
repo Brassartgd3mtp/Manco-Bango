@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 public class PresetSelector : MonoBehaviour
 {
     private PlayerController playerController;
+    [Space]
     private PlayerDash playerDash;
     public Canvas[] presetsCanvas = new Canvas[2];
     public Canvas[] otherCanvas;
