@@ -9,11 +9,16 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private Renderer nextBulletColor;
     [SerializeField] private TextMeshProUGUI reloadText;
     [SerializeField] private CanvasToggle canvasToggle;
-    public ParticleManager particleManager;
+    [SerializeField] private BarrelRotate barrelRotate;
     [SerializeField] private LayerMask ignoredColliders;
+    public ParticleManager particleManager;
+    public GameObject bossRedParticlePrefab; // Préfab de l'effet de particules pour les objets "BossRed"
+    public GameObject bossBlueParticlePrefab; // Préfab de l'effet de particules pour les objets "BossBlue"
+    public TextMeshProUGUI bossRedCountText; // Référence au composant TextMeshPro pour le total "BossRed"
+    public TextMeshProUGUI bossBlueCountText; // Référence au composant TextMeshPro pour le total "BossBlue"
     private Barrel barrel;
-    public GameObject bossRedParticlePrefab;
-    public GameObject bossBlueParticlePrefab;
+    private float shootDelay = 0.01f;
+    private bool canShoot = true;
 
     private int bossRedTotal = 0;
     private int bossBlueTotal = 0;
@@ -47,7 +52,12 @@ public class PlayerGun : MonoBehaviour
     {
         if (!canvasToggle.isGamePaused)
         {
-            if (Input.GetButtonDown("Fire1")) Shoot();
+            if (Input.GetButtonDown("Fire1") && canShoot)
+            {
+                canShoot = false;
+                Shoot();
+                Invoke(nameof(ShootDelay), shootDelay);
+            }
 
             if (Input.GetButtonDown("Dump")) Dump();
 
@@ -64,12 +74,18 @@ public class PlayerGun : MonoBehaviour
         CheckMagicObjects();
     }
 
+    private void ShootDelay()
+    {
+        canShoot = true;
+    }
+
     private void Shoot()
     {
         if (barrel.barrelStock[Barrel.SelectedBullet] != Color.black && !Cursor.visible)
         {
             Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
+            barrelRotate.Rotate();
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(ignoredColliders)))
             {
