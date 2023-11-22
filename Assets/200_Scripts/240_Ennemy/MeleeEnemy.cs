@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class MeleeEnemy : MonoBehaviour
 {
     public float attackRange = 2f;
-    public float attackCooldown = 2f;
+    [SerializeField] public float attackCooldown = 2f;
     public int meleeDamage = 10;
     public float playerDetectionRange = 5f; // Portée de détection du joueur
     public LayerMask playerLayer; // Couche du joueur

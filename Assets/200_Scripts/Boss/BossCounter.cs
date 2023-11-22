@@ -20,8 +20,6 @@ public class BossCounter : MonoBehaviour
         bossBlueCount = CountObjectsWithTag("BossBlue");
 
         // Afficher les données actualisées dans la console
-        Debug.Log("Nombre d'objets avec le tag 'BossRed': " + bossRedCount);
-        Debug.Log("Nombre d'objets avec le tag 'BossBlue': " + bossBlueCount);
     }
 
     private int CountObjectsWithTag(string tag)

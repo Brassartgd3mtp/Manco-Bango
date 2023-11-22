@@ -50,7 +50,6 @@ public class HealthManager : MonoBehaviour
 
         if (collision.gameObject.CompareTag("FloorKill"))
         {
-            Debug.Log("Merjuezfipehjzfp"); 
             DamageButton(100);
         }
 
@@ -62,7 +61,6 @@ public class HealthManager : MonoBehaviour
 
         if (collision.gameObject.CompareTag("FloorKill"))
         {
-            Debug.Log("Merjuezfipehjzfp");
             DamageButton(100);
         }
 
