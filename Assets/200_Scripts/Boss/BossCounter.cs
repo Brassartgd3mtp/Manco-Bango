@@ -7,7 +7,7 @@ public class BossCounter : MonoBehaviour
 
     private void Update()
     {
-        // Actualiser les compteurs à chaque frame
+        // Actualiser les compteurs ï¿½ chaque frame
         UpdateObjectCounters();
     }
 
@@ -19,9 +19,7 @@ public class BossCounter : MonoBehaviour
         // Compter les objets avec le tag "BossBlue"
         bossBlueCount = CountObjectsWithTag("BossBlue");
 
-        // Afficher les données actualisées dans la console
-        //Debug.Log("Nombre d'objets avec le tag 'BossRed': " + bossRedCount);
-        //Debug.Log("Nombre d'objets avec le tag 'BossBlue': " + bossBlueCount);
+        // Afficher les donnï¿½es actualisï¿½es dans la console
     }
 
     private int CountObjectsWithTag(string tag)
