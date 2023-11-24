@@ -8,8 +8,8 @@ public class MeleeEnemy : MonoBehaviour
     public float attackRange = 2f;
     public float attackCooldown = 2f;
     public int meleeDamage = 10;
-    public float playerDetectionRange = 5f; // Portée de détection du joueur
-    public LayerMask playerLayer; // Couche du joueur
+    public float playerDetectionRange = 5f;
+    public LayerMask playerLayer;
 
     private Transform player;
     private NavMeshAgent navMeshAgent;
@@ -58,14 +58,6 @@ public class MeleeEnemy : MonoBehaviour
     void AttackMelee()
     {
         // Gérer les dégâts au corps à corps ici
-        Debug.Log("Melee enemy attack!");
         lastAttackTime = Time.time;
     }
-
-    // Fonction pour dessiner un gizmo dans l'éditeur Unity
-    //void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.blue;
-    //    Gizmos.DrawWireSphere(transform.position, playerDetectionRange);
-    //}
 }

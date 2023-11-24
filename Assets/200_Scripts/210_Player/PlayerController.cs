@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private LayerMask whatIsWall;
     [SerializeField] private CapsuleCollider capsuleCollider;
-    [SerializeField] private Transform orientation;
+    public Transform Orientation;
     public float moveSpeed = 10;
     public float airMultiplier = 1;
     public float groundDrag = 5;
@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        moveDirection = Orientation.forward * verticalInput + Orientation.right * horizontalInput;
 
         //Je stop le joueur dès qu'il lâche ses inputs (seulement s'il est au sol)
         if (horizontalInput == 0 && verticalInput == 0 && grounded && !PlayerSlide.sliding)

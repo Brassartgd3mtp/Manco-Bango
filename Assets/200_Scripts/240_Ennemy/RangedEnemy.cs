@@ -41,11 +41,4 @@ public class RangedEnemy : MonoBehaviour
             // Utilisez un script pour déplacer le projectile vers le joueur
         }
     }
-
-    // Fonction pour dessiner un gizmo dans l'éditeur Unity
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
 }
