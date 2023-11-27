@@ -3,20 +3,13 @@ using UnityEngine.UI;
 
 public class MeleeAttack : MonoBehaviour
 {
-    public float attackRange = 2.0f; // Portée de l'attaque
-    public GameObject particlePrefab; // Préfab du système de particules
-    public float particleDuration = 1.0f; // Durée d'affichage des particules en secondes
-    public float attackCooldown = 2.0f; // Temps d'attente entre chaque attaque en secondes
-    public Image cooldownImage; // Image utilisée pour afficher le cooldown
+    public float attackRange = 2.0f;
+    public float particleDuration = 1.0f;
+    public float attackCooldown = 2.0f;
+    public Image cooldownImage;
+    public GameObject particlePrefab;
 
     private bool canAttack = true;
-
-    private void OnDrawGizmos()
-    {
-        // Dessinez une sphère gizmo pour visualiser la portée de l'attaque
-        Gizmos.color = Color.red; // Couleur du gizmo
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
 
     private void Update()
     {
@@ -64,7 +57,6 @@ public class MeleeAttack : MonoBehaviour
             // Vérifiez si l'objet a le tag "Enemy" et le layer "Enemy"
             if (hitCollider.CompareTag("Enemy") && hitCollider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                // Détruisez immédiatement l'ennemi
                 // Obtenez la référence à l'ennemi s'il est touché par le raycast
                 EnemyHealth enemyHealth = hitCollider.GetComponent<EnemyHealth>();
 
@@ -72,7 +64,6 @@ public class MeleeAttack : MonoBehaviour
                 {
                     // Appel de la fonction TakeDamage pour réduire les points de vie de l'ennemi
                     enemyHealth.TakeDamage(10);
-                    Debug.Log("-10PV");
 
                     // Instanciez les particules
                     if (particlePrefab != null)

@@ -10,12 +10,15 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private TextMeshProUGUI reloadText;
     [SerializeField] private CanvasToggle canvasToggle;
     [SerializeField] private BarrelRotate barrelRotate;
-    [SerializeField] private LayerMask ignoredColliders;
+    [SerializeField] private GameObject bullet;
+    [SerializeField] private Transform canonPos;
+    [SerializeField] private LayerMask hitableColliders;
+
+    [Header("Particles")]
     public ParticleManager particleManager;
-    public GameObject bossRedParticlePrefab; // Préfab de l'effet de particules pour les objets "BossRed"
-    public GameObject bossBlueParticlePrefab; // Préfab de l'effet de particules pour les objets "BossBlue"
-    public TextMeshProUGUI bossRedCountText; // Référence au composant TextMeshPro pour le total "BossRed"
-    public TextMeshProUGUI bossBlueCountText; // Référence au composant TextMeshPro pour le total "BossBlue"
+    public GameObject bossRedParticlePrefab;
+    public GameObject bossBlueParticlePrefab;
+
     private Barrel barrel;
     private float shootDelay = 0.01f;
     private bool canShoot = true;
@@ -29,22 +32,11 @@ public class PlayerGun : MonoBehaviour
     {
         barrel = GetComponent<Barrel>();
 
-        // Assurez-vous que les composants TextMeshPro et les barres de progression sont correctement référencés
-
         // Comptez le nombre total d'objets "BossRed" et "BossBlue" dans la scène
         GameObject[] bossRedObjects = GameObject.FindGameObjectsWithTag("BossRed");
         GameObject[] bossBlueObjects = GameObject.FindGameObjectsWithTag("BossBlue");
         bossRedTotal = bossRedObjects.Length;
         bossBlueTotal = bossBlueObjects.Length;
-
-        // Mettez à jour l'UI des compteurs de boss
-        UpdateBossCountsUI();
-    }
-
-    private void UpdateBossCountsUI()
-    {
-        // Mettez à jour le texte pour afficher le total et le nombre restant d'objets "BossRed" et "BossBlue"
-
     }
 
 
@@ -87,7 +79,7 @@ public class PlayerGun : MonoBehaviour
             RaycastHit hit;
             barrelRotate.Rotate();
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(ignoredColliders)))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, hitableColliders))
             {
                 if (hit.collider.gameObject.layer == 10)
                 {
@@ -95,14 +87,12 @@ public class PlayerGun : MonoBehaviour
                     if (enemyHealth is not null)
                     {
                         enemyHealth.TakeDamage(10);
-                        Debug.Log("-10PV");
                     }
                 }
 
                 if (hit.transform.CompareTag("Destroyable") && hit.collider.gameObject.layer == 0)
                 {
                     Destroy(hit.transform.gameObject);
-                    UpdateBossCountsUI();
                 }
 
                 if (barrel.barrelStock[Barrel.SelectedBullet] == Color.red)
@@ -111,7 +101,6 @@ public class PlayerGun : MonoBehaviour
                     {
                         Destroy(hit.transform.gameObject);
                         bossRedCount++;
-                        UpdateBossCountsUI();
 
                         if (bossRedParticlePrefab != null)
                         {
@@ -127,7 +116,6 @@ public class PlayerGun : MonoBehaviour
                     {
                         Destroy(hit.transform.gameObject);
                         bossBlueCount++;
-                        UpdateBossCountsUI();
 
                         if (bossBlueParticlePrefab != null)
                         {
@@ -138,7 +126,21 @@ public class PlayerGun : MonoBehaviour
 
                 particleManager.Impact(barrel.barrelStock[Barrel.SelectedBullet], hit.point, hit.normal);
             }
+
+            Vector3 direction = hit.point - canonPos.position;
+
+            GameObject _bullet = Instantiate(bullet, canonPos.position, Quaternion.identity);
+            PlayerController playerController = FindObjectOfType<PlayerController>();
+
+            _bullet.transform.forward = direction.normalized + playerController.Orientation.forward;
+            _bullet.transform.up = direction.normalized + playerController.Orientation.forward;
+
+            _bullet.GetComponent<Rigidbody>().AddForce(direction.normalized * 10, ForceMode.Impulse);
+            _bullet.GetComponent<Renderer>().material.color = barrel.barrelStock[Barrel.SelectedBullet];
+
+
             barrel.NextBullet();
+            //Destroy(_bullet.gameObject);
         }
     }
 
@@ -146,7 +148,6 @@ public class PlayerGun : MonoBehaviour
     {
         bossRedCount = 0;
         bossBlueCount = 0;
-        UpdateBossCountsUI();
 
         for (int i = 0; i < barrel.barrelStock.Count; i++)
         {

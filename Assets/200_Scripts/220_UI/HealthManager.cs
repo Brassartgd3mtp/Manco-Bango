@@ -25,7 +25,6 @@ public class HealthManager : MonoBehaviour
 
             if (health <= 0)
             {
-                Debug.Log("MORT");
                 // Sauvegardez la santé actuelle
                 health = CheckpointManager.SavedHealth;
                 // Téléportez le joueur au dernier checkpoint

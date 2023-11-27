@@ -28,7 +28,5 @@ public class CheckpointManager : MonoBehaviour
         _player.position = checkpointPosition;
 
         healthManager.health = SavedHealth;
-
-        Debug.Log("TP");
     }
 }
