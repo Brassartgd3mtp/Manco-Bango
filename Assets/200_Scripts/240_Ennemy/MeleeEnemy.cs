@@ -7,6 +7,7 @@ public class MeleeEnemy : MonoBehaviour
 {
     public float attackRange = 2f;
     [SerializeField] public float attackCooldown = 2f;
+    public float timeBeforeAttack = 1.5f; // Temps d'attente avant d'attaquer une fois que le joueur est détecté
     public int meleeDamage = 10;
     public float playerDetectionRange = 5f; // Portée de détection du joueur
     public LayerMask playerLayer; // Couche du joueur
@@ -14,6 +15,7 @@ public class MeleeEnemy : MonoBehaviour
     private Transform player;
     private NavMeshAgent navMeshAgent;
     private float lastAttackTime;
+    private float detectionTime; // Temps de détection du joueur
 
     void Start()
     {
@@ -29,7 +31,7 @@ public class MeleeEnemy : MonoBehaviour
         {
             float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-            if (distanceToPlayer <= attackRange && Time.time - lastAttackTime >= attackCooldown)
+            if (distanceToPlayer <= attackRange && Time.time - lastAttackTime >= attackCooldown && Time.time - detectionTime >= timeBeforeAttack)
             {
                 AttackMelee();
             }
@@ -47,6 +49,8 @@ public class MeleeEnemy : MonoBehaviour
             if (hitCollider.CompareTag("Player"))
             {
                 player = hitCollider.transform;
+                detectionTime = Time.time; // Enregistrez le temps de détection
+               
                 return; // Arrêtez de chercher dès que le joueur est trouvé
             }
         }

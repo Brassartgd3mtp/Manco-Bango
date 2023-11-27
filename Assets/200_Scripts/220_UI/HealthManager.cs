@@ -36,7 +36,7 @@ public class HealthManager : MonoBehaviour
                 //Time.timeScale = 0f;
                 //Cursor.visible = true;
                 //Cursor.lockState = CursorLockMode.None;
-               // isGameOver = true; // Marquez le jeu comme étant en cours de jeu terminé
+                // isGameOver = true; // Marquez le jeu comme étant en cours de jeu terminé
             }
         }
     }
@@ -45,23 +45,20 @@ public class HealthManager : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            DamageButton(10);
+            StartCoroutine(DamageDelay(10));
         }
 
         if (collision.gameObject.CompareTag("FloorKill"))
         {
-            DamageButton(100);
+            StartCoroutine(DamageDelay(100));
         }
-
-
     }
 
     private void OnTriggerEnter(Collider collision)
     {
-
         if (collision.gameObject.CompareTag("FloorKill"))
         {
-            DamageButton(100);
+            StartCoroutine(DamageDelay(100));
         }
 
         if (collision.gameObject.CompareTag("Heal"))
@@ -74,11 +71,25 @@ public class HealthManager : MonoBehaviour
         }
     }
 
+    IEnumerator DamageDelay(int damageAmount)
+    {
+        Debug.Log("Waiting for damage delay...");
+
+        yield return new WaitForSeconds(1.5f); // Délai avant d'infliger des dégâts
+
+        if (!isGameOver)
+        {
+            Debug.Log("Applying damage after delay...");
+            DamageButton(damageAmount);
+        }
+    }
+
     public void DamageButton(int damageAmount)
     {
         if (!isGameOver)
         {
             health -= damageAmount;
+            Debug.Log("Health reduced by " + damageAmount + ". Current health: " + health);
         }
     }
 
