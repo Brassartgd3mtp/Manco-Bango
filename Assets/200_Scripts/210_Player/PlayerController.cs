@@ -23,7 +23,10 @@ public class PlayerController : MonoBehaviour
     [Header("Coyotte")]
     public float maxCoyotteTime = 0.25f;
     private bool canCoyotte;
-    
+
+    private bool isWalking = false;
+    public float repeatInterval = 2f; // Ajustez selon vos besoins
+
     public bool CanCoyotte
     {
         get => canCoyotte;
@@ -59,6 +62,9 @@ public class PlayerController : MonoBehaviour
         readyToJump = true;
 
         CanCoyotte = true;
+
+        InvokeRepeating("PlayWalkSound", 0f, repeatInterval);
+
     }
 
     private void Update()
@@ -120,6 +126,10 @@ public class PlayerController : MonoBehaviour
     {
         moveDirection = Orientation.forward * verticalInput + Orientation.right * horizontalInput;
 
+
+        isWalking = moveDirection.x > 0 || moveDirection.z > 0;
+
+
         //Je stop le joueur dès qu'il lâche ses inputs (seulement s'il est au sol)
         if (horizontalInput == 0 && verticalInput == 0 && grounded && !PlayerSlide.sliding)
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
@@ -127,21 +137,28 @@ public class PlayerController : MonoBehaviour
         //Je vérifie si le personnage est en contact avec un mur dans la direction vers laquelle is se déplace
         bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1f, whatIsWall);
 
+
+
         //Si le personnage est au sol, je dépalce le joueur et j'ignore l'adhérence avec un mur
         if (grounded)
         {
+            
+
             if (!isTouchingWall)
             {
                 rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
             }
             else
             {
+
                 Vector3 moveDirectionWithoutWall = Vector3.ProjectOnPlane(moveDirection, hitInfo.normal).normalized;
                 rb.AddForce(moveDirectionWithoutWall * moveSpeed * 10f, ForceMode.Force);
             }
         }
         else //J'ajoute la force en l'air en tenant compte de l'adhérence au mur
         {
+            isWalking = false;
+
             if (!isTouchingWall)
             {
                 rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
@@ -186,9 +203,12 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        JumpSound();
 
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+
+
     }
 
     private void ResetJump()
@@ -201,4 +221,31 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(maxCoyotteTime);
         CanCoyotte = false;
     }
+
+    public void JumpSound()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        AudioManager.Instance.PlaySound(9, audioSource);
+    }
+
+    public void WalkSound()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        AudioManager.Instance.PlaySound(7, audioSource);
+    }
+
+
+
+    private void PlayWalkSound()
+    {
+        if (isWalking)
+        {
+            AudioSource audioSource = GetComponent<AudioSource>();
+            AudioManager.Instance.PlaySound(7, audioSource);
+        }
+    }
+
+
+    
+
 }

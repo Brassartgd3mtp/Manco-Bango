@@ -49,7 +49,7 @@ public class HealthManager : MonoBehaviour
 
         if (collision.gameObject.CompareTag("FloorKill"))
         {
-            StartCoroutine(DamageDelay(100));
+            DamageButton(100);
         }
     }
 
@@ -57,7 +57,7 @@ public class HealthManager : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("FloorKill"))
         {
-            StartCoroutine(DamageDelay(100));
+            DamageButton(100);
         }
 
         if (collision.gameObject.CompareTag("Heal"))
