@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
 
 public class PlayerGun : MonoBehaviour
 {
@@ -19,8 +18,10 @@ public class PlayerGun : MonoBehaviour
     public GameObject bossRedParticlePrefab;
     public GameObject bossBlueParticlePrefab;
 
+    [Header("Shoot Parameters")]
+    [SerializeField] private float shootDelay = 0.02f;
+    [SerializeField] private int bulletSpeed = 10;
     private Barrel barrel;
-    private float shootDelay = 0.01f;
     private bool canShoot = true;
 
     private int bossRedTotal = 0;
@@ -105,7 +106,6 @@ public class PlayerGun : MonoBehaviour
                         if (bossRedParticlePrefab != null)
                         {
                             Instantiate(bossRedParticlePrefab, hit.point, Quaternion.identity);
-                            Debug.Log("Particule");
                         }
                     }
                 }
@@ -130,17 +130,15 @@ public class PlayerGun : MonoBehaviour
             Vector3 direction = hit.point - canonPos.position;
 
             GameObject _bullet = Instantiate(bullet, canonPos.position, Quaternion.identity);
-            PlayerController playerController = FindObjectOfType<PlayerController>();
 
-            _bullet.transform.forward = direction.normalized + playerController.Orientation.forward;
-            _bullet.transform.up = direction.normalized + playerController.Orientation.forward;
+            _bullet.transform.forward = direction.normalized;
 
-            _bullet.GetComponent<Rigidbody>().AddForce(direction.normalized * 10, ForceMode.Impulse);
+            _bullet.GetComponent<Rigidbody>().AddForce(direction.normalized * bulletSpeed, ForceMode.Impulse);
             _bullet.GetComponent<Renderer>().material.color = barrel.barrelStock[Barrel.SelectedBullet];
 
+            Destroy(_bullet, 1);
 
             barrel.NextBullet();
-            //Destroy(_bullet.gameObject);
         }
     }
 

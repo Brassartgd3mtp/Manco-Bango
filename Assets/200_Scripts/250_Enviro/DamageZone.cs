@@ -15,7 +15,7 @@ public class DamageZone : MonoBehaviour
             HealthManager playerHealth = other.GetComponent<HealthManager>();
             if (playerHealth != null)
             {
-                playerHealth.DamageButton(damageAmount);
+                playerHealth.ApplyDamage(damageAmount);
             }
 
          

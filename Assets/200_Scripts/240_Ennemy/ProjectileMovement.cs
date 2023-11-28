@@ -45,7 +45,7 @@ public class Projectile : MonoBehaviour
             HealthManager healthManager = other.GetComponent<HealthManager>();
             if (healthManager != null)
             {
-                healthManager.DamageButton(damageAmount);
+                healthManager.ApplyDamage(damageAmount);
             }
         }
 

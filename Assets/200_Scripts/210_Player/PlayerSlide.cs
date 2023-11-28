@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -43,11 +44,6 @@ public class PlayerSlide : MonoBehaviour
             if (Input.GetButtonDown("Slide"))
             {
                 StartSlide();
-            }
-            else if (Input.GetButtonUp("Slide"))
-            {
-                if (!OnSlope())
-                    StopSlide();
             }
 
             if (OnSlope())
@@ -98,24 +94,35 @@ public class PlayerSlide : MonoBehaviour
             FOVTimer -= Time.deltaTime;
             fovEffect.fieldOfView += fovModifier * Time.deltaTime;
         }
-
-        else if (fovEffect.fieldOfView != baseFOV && !OnSlope())
-            fovEffect.fieldOfView -= fovModifier * Time.deltaTime;
     }
 
     private void StopSlide()
     {
+        float baseSlideForce = slideForce;
+
         sliding = false;
 
         Transform playerObj = gameObject.transform;
-
         playerObj.localScale = new Vector3(playerObj.localScale.x, startYScale, playerObj.localScale.z);
 
-        slideForce = 200;
+        slideForce = baseSlideForce;
 
-        fovEffect.fieldOfView = baseFOV;
+        if (!OnSlope())
+            StartCoroutine(ReduceFOV());
 
         FOVTimer = maxFOVTimer;
+    }
+
+    private IEnumerator ReduceFOV()
+    {
+        while (fovEffect.fieldOfView > baseFOV)
+        {
+            fovEffect.fieldOfView -= fovModifier * Time.deltaTime * 2;
+            yield return null;
+        }
+
+        fovEffect.fieldOfView = baseFOV;
+        yield break;
     }
 
     public bool OnSlope()

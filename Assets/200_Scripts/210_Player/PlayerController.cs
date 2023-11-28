@@ -10,19 +10,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask whatIsWall;
     [SerializeField] private CapsuleCollider capsuleCollider;
     public Transform Orientation;
-    public float moveSpeed = 10;
-    public float airMultiplier = 1;
-    public float groundDrag = 5;
+    public float MoveSpeed = 10;
+    public float AirMultiplier = 1;
+    public float GroundDrag = 5;
     //[SerializeField] private int fallSpeedModifier = 5; (voir ligne 151)
 
     [Header("Jump")]
-    public float jumpForce = 8;
-    public float jumpCooldown = 0.25f;
-    private bool readyToJump;
+    public float JumpForce = 8;
+    public float JumpCooldown = 0.25f;
+    public bool readyToJump;
 
     [Header("Coyotte")]
-    public float maxCoyotteTime = 0.25f;
-    private bool canCoyotte;
+    public float MaxCoyotteTime = 0.25f;
+    //public float coyotteTimer;
+    public bool canCoyotte;
     
     public bool CanCoyotte
     {
@@ -31,6 +32,8 @@ public class PlayerController : MonoBehaviour
         {
             if (grounded && readyToJump) canCoyotte = true;
             else canCoyotte = value;
+
+            //coyotteTimer = MaxCoyotteTime;
         }
     }
 
@@ -59,6 +62,8 @@ public class PlayerController : MonoBehaviour
         readyToJump = true;
 
         CanCoyotte = true;
+
+        //coyotteTimer = MaxCoyotteTime;
     }
 
     private void Update()
@@ -77,7 +82,7 @@ public class PlayerController : MonoBehaviour
 
         //Je modifie l'attraction si le joueur est en l'air
         if (grounded)
-            rb.drag = groundDrag;
+            rb.drag = GroundDrag;
         else
             rb.drag = 0; //Permet d'avoir un déplacement aérien agréable
 
@@ -104,16 +109,17 @@ public class PlayerController : MonoBehaviour
 
             Jump();
 
-            Invoke(nameof(ResetJump), jumpCooldown);
+            Invoke(nameof(ResetJump), JumpCooldown);
 
             return;
         }
 
         if (!grounded)
-            _coyotteCoroutine = StartCoroutine(CoyotteLimit()); //Je lance mon timer durant lequel j'ai le droit de coyotte
+            Invoke(nameof(CoyotteLimit), MaxCoyotteTime);
+        //_coyotteCoroutine = StartCoroutine(CoyotteLimit()); //Je lance mon timer durant lequel j'ai le droit de coyotte
 
-        else if (_coyotteCoroutine is not null)
-            StopCoroutine(_coyotteCoroutine); //Si je rentre en contact avec le sol, j'arrête de force ma coroutine
+        //else if (_coyotteCoroutine is not null)
+        //    StopCoroutine(_coyotteCoroutine); //Si je rentre en contact avec le sol, j'arrête de force ma coroutine
     }
 
     private void MovePlayer()
@@ -132,24 +138,24 @@ public class PlayerController : MonoBehaviour
         {
             if (!isTouchingWall)
             {
-                rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+                rb.AddForce(moveDirection.normalized * MoveSpeed * 10f, ForceMode.Force);
             }
             else
             {
                 Vector3 moveDirectionWithoutWall = Vector3.ProjectOnPlane(moveDirection, hitInfo.normal).normalized;
-                rb.AddForce(moveDirectionWithoutWall * moveSpeed * 10f, ForceMode.Force);
+                rb.AddForce(moveDirectionWithoutWall * MoveSpeed * 10f, ForceMode.Force);
             }
         }
         else //J'ajoute la force en l'air en tenant compte de l'adhérence au mur
         {
             if (!isTouchingWall)
             {
-                rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+                rb.AddForce(moveDirection.normalized * MoveSpeed * 10f * AirMultiplier, ForceMode.Force);
             }
             else
             {
                 Vector3 moveDirectionWithoutWall = Vector3.ProjectOnPlane(moveDirection, hitInfo.normal).normalized;
-                rb.AddForce(moveDirectionWithoutWall * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+                rb.AddForce(moveDirectionWithoutWall * MoveSpeed * 10f * AirMultiplier, ForceMode.Force);
             }
 
             //J'augmente la vitesse de chute du joueur au moment où il commence à chuter (potentiellemnt une feature du style groundpound)
@@ -160,22 +166,22 @@ public class PlayerController : MonoBehaviour
     private void SpeedControl()
     {
         //Je limite la vélocité max sur l'axe X et Z du joueur
-        if (rb.velocity.magnitude > moveSpeed)
+        if (rb.velocity.magnitude > MoveSpeed)
         {
-            Vector3 limitedVelHor = rb.velocity.normalized * moveSpeed;
+            Vector3 limitedVelHor = rb.velocity.normalized * MoveSpeed;
             rb.velocity = new Vector3(limitedVelHor.x, rb.velocity.y, limitedVelHor.z);
         }
 
         //Je limite la vélocité max sur l'axe Y du joueur
-        if (rb.velocity.y > jumpForce * 10)
+        if (rb.velocity.y > JumpForce * 10)
         {
-            Vector3 limitedVelVer = rb.velocity.normalized * jumpForce * 10;
+            Vector3 limitedVelVer = rb.velocity.normalized * JumpForce * 10;
             rb.velocity = new Vector3(rb.velocity.x,limitedVelVer.y, rb.velocity.z);
         }
 
-        if (rb.velocity.y < -jumpForce * 10)
+        if (rb.velocity.y < -JumpForce * 10)
         {
-            Vector3 limitedVelVer = rb.velocity.normalized * -jumpForce * 10;
+            Vector3 limitedVelVer = rb.velocity.normalized * -JumpForce * 10;
             rb.velocity = new Vector3(rb.velocity.x, -limitedVelVer.y, rb.velocity.z);
         }
 
@@ -188,7 +194,7 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        rb.AddForce(transform.up * JumpForce, ForceMode.Impulse);
     }
 
     private void ResetJump()
@@ -196,9 +202,9 @@ public class PlayerController : MonoBehaviour
         readyToJump = true;
     }
 
-    private IEnumerator CoyotteLimit()
+    private void CoyotteLimit()
     {
-        yield return new WaitForSeconds(maxCoyotteTime);
+        //yield return new WaitForSeconds(MaxCoyotteTime);
         CanCoyotte = false;
     }
 }

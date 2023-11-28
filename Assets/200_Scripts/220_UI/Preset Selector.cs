@@ -14,6 +14,9 @@ public class PresetSelector : MonoBehaviour
     public Canvas[] otherCanvas;
     [Space]
     public SceneFader sceneFader;
+    [Space]
+    public Camera PlayerCam;
+    public Transform GunTransform;
 
     private PlayerController playerController;
     private PlayerDash playerDash;
@@ -110,7 +113,7 @@ public class PresetSelector : MonoBehaviour
                 $"\nGround Attraction = <color=\"blue\">5</color> -> <color=\"green\">{_groundDrag}</color>" +
                 $"\nJump Force = <color=\"blue\">10</color> -> <color=\"green\">{_jumpForce}</color>" +
                 $"\nJump Cooldown = <color=\"blue\">0.25</color> -> <color=\"green\">{_jumpCooldown}</color>" +
-                $"\nMax Coyotte Time = <color=\"blue\">1</color> -> <color=\"green\">{_maxCoyotteTime}</color>";
+                $"\nMax Coyotte Time = <color=\"blue\">0.5f</color> -> <color=\"green\">{_maxCoyotteTime}</color>";
         }
     }
 
@@ -128,40 +131,40 @@ public class PresetSelector : MonoBehaviour
     public void CDefault()
     {
         #region Movement
-            playerController.moveSpeed = 10;
-            playerController.airMultiplier = 1;
-            playerController.groundDrag = 5;
+            playerController.MoveSpeed = 10;
+            playerController.AirMultiplier = 1;
+            playerController.GroundDrag = 5;
         #endregion
         #region Jump
-            playerController.jumpForce = 10;
-            playerController.jumpCooldown = .25f;
+            playerController.JumpForce = 10;
+            playerController.JumpCooldown = .25f;
         #endregion
         #region Coyotte
-            playerController.maxCoyotteTime = 1;
+            playerController.MaxCoyotteTime = .5f;
         #endregion
 
         CanvaDisable(presetsCanvas[0]);
         CanvaEnable(reviewCanvas[0]);
-        Review(true, playerController.moveSpeed, playerController.airMultiplier, playerController.groundDrag, playerController.jumpForce, playerController.jumpCooldown, playerController.maxCoyotteTime);
+        Review(true, playerController.MoveSpeed, playerController.AirMultiplier, playerController.GroundDrag, playerController.JumpForce, playerController.JumpCooldown, playerController.MaxCoyotteTime);
     }
     public void CPreset1()
     {
         #region Movement
-            playerController.moveSpeed = 15;
-            playerController.airMultiplier = .4f;
-            playerController.groundDrag = 5;
+            playerController.MoveSpeed = 15;
+            playerController.AirMultiplier = .4f;
+            playerController.GroundDrag = 5;
         #endregion
         #region Jump
-            playerController.jumpForce = 12;
-            playerController.jumpCooldown = .25f;
+            playerController.JumpForce = 12;
+            playerController.JumpCooldown = .25f;
         #endregion
         #region Coyotte
-            playerController.maxCoyotteTime = .5f;
+            playerController.MaxCoyotteTime = 1f;
         #endregion
 
         CanvaDisable(presetsCanvas[0]);
         CanvaEnable(reviewCanvas[0]);
-        Review(false, playerController.moveSpeed, playerController.airMultiplier, playerController.groundDrag, playerController.jumpForce, playerController.jumpCooldown, playerController.maxCoyotteTime);
+        Review(false, playerController.MoveSpeed, playerController.AirMultiplier, playerController.GroundDrag, playerController.JumpForce, playerController.JumpCooldown, playerController.MaxCoyotteTime);
     }
 
     public void DDefault()
@@ -183,5 +186,26 @@ public class PresetSelector : MonoBehaviour
         CanvaDisable(presetsCanvas[1]);
         CanvaEnable(reviewCanvas[1]);
         Review(false, playerDash.dashForce, playerDash.dashCooldown, playerDash.dashDuration);
+    }
+
+    public void FOVDefault()
+    {
+        PlayerCam.fieldOfView = 120;
+        GunTransform.localScale = new Vector3(2, 2, 0.5f);
+        GunTransform.localPosition = new Vector3(0.34f, -0.46f, 0.34f);
+    }
+
+    public void FOVPreset1()
+    {
+        PlayerCam.fieldOfView = 100;
+        GunTransform.localScale = new Vector3(2, 2, 0.75f);
+        GunTransform.localPosition = new Vector3(0.43f, -0.5f, 0.3f);
+    }
+
+    public void FOVPreset2()
+    {
+        PlayerCam.fieldOfView = 80;
+        GunTransform.localScale = new Vector3(2, 2, 1f);
+        GunTransform.localPosition = new Vector3(0.43f, -0.5f, 0.5f);
     }
 }

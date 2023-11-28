@@ -44,12 +44,12 @@ public class HealthManager : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            DamageButton(10);
+            ApplyDamage(10);
         }
 
         if (collision.gameObject.CompareTag("FloorKill"))
         {
-            DamageButton(100);
+            ApplyDamage(100);
         }
 
 
@@ -60,20 +60,20 @@ public class HealthManager : MonoBehaviour
 
         if (collision.gameObject.CompareTag("FloorKill"))
         {
-            DamageButton(100);
+            ApplyDamage(100);
         }
 
         if (collision.gameObject.CompareTag("Heal"))
         {
             if (health != maxHealth)
             {
-                HealButton(10);
+                ApplyHeal(10);
                 Destroy(collision.gameObject);
             }
         }
     }
 
-    public void DamageButton(int damageAmount)
+    public void ApplyDamage(int damageAmount)
     {
         if (!isGameOver)
         {
@@ -81,7 +81,7 @@ public class HealthManager : MonoBehaviour
         }
     }
 
-    public void HealButton(int damageAmount)
+    public void ApplyHeal(int damageAmount)
     {
         if (!isGameOver)
         {
