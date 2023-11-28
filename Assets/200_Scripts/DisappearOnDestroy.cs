@@ -23,15 +23,7 @@ public class DisappearOnDestroy : MonoBehaviour
         }
     }
 
-    private void PlaySound()
-    {
-        if (objectToDisappear == null)
-        {
-            DoorSound();
-
-        }
-
-    }
+   
 
     // Fonction pour vérifier si tous les objets avec un tag spécifié sont détruits
     private bool AllObjectsDestroyedWithTag(string tag)

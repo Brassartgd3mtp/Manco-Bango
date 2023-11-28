@@ -35,8 +35,10 @@ public class RangedEnemy : MonoBehaviour
 
     void AttackRanged()
     {
+
         if (projectilePrefab != null && launchPoint != null)
         {
+
             GameObject projectile = Instantiate(projectilePrefab, launchPoint.position, Quaternion.identity);
             // Utilisez un script pour déplacer le projectile vers le joueur
         }

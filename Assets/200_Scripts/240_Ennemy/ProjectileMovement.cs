@@ -12,6 +12,17 @@ public class Projectile : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform; // Trouvez le joueur
+
+        if (player == null)
+        {
+            Debug.LogError("Le joueur n'a pas été trouvé. Assurez-vous qu'un objet avec le tag 'Player' est présent.");
+            return;
+        }
+        else
+        {
+            Debug.Log("Joueur trouvé avec succès.");
+        }
+
         target = player; // Initialisez la position cible
 
         // Détruisez le projectile après la durée de vie spécifiée
@@ -21,9 +32,6 @@ public class Projectile : MonoBehaviour
     // Appelé à chaque frame
     void Update()
     {
-        // Mettez à jour la position cible à chaque frame en fonction de la position actuelle du joueur
-        target = player;
-
         // Déplacez le projectile vers la position cible (le joueur)
         transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
     }
@@ -31,32 +39,26 @@ public class Projectile : MonoBehaviour
     // Appelé lorsqu'une collision se produit
     void OnTriggerEnter(Collider other)
     {
-        // Vérifiez si l'objet avec lequel le projectile a collision est sur la couche "Enemies"
-        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-        {
-            // Ignorez la collision avec cet ennemi (même couche)
-            return;
-        }
-
         // Vérifiez si l'objet avec lequel le projectile a collision est le joueur
         if (other.CompareTag("Player"))
         {
-            // Réduisez la santé du joueur en utilisant la méthode DamageButton
+            Debug.Log("Projectile en collision avec le joueur. Infliger des dégâts.");
+            // Réduisez la santé du joueur en utilisant la méthode ApplyDamage
             HealthManager healthManager = other.GetComponent<HealthManager>();
             if (healthManager != null)
             {
                 healthManager.ApplyDamage(damageAmount);
             }
+
+            // Annulez l'Invoke avant de détruire le projectile
+            Debug.Log("Destruction du projectile après la collision avec le joueur.");
+            CancelInvoke();
+            Destroy(gameObject);
         }
-
-        // Détruisez le projectile lorsqu'il entre en collision avec n'importe quel autre objet
-        DestroyProjectile();
+        else
+        {
+            // Si la collision n'est pas avec le joueur, ne faites rien (ou effectuez d'autres actions si nécessaire)
+        }
     }
 
-    // Fonction pour détruire le projectile
-    void DestroyProjectile()
-    {
-        CancelInvoke(); // Annule l'appel à la destruction si elle est déclenchée manuellement
-        Destroy(gameObject);
-    }
 }
