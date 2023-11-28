@@ -92,7 +92,7 @@ public class PresetSelector : MonoBehaviour
         }
     }
 
-    private void Review(bool _isDefault, float _movespeed, float _airmult, float _groundDrag, float _jumpForce, float _jumpCooldown, float _maxCoyotteTime)
+    private void Review(bool _isDefault, float _movespeed, float _airmult, float _groundDrag, float _jumpForce, float _jumpCooldown, float _maxCoyotteTime, bool _isAbrupt)
     {
         if (_isDefault)
         {
@@ -102,7 +102,8 @@ public class PresetSelector : MonoBehaviour
                 $"\nGround Attraction = {_groundDrag}" +
                 $"\nJump Force = {_jumpForce}" +
                 $"\nJump Cooldown = {_jumpCooldown}" +
-                $"\nMax Coyotte Time = {_maxCoyotteTime}";
+                $"\nMax Coyotte Time = {_maxCoyotteTime}" +
+                $"\nAbrupt Walk = {_isAbrupt}";
         }
 
         else
@@ -113,7 +114,8 @@ public class PresetSelector : MonoBehaviour
                 $"\nGround Attraction = <color=\"blue\">5</color> -> <color=\"green\">{_groundDrag}</color>" +
                 $"\nJump Force = <color=\"blue\">10</color> -> <color=\"green\">{_jumpForce}</color>" +
                 $"\nJump Cooldown = <color=\"blue\">0.25</color> -> <color=\"green\">{_jumpCooldown}</color>" +
-                $"\nMax Coyotte Time = <color=\"blue\">0.5f</color> -> <color=\"green\">{_maxCoyotteTime}</color>";
+                $"\nMax Coyotte Time = <color=\"blue\">0.5f</color> -> <color=\"green\">{_maxCoyotteTime}</color>" +
+                $"\nAbrupt Walk = <color=\"blue\">true</color> -> <color=\"green\">{_isAbrupt}</color>";
         }
     }
 
@@ -131,27 +133,8 @@ public class PresetSelector : MonoBehaviour
     public void CDefault()
     {
         #region Movement
-            playerController.MoveSpeed = 10;
-            playerController.AirMultiplier = 1;
-            playerController.GroundDrag = 5;
-        #endregion
-        #region Jump
-            playerController.JumpForce = 10;
-            playerController.JumpCooldown = .25f;
-        #endregion
-        #region Coyotte
-            playerController.MaxCoyotteTime = .5f;
-        #endregion
-
-        CanvaDisable(presetsCanvas[0]);
-        CanvaEnable(reviewCanvas[0]);
-        Review(true, playerController.MoveSpeed, playerController.AirMultiplier, playerController.GroundDrag, playerController.JumpForce, playerController.JumpCooldown, playerController.MaxCoyotteTime);
-    }
-    public void CPreset1()
-    {
-        #region Movement
             playerController.MoveSpeed = 15;
-            playerController.AirMultiplier = .4f;
+            playerController.AirMultiplier = 1f;
             playerController.GroundDrag = 5;
         #endregion
         #region Jump
@@ -161,23 +144,35 @@ public class PresetSelector : MonoBehaviour
         #region Coyotte
             playerController.MaxCoyotteTime = 1f;
         #endregion
+        playerController.AbruptWalk = true;
 
         CanvaDisable(presetsCanvas[0]);
         CanvaEnable(reviewCanvas[0]);
-        Review(false, playerController.MoveSpeed, playerController.AirMultiplier, playerController.GroundDrag, playerController.JumpForce, playerController.JumpCooldown, playerController.MaxCoyotteTime);
+        Review(true, playerController.MoveSpeed, playerController.AirMultiplier, playerController.GroundDrag, playerController.JumpForce, playerController.JumpCooldown, playerController.MaxCoyotteTime, playerController.AbruptWalk);
+    }
+
+    public void Cpreset1()
+    {
+        #region Movement
+        playerController.MoveSpeed = 18;
+        playerController.AirMultiplier = .5f;
+        playerController.GroundDrag = 5;
+        #endregion
+        #region Jump
+        playerController.JumpForce = 8;
+        playerController.JumpCooldown = .25f;
+        #endregion
+        #region Coyotte
+        playerController.MaxCoyotteTime = 0.5f;
+        #endregion
+        playerController.AbruptWalk = false;
+
+        CanvaDisable(presetsCanvas[0]);
+        CanvaEnable(reviewCanvas[0]);
+        Review(true, playerController.MoveSpeed, playerController.AirMultiplier, playerController.GroundDrag, playerController.JumpForce, playerController.JumpCooldown, playerController.MaxCoyotteTime, playerController.AbruptWalk);
     }
 
     public void DDefault()
-    {
-        playerDash.dashForce = 200;
-        playerDash.dashCooldown = 1;
-        playerDash.dashDuration = .5f;
-
-        CanvaDisable(presetsCanvas[1]);
-        CanvaEnable(reviewCanvas[1]);
-        Review(true, playerDash.dashForce, playerDash.dashCooldown, playerDash.dashDuration);
-    }
-    public void DPreset1()
     {
         playerDash.dashForce = 800;
         playerDash.dashCooldown = 1;
@@ -185,27 +180,6 @@ public class PresetSelector : MonoBehaviour
 
         CanvaDisable(presetsCanvas[1]);
         CanvaEnable(reviewCanvas[1]);
-        Review(false, playerDash.dashForce, playerDash.dashCooldown, playerDash.dashDuration);
-    }
-
-    public void FOVDefault()
-    {
-        PlayerCam.fieldOfView = 120;
-        GunTransform.localScale = new Vector3(2, 2, 0.5f);
-        GunTransform.localPosition = new Vector3(0.34f, -0.46f, 0.34f);
-    }
-
-    public void FOVPreset1()
-    {
-        PlayerCam.fieldOfView = 100;
-        GunTransform.localScale = new Vector3(2, 2, 0.75f);
-        GunTransform.localPosition = new Vector3(0.43f, -0.5f, 0.3f);
-    }
-
-    public void FOVPreset2()
-    {
-        PlayerCam.fieldOfView = 80;
-        GunTransform.localScale = new Vector3(2, 2, 1f);
-        GunTransform.localPosition = new Vector3(0.43f, -0.5f, 0.5f);
+        Review(true, playerDash.dashForce, playerDash.dashCooldown, playerDash.dashDuration);
     }
 }

@@ -18,7 +18,7 @@ public class PlayerGun : MonoBehaviour
     public GameObject bossBlueParticlePrefab;
 
     [Header("Shoot Parameters")]
-    [SerializeField] private float shootDelay = 0.02f;
+    [SerializeField] private float shootDelay = 0.1f;
     private Barrel barrel;
     private bool canShoot = true;
 
@@ -74,13 +74,14 @@ public class PlayerGun : MonoBehaviour
         if (barrel.barrelStock[Barrel.SelectedBullet] != Color.black && !Cursor.visible)
         {
             ShotFire();
+            particleManager.MuzzleFlash(barrel.barrelStock[Barrel.SelectedBullet]);
+
             Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
             barrelRotate.Rotate();
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, hitableColliders))
             {
-                Debug.Log(hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == 10)
                 {
                     EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();

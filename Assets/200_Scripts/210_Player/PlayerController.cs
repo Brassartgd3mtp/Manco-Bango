@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class PlayerController : MonoBehaviour
     public float MoveSpeed = 10;
     public float AirMultiplier = 1;
     public float GroundDrag = 5;
-    //[SerializeField] private int fallSpeedModifier = 5; (voir ligne 151)
+    public bool AbruptWalk = false;
+    //[SerializeField] private int fallSpeedModifier = 5; (voir ligne 183)
 
     [Header("Jump")]
     public float JumpForce = 8;
@@ -77,6 +79,11 @@ public class PlayerController : MonoBehaviour
             checkpointManager.ReturnToCheckpoint(gameObject.transform);
         }
 
+        if (Input.GetKeyDown(KeyCode.F8))
+        {
+            SceneManager.LoadScene(1);
+        }
+
         //Je fais un Raycast qui part de mon personnage et qui va en direction du sol pour détecter s'il est en contact avec le sol
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
 
@@ -134,7 +141,7 @@ public class PlayerController : MonoBehaviour
 
 
         //Je stop le joueur dès qu'il lâche ses inputs (seulement s'il est au sol)
-        if (horizontalInput == 0 && verticalInput == 0 && grounded && !PlayerSlide.sliding)
+        if (AbruptWalk && horizontalInput == 0 && verticalInput == 0 && grounded && !PlayerSlide.sliding)
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
 
         //Je vérifie si le personnage est en contact avec un mur dans la direction vers laquelle is se déplace
