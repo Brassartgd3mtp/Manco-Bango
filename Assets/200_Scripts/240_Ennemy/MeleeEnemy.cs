@@ -28,6 +28,7 @@ public class MeleeEnemy : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private NavMeshAgent navMeshAgent;
     [SerializeField] private HealthManager playerHealth;
+    [SerializeField] private ParticleSystem preChargeParticle;
 
     private Vector3 startPos;
     private Vector3 targetPos;
@@ -37,6 +38,8 @@ public class MeleeEnemy : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
 
         playerHealth = FindAnyObjectByType<HealthManager>();
+
+        preChargeParticle = gameObject.GetComponentInChildren<ParticleSystem>();
 
         chargeDetectionRange = playerDetectionRange / 1.5f;
 
@@ -93,6 +96,10 @@ public class MeleeEnemy : MonoBehaviour
 
     private IEnumerator ChargeToPlayer()
     {
+        float preChargeTimer = preChargeParticle.main.duration;
+        preChargeParticle.Play();
+        yield return new WaitForSeconds(preChargeTimer);
+
         canChargeAttack = false;
 
         float elapsedTime = 0f;

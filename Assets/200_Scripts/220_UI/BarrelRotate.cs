@@ -7,7 +7,7 @@ public class BarrelRotate : MonoBehaviour
 {
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private float rotSpeed = 12;
-    [SerializeField] private int rotationType = 0;
+    [SerializeField] private int rotationState = 0;
     private static bool isRotating = false;
 
     private void Awake()
@@ -29,7 +29,7 @@ public class BarrelRotate : MonoBehaviour
 
         float targetAngle = 0f;
 
-        switch (rotationType)
+        switch (rotationState)
         {
             case 0: targetAngle = 62.7f; break;
             case 1: targetAngle = 119.2f; break;
@@ -46,7 +46,7 @@ public class BarrelRotate : MonoBehaviour
         }
 
         // Correction pour s'assurer que la rotation atteint exactement l'angle cible
-        if (rotationType < 5)
+        if (rotationState < 5)
             rectTransform.rotation = Quaternion.Euler(0, 0, targetAngle);
         else
             rectTransform.rotation = Quaternion.Euler(0, 0, 0);
@@ -54,6 +54,6 @@ public class BarrelRotate : MonoBehaviour
         isRotating = false;
 
         // Incrémentez la rotationType uniquement si elle est inférieure à 5
-        rotationType = (rotationType + 1) % 6;
+        rotationState = (rotationState + 1) % 6;
     }
 }

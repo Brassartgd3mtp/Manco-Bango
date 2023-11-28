@@ -1,20 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public class ParticleManager : MonoBehaviour
 {
     [SerializeField] private ParticleSystem impact;
+    [SerializeField] private ParticleSystem muzzle;
     [SerializeField] private ParticleSystem dash;
 
-    private ParticleSystem.MainModule impactMain;
-    private ParticleSystem.MainModule dashMain;
+    private MainModule impactMain;
+    private MainModule muzzleMain;
+    private MainModule dashMain;
 
     void Start()
     {
         impactMain = impact.main;
+        muzzleMain = muzzle.main;
         dashMain = dash.main;
     }
 
@@ -34,7 +34,13 @@ public class ParticleManager : MonoBehaviour
 
     public void DashRate(int rateValue)
     {
-        ParticleSystem.EmissionModule dashEmission = dash.emission;
+        EmissionModule dashEmission = dash.emission;
         dashEmission.rateOverTime = rateValue;
+    }
+
+    public void MuzzleFlash(Color color)
+    {
+        muzzleMain.startColor = color;
+        muzzle.Play();
     }
 }
