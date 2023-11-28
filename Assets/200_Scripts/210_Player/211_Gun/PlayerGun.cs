@@ -9,7 +9,6 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private TextMeshProUGUI reloadText;
     [SerializeField] private CanvasToggle canvasToggle;
     [SerializeField] private BarrelRotate barrelRotate;
-    [SerializeField] private GameObject bullet;
     [SerializeField] private Transform canonPos;
     [SerializeField] private LayerMask hitableColliders;
 
@@ -20,7 +19,6 @@ public class PlayerGun : MonoBehaviour
 
     [Header("Shoot Parameters")]
     [SerializeField] private float shootDelay = 0.02f;
-    [SerializeField] private int bulletSpeed = 10;
     private Barrel barrel;
     private bool canShoot = true;
 
@@ -39,7 +37,6 @@ public class PlayerGun : MonoBehaviour
         bossRedTotal = bossRedObjects.Length;
         bossBlueTotal = bossBlueObjects.Length;
     }
-
 
     private void Update()
     {
@@ -83,6 +80,7 @@ public class PlayerGun : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, hitableColliders))
             {
+                Debug.Log(hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == 10)
                 {
                     EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
@@ -127,17 +125,6 @@ public class PlayerGun : MonoBehaviour
 
                 particleManager.Impact(barrel.barrelStock[Barrel.SelectedBullet], hit.point, hit.normal);
             }
-
-            Vector3 direction = hit.point - canonPos.position;
-
-            GameObject _bullet = Instantiate(bullet, canonPos.position, Quaternion.identity);
-
-            _bullet.transform.forward = direction.normalized;
-
-            _bullet.GetComponent<Rigidbody>().AddForce(direction.normalized * bulletSpeed, ForceMode.Impulse);
-            _bullet.GetComponent<Renderer>().material.color = barrel.barrelStock[Barrel.SelectedBullet];
-
-            Destroy(_bullet, 1);
 
             barrel.NextBullet();
         }
