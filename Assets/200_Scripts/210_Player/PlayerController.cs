@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -36,8 +35,6 @@ public class PlayerController : MonoBehaviour
         {
             if (grounded && readyToJump) canCoyotte = true;
             else canCoyotte = value;
-
-            //coyotteTimer = MaxCoyotteTime;
         }
     }
 
@@ -66,7 +63,6 @@ public class PlayerController : MonoBehaviour
         readyToJump = true;
 
         CanCoyotte = true;
-        //coyotteTimer = MaxCoyotteTime;
         
         InvokeRepeating("PlayWalkSound", 0f, repeatInterval);
     }
@@ -125,11 +121,10 @@ public class PlayerController : MonoBehaviour
         }
 
         if (!grounded)
-            Invoke(nameof(CoyotteLimit), MaxCoyotteTime);
-        //_coyotteCoroutine = StartCoroutine(CoyotteLimit()); //Je lance mon timer durant lequel j'ai le droit de coyotte
+        _coyotteCoroutine = StartCoroutine(CoyotteLimit()); //Je lance mon timer durant lequel j'ai le droit de coyotte
 
-        //else if (_coyotteCoroutine is not null)
-        //    StopCoroutine(_coyotteCoroutine); //Si je rentre en contact avec le sol, j'arrête de force ma coroutine
+        else if (_coyotteCoroutine is not null)
+            StopCoroutine(_coyotteCoroutine); //Si je rentre en contact avec le sol, j'arrête de force ma coroutine
     }
 
     private void MovePlayer()
@@ -226,9 +221,9 @@ public class PlayerController : MonoBehaviour
         readyToJump = true;
     }
 
-    private void CoyotteLimit()
+    private IEnumerator CoyotteLimit()
     {
-        //yield return new WaitForSeconds(MaxCoyotteTime);
+        yield return new WaitForSeconds(MaxCoyotteTime);
         CanCoyotte = false;
     }
 

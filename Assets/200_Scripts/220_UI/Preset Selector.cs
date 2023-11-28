@@ -1,8 +1,5 @@
-using System.Runtime.CompilerServices;
 using TMPro;
-using TMPro.Examples;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PresetSelector : MonoBehaviour
 {
@@ -151,25 +148,25 @@ public class PresetSelector : MonoBehaviour
         Review(true, playerController.MoveSpeed, playerController.AirMultiplier, playerController.GroundDrag, playerController.JumpForce, playerController.JumpCooldown, playerController.MaxCoyotteTime, playerController.AbruptWalk);
     }
 
-    public void Cpreset1()
+    public void CPreset1()
     {
         #region Movement
-        playerController.MoveSpeed = 18;
-        playerController.AirMultiplier = .5f;
-        playerController.GroundDrag = 5;
+            playerController.MoveSpeed = 18;
+            playerController.AirMultiplier = .5f;
+            playerController.GroundDrag = 5;
         #endregion
         #region Jump
-        playerController.JumpForce = 8;
-        playerController.JumpCooldown = .25f;
+            playerController.JumpForce = 8;
+            playerController.JumpCooldown = .25f;
         #endregion
         #region Coyotte
-        playerController.MaxCoyotteTime = 0.5f;
+            playerController.MaxCoyotteTime = 0.5f;
         #endregion
-        playerController.AbruptWalk = false;
+            playerController.AbruptWalk = false;
 
         CanvaDisable(presetsCanvas[0]);
         CanvaEnable(reviewCanvas[0]);
-        Review(true, playerController.MoveSpeed, playerController.AirMultiplier, playerController.GroundDrag, playerController.JumpForce, playerController.JumpCooldown, playerController.MaxCoyotteTime, playerController.AbruptWalk);
+        Review(false, playerController.MoveSpeed, playerController.AirMultiplier, playerController.GroundDrag, playerController.JumpForce, playerController.JumpCooldown, playerController.MaxCoyotteTime, playerController.AbruptWalk);
     }
 
     public void DDefault()

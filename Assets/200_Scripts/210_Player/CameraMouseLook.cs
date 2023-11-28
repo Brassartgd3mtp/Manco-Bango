@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-
-using UnityEngine.UI;
 
 public class CameraMouseLook : MonoBehaviour
 {
@@ -14,6 +9,14 @@ public class CameraMouseLook : MonoBehaviour
 
     private float rotationX;
     private float rotationY;
+
+#if !UNITY_EDITOR
+    private void Awake()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+#endif
 
     private void Update()
     {

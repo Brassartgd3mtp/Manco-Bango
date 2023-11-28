@@ -82,7 +82,6 @@ public class PlayerGun : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, hitableColliders))
             {
-                Debug.Log(hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == 10)
                 {
                     EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
