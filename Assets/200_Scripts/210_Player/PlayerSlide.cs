@@ -36,7 +36,6 @@ public class PlayerSlide : MonoBehaviour
         dash = GetComponent<PlayerDash>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (PlayerController.moveDirection != new Vector3(0, 0, 0) && !dash.isDashing)
@@ -90,6 +89,7 @@ public class PlayerSlide : MonoBehaviour
         slideTimer -= Time.deltaTime;
 
         if (slideTimer <= 0 && !OnSlope())
+            StopSlide();
 
         if (FOVTimer > 0)
         {

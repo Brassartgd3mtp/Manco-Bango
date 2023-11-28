@@ -21,11 +21,11 @@ public class PlayerController : MonoBehaviour
     public bool readyToJump;
 
     [Header("Coyotte")]
-    public float maxCoyotteTime = 0.25f;
+    public float MaxCoyotteTime = 0.25f;
     private bool canCoyotte;
 
     private bool isWalking = false;
-    public float repeatInterval = 2f; // Ajustez selon vos besoins
+    public float repeatInterval = 2f;
 
     public bool CanCoyotte
     {

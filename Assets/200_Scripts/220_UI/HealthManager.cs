@@ -79,11 +79,11 @@ public class HealthManager : MonoBehaviour
         if (!isGameOver)
         {
             Debug.Log("Applying damage after delay...");
-            DamageButton(damageAmount);
+            ApplyDamage(damageAmount);
         }
     }
 
-    public void ApplyButton(int damageAmount)
+    public void ApplyDamage(int damageAmount)
     {
         if (!isGameOver)
         {
