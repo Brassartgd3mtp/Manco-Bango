@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SoundsDatabase
   m_EditorClassIdentifier: 
   sounds:
-  - {fileID: 8300000, guid: cfd3fab2cf2d24047b436f0fd45a3bf6, type: 3}
+  - {fileID: 8300000, guid: e82673505b2a8bc45a46abe3c1a431e5, type: 3}
   - {fileID: 8300000, guid: b0089f07dd4109d4dab6e1452aacf7a4, type: 3}
   - {fileID: 8300000, guid: d67647fd88140624b91e5203f976a603, type: 3}
   - {fileID: 8300000, guid: 919397dfdc4520d489ec1104e9636506, type: 3}
@@ -32,7 +32,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 65c694cf6723b7e449a03c741f89c89e, type: 3}
   - {fileID: 8300000, guid: b62194d829c7fe24c91e77654956b38c, type: 3}
   - {fileID: 8300000, guid: ce1987eb8232a694f900b4fc73a00dff, type: 3}
-  - {fileID: 8300000, guid: 57c0a5df76e590b4084238d804ff5aed, type: 3}
+  - {fileID: 8300000, guid: e82673505b2a8bc45a46abe3c1a431e5, type: 3}
   - {fileID: 8300000, guid: c5a7abab20ee95f4f97477573039607b, type: 3}
   - {fileID: 8300000, guid: 862f79b7c7ce6594d9020547d64dd92d, type: 3}
   - {fileID: 8300000, guid: f6d5c1dfd86b87f48926884ca34066e1, type: 3}
