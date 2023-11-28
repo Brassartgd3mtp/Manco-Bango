@@ -58,12 +58,13 @@ public class PlayerSlide : MonoBehaviour
     {
         if (sliding)
             Sliding();
+
     }
 
     Vector3 direction;
     private void StartSlide()
     {
-
+        
         direction = new Vector3(PlayerController.moveDirection.x, 0, PlayerController.moveDirection.z);
         sliding = true;
 
@@ -76,7 +77,8 @@ public class PlayerSlide : MonoBehaviour
 
     private void Sliding()
     {
-       
+
+        SlideSound(volume: 1.0f, loop: true);
 
         if (!OnSlope())
             PlayerController.rb.AddForce(direction * slideForce, ForceMode.Force);
@@ -100,6 +102,7 @@ public class PlayerSlide : MonoBehaviour
 
     private void StopSlide()
     {
+        SlideSound(0.0f);
         float baseSlideForce = slideForce;
 
         sliding = false;
@@ -140,5 +143,15 @@ public class PlayerSlide : MonoBehaviour
         }
         return false;
     }
+
+    public void SlideSound(float volume = 1.0f, bool loop = false)
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        audioSource.volume = volume;
+        audioSource.loop = loop;
+        AudioManager.Instance.PlaySound(19, audioSource);
+    }
+
+
 
 }

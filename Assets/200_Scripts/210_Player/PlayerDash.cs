@@ -67,7 +67,7 @@ public class PlayerDash : MonoBehaviour
 
         while (dashTimer < dashDuration) //J'applique mon dash
         {
-
+            
             PlayerController.rb.velocity = new Vector3(PlayerController.rb.velocity.x, 0, PlayerController.rb.velocity.z);
 
             PlayerController.rb.AddForce(velocityLock, ForceMode.Force);
