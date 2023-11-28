@@ -76,6 +76,7 @@ public class PlayerGun : MonoBehaviour
     {
         if (barrel.barrelStock[Barrel.SelectedBullet] != Color.black && !Cursor.visible)
         {
+            ShotFire();
             Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
             barrelRotate.Rotate();
@@ -167,4 +168,20 @@ public class PlayerGun : MonoBehaviour
             }
         }
     }
+
+    public void ShotFire()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        AudioManager.Instance.PlaySound(14, audioSource);
+    }
+
+
+
+
+
+
+
+
+
+
 }

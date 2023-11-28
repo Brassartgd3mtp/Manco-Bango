@@ -25,17 +25,17 @@ public class HealthManager : MonoBehaviour
 
             if (health <= 0)
             {
-                // Sauvegardez la santé actuelle
+                // Sauvegardez la santï¿½ actuelle
                 health = CheckpointManager.SavedHealth;
-                // Téléportez le joueur au dernier checkpoint
+                // Tï¿½lï¿½portez le joueur au dernier checkpoint
                 checkpointManager.ReturnToCheckpoint(gameObject.transform);
-                // Désactivez d'autres fonctionnalités, par exemple le panneau de Game Over
+                // Dï¿½sactivez d'autres fonctionnalitï¿½s, par exemple le panneau de Game Over
                 //gameOverPanel.SetActive(true);
                 //Escape = true;
                 //Time.timeScale = 0f;
                 //Cursor.visible = true;
                 //Cursor.lockState = CursorLockMode.None;
-               // isGameOver = true; // Marquez le jeu comme étant en cours de jeu terminé
+                // isGameOver = true; // Marquez le jeu comme ï¿½tant en cours de jeu terminï¿½
             }
         }
     }
@@ -44,20 +44,17 @@ public class HealthManager : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            ApplyDamage(10);
+            StartCoroutine(DamageDelay(10));
         }
 
         if (collision.gameObject.CompareTag("FloorKill"))
         {
             ApplyDamage(100);
         }
-
-
     }
 
     private void OnTriggerEnter(Collider collision)
     {
-
         if (collision.gameObject.CompareTag("FloorKill"))
         {
             ApplyDamage(100);
@@ -73,11 +70,25 @@ public class HealthManager : MonoBehaviour
         }
     }
 
-    public void ApplyDamage(int damageAmount)
+    IEnumerator DamageDelay(int damageAmount)
+    {
+        Debug.Log("Waiting for damage delay...");
+
+        yield return new WaitForSeconds(1.5f); // Dï¿½lai avant d'infliger des dï¿½gï¿½ts
+
+        if (!isGameOver)
+        {
+            Debug.Log("Applying damage after delay...");
+            DamageButton(damageAmount);
+        }
+    }
+
+    public void ApplyButton(int damageAmount)
     {
         if (!isGameOver)
         {
             health -= damageAmount;
+            Debug.Log("Health reduced by " + damageAmount + ". Current health: " + health);
         }
     }
 

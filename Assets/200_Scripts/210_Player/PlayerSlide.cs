@@ -64,6 +64,7 @@ public class PlayerSlide : MonoBehaviour
     Vector3 direction;
     private void StartSlide()
     {
+
         direction = new Vector3(PlayerController.moveDirection.x, 0, PlayerController.moveDirection.z);
         sliding = true;
 
@@ -76,6 +77,8 @@ public class PlayerSlide : MonoBehaviour
 
     private void Sliding()
     {
+       
+
         if (!OnSlope())
             PlayerController.rb.AddForce(direction * slideForce, ForceMode.Force);
         else
@@ -87,7 +90,6 @@ public class PlayerSlide : MonoBehaviour
         slideTimer -= Time.deltaTime;
 
         if (slideTimer <= 0 && !OnSlope())
-            StopSlide();
 
         if (FOVTimer > 0)
         {
@@ -138,4 +140,5 @@ public class PlayerSlide : MonoBehaviour
         }
         return false;
     }
+
 }

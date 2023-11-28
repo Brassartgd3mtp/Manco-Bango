@@ -8,6 +8,7 @@ public class MeleeEnemy : MonoBehaviour
     [SerializeField] private int meleeDamage = 10;
     [SerializeField] private float attackCooldown = 2f;
     private float lastAttackTime;
+    private float detectionTime; // Temps de d�tection du joueur
 
     [Space]
     [SerializeField] private float attackRange = 2f;
@@ -76,7 +77,9 @@ public class MeleeEnemy : MonoBehaviour
             if (hitCollider.CompareTag("Player"))
             {
                 player = hitCollider.transform;
-                return;
+                detectionTime = Time.time; // Enregistrez le temps de d�tection
+               
+                return; // Arr�tez de chercher d�s que le joueur est trouv�
             }
         }
         player = null;

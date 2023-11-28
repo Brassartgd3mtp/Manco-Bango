@@ -36,6 +36,9 @@ public class PlayerDash : MonoBehaviour
             {
                 if (canDash && !PlayerSlide.sliding && Input.GetButtonDown("Dash"))
                 {
+
+                    DashSound();
+
                     direction = PlayerController.moveDirection;
 
                     StartCoroutine(Dash());
@@ -64,12 +67,15 @@ public class PlayerDash : MonoBehaviour
 
         while (dashTimer < dashDuration) //J'applique mon dash
         {
+
             PlayerController.rb.velocity = new Vector3(PlayerController.rb.velocity.x, 0, PlayerController.rb.velocity.z);
 
             PlayerController.rb.AddForce(velocityLock, ForceMode.Force);
             dashTimer += Time.deltaTime;
 
             yield return null;
+
+
         }
 
         isDashing = false;
@@ -163,4 +169,11 @@ public class PlayerDash : MonoBehaviour
             PlayerController.rb.velocity = Vector3.zero;
         }
     }
+    public void DashSound()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        AudioManager.Instance.PlaySound(0, audioSource);
+    }
+
+
 }
