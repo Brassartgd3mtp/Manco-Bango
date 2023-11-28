@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ObjectInteraction : MonoBehaviour
 {
-    public float interactRange = 10f;
     [SerializeField] private Camera fpCam;
     [SerializeField] private Barrel barrel;
     public static List<GameObject> RedDoors = new List<GameObject>();
@@ -18,7 +17,7 @@ public class ObjectInteraction : MonoBehaviour
             RaycastHit hit;
             if(barrel.barrelStock[Barrel.SelectedBullet] != Color.black)
             {
-                if (Physics.Raycast(ray, out hit, interactRange))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                 {
                     if (barrel.barrelStock[Barrel.SelectedBullet] == Color.blue)
                     {

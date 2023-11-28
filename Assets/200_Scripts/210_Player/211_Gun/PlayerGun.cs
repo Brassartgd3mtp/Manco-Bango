@@ -82,6 +82,7 @@ public class PlayerGun : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, hitableColliders))
             {
+                Debug.Log(hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == 10)
                 {
                     EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
@@ -100,7 +101,7 @@ public class PlayerGun : MonoBehaviour
                 {
                     if (hit.transform.CompareTag("BossRed") && hit.collider.gameObject.layer == 9)
                     {
-                        Destroy(hit.transform.gameObject);
+                        Destroy(hit.collider.gameObject);
                         bossRedCount++;
 
                         if (bossRedParticlePrefab != null)
@@ -114,7 +115,7 @@ public class PlayerGun : MonoBehaviour
                 {
                     if (hit.transform.CompareTag("BossBlue") && hit.collider.gameObject.layer == 8)
                     {
-                        Destroy(hit.transform.gameObject);
+                        Destroy(hit.collider.gameObject);
                         bossBlueCount++;
 
                         if (bossBlueParticlePrefab != null)
