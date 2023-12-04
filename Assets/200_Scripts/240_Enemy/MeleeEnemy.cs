@@ -6,8 +6,8 @@ public class MeleeEnemy : MonoBehaviour
 {
     [Header("Monster Stats")]
     [SerializeField] private int meleeDamage = 10;
-    [SerializeField] private float attackCooldown = 2f;
-    private float lastAttackTime;
+    [SerializeField] private float maxAttackCooldown = 2f;
+    [SerializeField] private float attackCooldown = 0f;
 
     [Space]
     [SerializeField] private float attackRange = 2f;
@@ -35,14 +35,12 @@ public class MeleeEnemy : MonoBehaviour
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
-
         playerHealth = FindAnyObjectByType<HealthManager>();
-
         preChargeParticle = gameObject.GetComponentInChildren<ParticleSystem>();
 
         chargeDetectionRange = playerDetectionRange / 1.5f;
 
-        lastAttackTime = -attackCooldown;
+        attackCooldown = -1f;
     }
 
     void Update()
@@ -58,13 +56,16 @@ public class MeleeEnemy : MonoBehaviour
 
             if (distanceToPlayer <= attackRange)
             {
-                if (Time.time - lastAttackTime >= attackCooldown) 
+                if (attackCooldown <= 0)
                     AttackMelee();
+                else
+                    attackCooldown -= Time.deltaTime;
             }
             else if (canChargeAttack && distanceToPlayer <= chargeDetectionRange)
             {
                 startPos = transform.position;
                 targetPos = player.position;
+
                 StartCoroutine(ChargeToPlayer());
             }
         }
@@ -88,7 +89,7 @@ public class MeleeEnemy : MonoBehaviour
 
     private void AttackMelee()
     {
-        lastAttackTime = Time.time;
+        attackCooldown = maxAttackCooldown;
         playerHealth.ApplyDamage(meleeDamage);
     }
 
@@ -105,6 +106,7 @@ public class MeleeEnemy : MonoBehaviour
         while (elapsedTime < chargeDuration)
         {
             transform.position = Vector3.Lerp(startPos, targetPos, elapsedTime / chargeDuration);
+
             elapsedTime += Time.deltaTime * chargeSpeed;
             yield return null;
         }
@@ -122,5 +124,8 @@ public class MeleeEnemy : MonoBehaviour
 
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, chargeDetectionRange);
+
+        Gizmos.color = Color.black;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }

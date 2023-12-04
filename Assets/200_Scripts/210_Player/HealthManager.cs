@@ -50,14 +50,6 @@ public class HealthManager : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            StartCoroutine(DamageDelay(10));
-        }
-    }
-
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.CompareTag("FloorKill"))
@@ -75,19 +67,6 @@ public class HealthManager : MonoBehaviour
         }
     }
 
-    IEnumerator DamageDelay(int damageAmount)
-    {
-        Debug.Log("Waiting for damage delay...");
-
-        yield return new WaitForSeconds(1.5f); // D�lai avant d'infliger des d�g�ts
-
-        if (!isGameOver)
-        {
-            Debug.Log("Applying damage after delay...");
-            ApplyDamage(damageAmount);
-        }
-    }
-
     public void ApplyDamage(int damageAmount)
     {
         if (!isGameOver)
@@ -102,14 +81,6 @@ public class HealthManager : MonoBehaviour
         if (!isGameOver)
         {
             health += damageAmount;
-        }
-    }
-
-    void DisableEscapeKey()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            return;
         }
     }
 }
