@@ -25,9 +25,6 @@ public class PlayerController : MonoBehaviour
     public float MaxCoyotteTime = 0.25f;
     private bool canCoyotte;
 
-    private bool isWalking = false;
-    public float repeatInterval = 2f;
-
     public bool CanCoyotte
     {
         get => canCoyotte;
@@ -38,6 +35,9 @@ public class PlayerController : MonoBehaviour
         }
     }
     public bool coyotteShow;
+
+    private bool isWalking = false;
+    private float repeatInterval = 2f;
 
     [Header("Ground Check")]
     [SerializeField] private LayerMask whatIsGround;
@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviour
         if (!grounded)
         _coyotteCoroutine = StartCoroutine(CoyotteLimit()); //Je lance mon timer durant lequel j'ai le droit de coyotte
 
-        else if (_coyotteCoroutine is not null)
+        else if (_coyotteCoroutine != null)
             StopCoroutine(_coyotteCoroutine); //Si je rentre en contact avec le sol, j'arrête de force ma coroutine
     }
 
