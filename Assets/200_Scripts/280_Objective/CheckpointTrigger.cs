@@ -16,7 +16,7 @@ public class CheckpointTrigger : MonoBehaviour
         {
             CheckpointManager checkpointManager = FindAnyObjectByType<CheckpointManager>();
             // Met � jour le dernier checkpoint du joueur en utilisant la position de ce checkpoint
-            checkpointManager.SetCheckpoint(transform.position, healthManager.health);
+            checkpointManager.SetCheckpoint(transform, healthManager.health);
 
             // Affichez un message de checkpoint atteint
             ShowTriggerText("Save...");

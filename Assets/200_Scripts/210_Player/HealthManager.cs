@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -11,9 +10,10 @@ public class HealthManager : MonoBehaviour
     public Image healthBarImage;
     public TextMeshProUGUI healthText;
     public GameObject gameOverPanel;
-    public bool Escape = false;
-    private bool isGameOver = false;
+    public bool canPressEscape = true;
+    public bool isGameOver = false;
     public int damageamount;
+    public Canvas[] canvas;
     [SerializeField] private CheckpointManager checkpointManager;
 
     void Update()
@@ -25,17 +25,27 @@ public class HealthManager : MonoBehaviour
 
             if (health <= 0)
             {
-                // Sauvegardez la sant� actuelle
-                health = CheckpointManager.SavedHealth;
-                // T�l�portez le joueur au dernier checkpoint
-                checkpointManager.ReturnToCheckpoint(gameObject.transform);
-                // D�sactivez d'autres fonctionnalit�s, par exemple le panneau de Game Over
-                //gameOverPanel.SetActive(true);
-                //Escape = true;
-                //Time.timeScale = 0f;
-                //Cursor.visible = true;
-                //Cursor.lockState = CursorLockMode.None;
-                // isGameOver = true; // Marquez le jeu comme �tant en cours de jeu termin�
+                foreach (Canvas canva in canvas)
+                {
+                    canva.gameObject.SetActive(false);
+                }
+
+                health = 0;
+
+                Vector3 _deathPos = CheckpointManager.checkpoint.position;
+                transform.position = _deathPos;
+
+                gameOverPanel.SetActive(true);
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+
+                canPressEscape = false;
+
+                isGameOver = true; // Marquez le jeu comme �tant en cours de jeu termin�
+
+                Rigidbody _rb = GetComponent<Rigidbody>();
+                _rb.velocity = Vector3.zero;
+                Time.timeScale = 0f;
             }
         }
     }
@@ -45,11 +55,6 @@ public class HealthManager : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             StartCoroutine(DamageDelay(10));
-        }
-
-        if (collision.gameObject.CompareTag("FloorKill"))
-        {
-            ApplyDamage(100);
         }
     }
 

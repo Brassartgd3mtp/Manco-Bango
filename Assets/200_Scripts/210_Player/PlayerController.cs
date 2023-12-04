@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
             else canCoyotte = value;
         }
     }
+    public bool coyotteShow;
 
     [Header("Ground Check")]
     [SerializeField] private LayerMask whatIsGround;
@@ -69,10 +70,11 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        coyotteShow = CanCoyotte;
         if (Input.GetKeyDown(KeyCode.F5))
         {
             //Je reviens au dernier checkpoint
-            checkpointManager.ReturnToCheckpoint(gameObject.transform);
+            checkpointManager.ReturnToCheckpoint();
         }
 
         if (Input.GetKeyDown(KeyCode.F8))
@@ -250,7 +252,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    
-
+    public void SetNewPosition(Transform _newPos)
+    {
+        transform.position = _newPos.position;
+    }
 }
