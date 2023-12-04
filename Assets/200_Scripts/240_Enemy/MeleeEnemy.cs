@@ -32,6 +32,8 @@ public class MeleeEnemy : MonoBehaviour
     private Vector3 startPos;
     private Vector3 targetPos;
 
+    private float distanceToPlayer;
+
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -49,7 +51,7 @@ public class MeleeEnemy : MonoBehaviour
 
         if (player != null)
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+            distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
             if (distanceToPlayer > chargeDetectionRange)
                 navMeshAgent.SetDestination(player.position);
@@ -96,6 +98,7 @@ public class MeleeEnemy : MonoBehaviour
     private IEnumerator ChargeToPlayer()
     {
         float preChargeTimer = preChargeParticle.main.duration;
+
         preChargeParticle.Play();
         yield return new WaitForSeconds(preChargeTimer);
 
@@ -106,6 +109,13 @@ public class MeleeEnemy : MonoBehaviour
         while (elapsedTime < chargeDuration)
         {
             transform.position = Vector3.Lerp(startPos, targetPos, elapsedTime / chargeDuration);
+
+            if (distanceToPlayer > playerDetectionRange)
+            {
+                preChargeParticle.Stop();
+                canChargeAttack = true;
+                yield break;
+            }
 
             elapsedTime += Time.deltaTime * chargeSpeed;
             yield return null;
