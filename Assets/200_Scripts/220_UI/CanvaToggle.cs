@@ -17,7 +17,7 @@ public class CanvasToggle : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !healthManager.Escape)
+        if (Input.GetKeyDown(KeyCode.Escape) && healthManager.canPressEscape)
         {
             if (isGamePaused)
             {
@@ -31,7 +31,7 @@ public class CanvasToggle : MonoBehaviour
 
         if (canvas != null)
         {
-            if (Input.GetKeyDown(KeyCode.Escape) && !healthManager.Escape)
+            if (Input.GetKeyDown(KeyCode.Escape) && healthManager.canPressEscape)
             {
                 // Inversez l'état du Canvas (activé ou désactivé) lorsque la touche "Echap" est enfoncée
                 canvas.enabled = !canvas.enabled;

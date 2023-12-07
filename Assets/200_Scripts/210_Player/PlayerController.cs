@@ -1,5 +1,5 @@
-using JetBrains.Annotations;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,9 +26,6 @@ public class PlayerController : MonoBehaviour
     public float MaxCoyotteTime = 0.25f;
     private bool canCoyotte;
 
-    private bool isWalking = false;
-    public float repeatInterval = 2f;
-
     public bool CanCoyotte
     {
         get => canCoyotte;
@@ -36,10 +33,12 @@ public class PlayerController : MonoBehaviour
         {
             if (grounded && readyToJump) canCoyotte = true;
             else canCoyotte = value;
-
-            //coyotteTimer = MaxCoyotteTime;
         }
     }
+    public bool coyotteShow;
+
+    private bool isWalking = false;
+    private float repeatInterval = 0.4f;
 
     [Header("Ground Check")]
     [SerializeField] private LayerMask whatIsGround;
@@ -66,17 +65,17 @@ public class PlayerController : MonoBehaviour
         readyToJump = true;
 
         CanCoyotte = true;
-        //coyotteTimer = MaxCoyotteTime;
-        
-        InvokeRepeating("PlayWalkSound", 0f, repeatInterval);
+
+        InvokeRepeating("PlayWalkSound", 0.0f, repeatInterval);
     }
 
     private void Update()
     {
+        coyotteShow = CanCoyotte;
         if (Input.GetKeyDown(KeyCode.F5))
         {
             //Je reviens au dernier checkpoint
-            checkpointManager.ReturnToCheckpoint(gameObject.transform);
+            checkpointManager.ReturnToCheckpoint();
         }
 
         if (Input.GetKeyDown(KeyCode.F8))
@@ -125,11 +124,10 @@ public class PlayerController : MonoBehaviour
         }
 
         if (!grounded)
-            Invoke(nameof(CoyotteLimit), MaxCoyotteTime);
-        //_coyotteCoroutine = StartCoroutine(CoyotteLimit()); //Je lance mon timer durant lequel j'ai le droit de coyotte
+        _coyotteCoroutine = StartCoroutine(CoyotteLimit()); //Je lance mon timer durant lequel j'ai le droit de coyotte
 
-        //else if (_coyotteCoroutine is not null)
-        //    StopCoroutine(_coyotteCoroutine); //Si je rentre en contact avec le sol, j'arrête de force ma coroutine
+        else if (_coyotteCoroutine != null)
+            StopCoroutine(_coyotteCoroutine); //Si je rentre en contact avec le sol, j'arrête de force ma coroutine
     }
 
     private void MovePlayer()
@@ -147,12 +145,11 @@ public class PlayerController : MonoBehaviour
         //Je vérifie si le personnage est en contact avec un mur dans la direction vers laquelle is se déplace
         bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1f, whatIsWall);
 
-
+    
 
         //Si le personnage est au sol, je dépalce le joueur et j'ignore l'adhérence avec un mur
         if (grounded)
         {
-            
 
             if (!isTouchingWall)
             {
@@ -226,9 +223,9 @@ public class PlayerController : MonoBehaviour
         readyToJump = true;
     }
 
-    private void CoyotteLimit()
+    private IEnumerator CoyotteLimit()
     {
-        //yield return new WaitForSeconds(MaxCoyotteTime);
+        yield return new WaitForSeconds(MaxCoyotteTime);
         CanCoyotte = false;
     }
 
@@ -240,22 +237,24 @@ public class PlayerController : MonoBehaviour
 
     public void WalkSound()
     {
-        AudioSource audioSource = GetComponent<AudioSource>();
-        AudioManager.Instance.PlaySound(7, audioSource);
-    }
-
-
-
-    private void PlayWalkSound()
-    {
-        if (isWalking)
-        {
             AudioSource audioSource = GetComponent<AudioSource>();
-            AudioManager.Instance.PlaySound(7, audioSource);
+            int[] soundsIds = { 5, 6, 7, 8 };
+            int randomIndex = Random.Range(0, soundsIds.Length);
+            int randomSoundId = soundsIds[randomIndex];
+            AudioManager.Instance.PlaySound(randomSoundId, audioSource);
+    }
+    
+    public void PlayWalkSound()
+    {
+        if (isWalking == true)
+        {
+            WalkSound();
         }
     }
+                
 
-
-    
-
+    public void SetNewPosition(Transform _newPos)
+    {
+        transform.position = _newPos.position;
+    }
 }

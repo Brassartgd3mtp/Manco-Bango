@@ -32,21 +32,17 @@ public class PlayerDash : MonoBehaviour
 
         if (cooldownTimer <= 0)
         {
-            if (PlayerController.moveDirection != new Vector3(0, 0, 0))
+            if (PlayerController.moveDirection != Vector3.zero && canDash && !PlayerSlide.sliding && Input.GetButtonDown("Dash"))
             {
-                if (canDash && !PlayerSlide.sliding && Input.GetButtonDown("Dash"))
-                {
+                DashSound();
 
-                    DashSound();
+                direction = PlayerController.moveDirection;
 
-                    direction = PlayerController.moveDirection;
+                StartCoroutine(Dash());
+                particleManager.Dash(dashDuration);
 
-                    StartCoroutine(Dash());
-                    particleManager.Dash(dashDuration);
-
-                    Invoke("ResetDash", dashCooldown + dashDuration);
-                    cooldownTimer = dashCooldown + dashDuration;
-                }
+                Invoke("ResetDash", dashCooldown + dashDuration);
+                cooldownTimer = dashCooldown + dashDuration;
             }
         }
         else

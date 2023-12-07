@@ -73,7 +73,7 @@ public class PlayerGun : MonoBehaviour
     {
         if (barrel.barrelStock[Barrel.SelectedBullet] != Color.black && !Cursor.visible)
         {
-            ShotFire();
+            PlayShot();
             particleManager.MuzzleFlash(barrel.barrelStock[Barrel.SelectedBullet]);
 
             Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -82,7 +82,6 @@ public class PlayerGun : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, hitableColliders))
             {
-                Debug.Log(hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == 10)
                 {
                     EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
@@ -134,6 +133,8 @@ public class PlayerGun : MonoBehaviour
 
     private void Dump()
     {
+        PlayDump();
+
         bossRedCount = 0;
         bossBlueCount = 0;
 
@@ -158,13 +159,24 @@ public class PlayerGun : MonoBehaviour
         }
     }
 
-    public void ShotFire()
+    public void PlayShot()
     {
         AudioSource audioSource = GetComponent<AudioSource>();
-        AudioManager.Instance.PlaySound(14, audioSource);
+        if (barrel.barrelStock[Barrel.SelectedBullet] == Color.red)
+        {
+            AudioManager.Instance.PlaySound(14, audioSource);
+        }
+        if (barrel.barrelStock[Barrel.SelectedBullet] == Color.blue)
+        {
+            AudioManager.Instance.PlaySound(16, audioSource);
+        }
     }
 
-
+    public void PlayDump()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        AudioManager.Instance.PlaySound(17, audioSource);
+    }
 
 
 

@@ -5038,8 +5038,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meleeDamage: 10
+  maxAttackCooldown: 2
   attackCooldown: 5
-  attackRange: 3.05
+  attackRange: 2.5
   playerDetectionRange: 12
   chargeAttackCooldown: 2
   chargeDuration: 2

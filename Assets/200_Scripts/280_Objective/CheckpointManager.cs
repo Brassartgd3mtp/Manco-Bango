@@ -2,31 +2,33 @@ using UnityEngine;
 
 public class CheckpointManager : MonoBehaviour
 {
-
-
-    private static Vector3 checkpointPosition;
+    public static Transform checkpoint;
     public static float SavedHealth;
 
+    [SerializeField] private PlayerController playerController;
     [SerializeField] private HealthManager healthManager;
     private void Start()
     {
-        checkpointPosition = transform.position; // Le point de départ initial devient le premier checkpoint
+        checkpoint = transform; // Le point de départ initial devient le premier checkpoint
+        playerController = GetComponent<PlayerController>();
+        healthManager = GetComponent<HealthManager>();
     }
 
     // Fonction pour définir un nouveau checkpoint
-    public void SetCheckpoint(Vector3 position, float savedHealth)
+    public void SetCheckpoint(Transform position, float savedHealth)
     {
         SavedHealth = savedHealth;
-        checkpointPosition = position;
-
-
+        checkpoint = position;
     }
 
     // Fonction pour retourner au dernier checkpoint
-    public void ReturnToCheckpoint(Transform _player)
+    public void ReturnToCheckpoint()
     {
-        _player.position = checkpointPosition;
-
         healthManager.health = SavedHealth;
+
+        healthManager.isGameOver = false;
+        healthManager.canPressEscape = true;
+
+        //playerController.SetNewPosition(checkpoint);
     }
 }
