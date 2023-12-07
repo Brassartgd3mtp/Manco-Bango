@@ -133,6 +133,8 @@ public class PlayerGun : MonoBehaviour
 
     private void Dump()
     {
+        PlayDump();
+
         bossRedCount = 0;
         bossBlueCount = 0;
 
@@ -163,7 +165,11 @@ public class PlayerGun : MonoBehaviour
         AudioManager.Instance.PlaySound(14, audioSource);
     }
 
-
+    public void PlayDump()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        AudioManager.Instance.PlaySound(17, audioSource);
+    }
 
 
 

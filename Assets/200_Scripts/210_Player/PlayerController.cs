@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -37,7 +38,7 @@ public class PlayerController : MonoBehaviour
     public bool coyotteShow;
 
     private bool isWalking = false;
-    private float repeatInterval = 2f;
+    private float repeatInterval = 0.4f;
 
     [Header("Ground Check")]
     [SerializeField] private LayerMask whatIsGround;
@@ -64,8 +65,8 @@ public class PlayerController : MonoBehaviour
         readyToJump = true;
 
         CanCoyotte = true;
-        
-        InvokeRepeating("PlayWalkSound", 0f, repeatInterval);
+
+        InvokeRepeating("PlayWalkSound", 0.0f, repeatInterval);
     }
 
     private void Update()
@@ -144,12 +145,11 @@ public class PlayerController : MonoBehaviour
         //Je vérifie si le personnage est en contact avec un mur dans la direction vers laquelle is se déplace
         bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1f, whatIsWall);
 
-
+    
 
         //Si le personnage est au sol, je dépalce le joueur et j'ignore l'adhérence avec un mur
         if (grounded)
         {
-            
 
             if (!isTouchingWall)
             {
@@ -237,20 +237,21 @@ public class PlayerController : MonoBehaviour
 
     public void WalkSound()
     {
-        AudioSource audioSource = GetComponent<AudioSource>();
-        AudioManager.Instance.PlaySound(7, audioSource);
-    }
-
-
-
-    private void PlayWalkSound()
-    {
-        if (isWalking)
-        {
             AudioSource audioSource = GetComponent<AudioSource>();
-            AudioManager.Instance.PlaySound(7, audioSource);
+            int[] soundsIds = { 5, 6, 7, 8 };
+            int randomIndex = Random.Range(0, soundsIds.Length);
+            int randomSoundId = soundsIds[randomIndex];
+            AudioManager.Instance.PlaySound(randomSoundId, audioSource);
+    }
+    
+    public void PlayWalkSound()
+    {
+        if (isWalking == true)
+        {
+            WalkSound();
         }
     }
+                
 
     public void SetNewPosition(Transform _newPos)
     {
