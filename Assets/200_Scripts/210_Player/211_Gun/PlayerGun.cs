@@ -10,6 +10,7 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private CanvasToggle canvasToggle;
     [SerializeField] private BarrelRotate barrelRotate;
     [SerializeField] private Transform canonPos;
+    [SerializeField] private BarrelFader barrelFader;
     [SerializeField] private LayerMask hitableColliders;
 
     [Header("Particles")]
@@ -79,6 +80,9 @@ public class PlayerGun : MonoBehaviour
             Ray ray = fpCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
             barrelRotate.Rotate();
+
+            barrelFader.Delay = barrelFader.MaxDelay;
+            barrelFader.canvaGroup.alpha = 1;
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, hitableColliders))
             {
