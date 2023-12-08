@@ -181,12 +181,4 @@ public class PlayerGun : MonoBehaviour
         AudioSource audioSource = GetComponent<AudioSource>();
         AudioManager.Instance.PlaySound(17, audioSource);
     }
-
-
-
-
-
-
-
-
 }

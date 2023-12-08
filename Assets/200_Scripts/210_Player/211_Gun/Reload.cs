@@ -57,5 +57,4 @@ public class Reload : MonoBehaviour
         AudioSource audioSource = GetComponent<AudioSource>();
         AudioManager.Instance.PlaySound(13, audioSource);
     }
-
 }
