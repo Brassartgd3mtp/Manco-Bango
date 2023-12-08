@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,13 +18,12 @@ public class PresetSelector : MonoBehaviour
     //public Transform GunTransform;
 
     private PlayerController playerController;
-    private Toggle abrupt;
+    public Toggle[] abrupt = new Toggle[2];
     //private PlayerDash playerDash;
 
     private void Awake()
     {
         playerController = FindObjectOfType<PlayerController>();
-        abrupt = FindObjectOfType<Toggle>();
         //playerDash = FindObjectOfType<PlayerDash>();
 
         Cursor.lockState = CursorLockMode.None;
@@ -46,7 +46,7 @@ public class PresetSelector : MonoBehaviour
 
     private void Update()
     {
-        if (!presetsCanvas[0].enabled /*&& !presetsCanvas[1].enabled && !reviewCanvas[0].enabled && !reviewCanvas[1].enabled*/)
+        if (!presetsCanvas[0].enabled && !presetsCanvas[1].enabled /*&& !reviewCanvas[0].enabled && !reviewCanvas[1].enabled*/)
         {
             foreach (Canvas other in otherCanvas)
             {
@@ -125,14 +125,22 @@ public class PresetSelector : MonoBehaviour
     //    CanvaEnable(presetsCanvas[_index]);
     //}
 
-    public void Validate(int _index)
+    public void Validate()
     {
-        CanvaDisable(presetsCanvas[_index]);
+        foreach (Canvas preset in presetsCanvas)
+        {
+            CanvaDisable(preset);
+        }
     }
 
-    public void ToggleAbrupt()
+    public void ToggleAbruptWalk()
     {
-        playerController.AbruptWalk = abrupt.isOn;
+        playerController.AbruptWalk = abrupt[0].isOn;
+    }
+
+    public void ToggleAbruptAir()
+    {
+        playerController.AbruptAirShift = abrupt[1].isOn;
     }
 
     //public void CDefault()

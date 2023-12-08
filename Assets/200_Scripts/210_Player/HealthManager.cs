@@ -72,7 +72,6 @@ public class HealthManager : MonoBehaviour
         if (!isGameOver)
         {
             health -= damageAmount;
-            Debug.Log("Health reduced by " + damageAmount + ". Current health: " + health);
         }
     }
 

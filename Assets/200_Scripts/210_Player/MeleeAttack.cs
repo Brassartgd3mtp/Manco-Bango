@@ -55,7 +55,7 @@ public class MeleeAttack : MonoBehaviour
             }
         }
 
-        if (nearestEnemy.TryGetComponent(out EnemyHealth _enemyHealth))
+        if (nearestEnemy != null && nearestEnemy.TryGetComponent(out EnemyHealth _enemyHealth))
         {
             _enemyHealth.TakeDamage(10);
 

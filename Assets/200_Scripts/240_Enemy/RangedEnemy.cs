@@ -10,13 +10,11 @@ public class RangedEnemy : MonoBehaviour
     public float attackCooldown = 2f;
 
     private Transform player;
-    private NavMeshAgent navMeshAgent;
     private float lastAttackTime;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        navMeshAgent = GetComponent<NavMeshAgent>();
         lastAttackTime = Time.time;
     }
 
@@ -29,18 +27,11 @@ public class RangedEnemy : MonoBehaviour
             AttackRanged();
             lastAttackTime = Time.time;
         }
-
-        navMeshAgent.SetDestination(player.position);
     }
 
     void AttackRanged()
     {
-
         if (projectilePrefab != null && launchPoint != null)
-        {
-
-            GameObject projectile = Instantiate(projectilePrefab, launchPoint.position, Quaternion.identity);
-            // Utilisez un script pour déplacer le projectile vers le joueur
-        }
+            Instantiate(projectilePrefab, launchPoint.position, Quaternion.identity);
     }
 }

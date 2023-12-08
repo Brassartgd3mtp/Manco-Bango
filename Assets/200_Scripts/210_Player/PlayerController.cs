@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public float AirMultiplier = 1;
     public float GroundDrag = 5;
     public bool AbruptWalk = false;
+    public bool AbruptAirShift = false;
     //[SerializeField] private int fallSpeedModifier = 5; (voir ligne 183)
 
     [Header("Jump")]
@@ -140,6 +141,8 @@ public class PlayerController : MonoBehaviour
 
         //Je stop le joueur dès qu'il lâche ses inputs (seulement s'il est au sol)
         if (AbruptWalk && horizontalInput == 0 && verticalInput == 0 && grounded && !PlayerSlide.sliding)
+            rb.velocity = new Vector3(0, rb.velocity.y, 0);
+        if (AbruptAirShift && horizontalInput == 0 && verticalInput == 0 && !grounded && !PlayerSlide.sliding)
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
 
         //Je vérifie si le personnage est en contact avec un mur dans la direction vers laquelle is se déplace

@@ -11,10 +11,13 @@ public class Reload : MonoBehaviour
     [SerializeField] private CanvasToggle canvasToggle;
 
     private Barrel barrel;
+    private BarrelFader barrelFader;
 
     private void Start()
     {
         barrel = gameObject.GetComponent<Barrel>();
+        barrelFader = FindObjectOfType<BarrelFader>();
+
         reloadTimeCountdown = reloadTimeSet;
     }
 
@@ -27,6 +30,8 @@ public class Reload : MonoBehaviour
             //Quand je recharge (et si le chargeur n'est pas déjà plein), je crée un balle, je lui change sa couleur et je l'ajoute au Stock
             if (Input.GetButtonDown("Reload") && barrel.barrelStock[Barrel.SelectedForReload] == Color.black && reloadTimeCountdown <= 0)
             {
+                barrelFader.Delay = barrelFader.MaxDelay;
+                barrelFader.canvaGroup.alpha = 1;
 
                 if (selector.rotation.eulerAngles.z <= 180 && selector.rotation.eulerAngles.z > 0)
                 {
