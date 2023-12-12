@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class BarrelRotate : MonoBehaviour
 {
@@ -29,7 +27,7 @@ public class BarrelRotate : MonoBehaviour
 
         float targetAngle = 0f;
 
-        switch (rotationState)
+        switch (rotationState) //J'établis une liste de rotation Z en fonction d'un index
         {
             case 0: targetAngle = 62.7f; break;
             case 1: targetAngle = 119.2f; break;
@@ -39,21 +37,21 @@ public class BarrelRotate : MonoBehaviour
             case 5: targetAngle = 350f; break;
         }
 
-        while (rectTransform.rotation.eulerAngles.z < targetAngle)
+        while (rectTransform.rotation.eulerAngles.z < targetAngle) //J'effectue la rotation jusqu'à atteindre la targetAngle
         {
             rectTransform.rotation *= Quaternion.Euler(0, 0, Time.deltaTime * (rotSpeed * 50));
             yield return null;
         }
 
-        // Correction pour s'assurer que la rotation atteint exactement l'angle cible
+        //Je corrige la rotation Z après avoir fait mon while
         if (rotationState < 5)
             rectTransform.rotation = Quaternion.Euler(0, 0, targetAngle);
         else
             rectTransform.rotation = Quaternion.Euler(0, 0, 0);
 
-        isRotating = false;
-
-        // Incrémentez la rotationType uniquement si elle est inférieure à 5
+        //J'incrémente rotationState de 1 et dès qu'il atteint 6, sa valeur repasse à 0
         rotationState = (rotationState + 1) % 6;
+
+        isRotating = false;
     }
 }

@@ -25,6 +25,7 @@ public class Reload : MonoBehaviour
     {
         if (!canvasToggle.isGamePaused)
         {
+            //Je crée un délai de recharge pour équilibrer le gameplay entre les différents profiles de joueurs
             if (reloadTimeCountdown > 0) reloadTimeCountdown -= Time.deltaTime;
 
             //Quand je recharge (et si le chargeur n'est pas déjà plein), je crée un balle, je lui change sa couleur et je l'ajoute au Stock
@@ -33,26 +34,35 @@ public class Reload : MonoBehaviour
                 barrelFader.Delay = barrelFader.MaxDelay;
                 barrelFader.canvaGroup.alpha = 1;
 
-                if (selector.rotation.eulerAngles.z <= 180 && selector.rotation.eulerAngles.z > 0)
+                /// <summary>
+                /// En fonction de la position de mon aiguille dans la roue au moment où on appuye sur la recharge,
+                /// je modifie la couleur de l'emplacement de recharge par rapport à la couleur de zone dans laquelle est l'aiguille.
+                /// 
+                /// //Cette façon dont je gère la position de l'aiguille n'est pas très pratique (surtout si on veut plus de deux éléments),
+                /// à refacto si ce projet est choisit pour le PFE.
+                /// </summary>
+                if (selector.rotation.eulerAngles.z <= 180 && selector.rotation.eulerAngles.z > 0) 
                 {
-                    ReloadWater();
+                    ReloadWaterSound();
                     barrel.AddStock(Color.blue);
                 }
-                else /*if (selector.rotation.eulerAngles.z <= 0 && selector.rotation.eulerAngles.z > -180)*/
+                else
                 {
-                    ReloadFire();
+                    ReloadFireSound();
                     barrel.AddStock(Color.red);
                 }
+
+                //Je réinitialise le delay de recharge
                 reloadTimeCountdown = reloadTimeSet;
             }
         }
     }
-    public void ReloadFire()
+    public void ReloadFireSound()
     {
         AudioSource audioSource = GetComponent<AudioSource>();
         AudioManager.Instance.PlaySound(12, audioSource);
     }
-    public void ReloadWater()
+    public void ReloadWaterSound()
     {
         AudioSource audioSource = GetComponent<AudioSource>();
         AudioManager.Instance.PlaySound(13, audioSource);

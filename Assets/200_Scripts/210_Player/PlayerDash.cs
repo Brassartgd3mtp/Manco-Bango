@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class PlayerDash : MonoBehaviour
 {
+    #region Variables
     [Header("Dash")]
     public float dashForce = 10.0f;
     public float dashCooldown = 1.0f;
@@ -20,6 +21,7 @@ public class PlayerDash : MonoBehaviour
 
     private bool canDash = true;
     [HideInInspector] public bool isDashing = false;
+    #endregion
 
     private void Start()
     {
@@ -32,7 +34,7 @@ public class PlayerDash : MonoBehaviour
 
         if (cooldownTimer <= 0)
         {
-            if (PlayerController.moveDirection != Vector3.zero && canDash && !PlayerSlide.sliding && Input.GetButtonDown("Dash"))
+            if (PlayerController.moveDirection != Vector3.zero && canDash && !PlayerSlide.Sliding && Input.GetButtonDown("Dash"))
             {
                 DashSound();
 
@@ -51,7 +53,8 @@ public class PlayerDash : MonoBehaviour
 
     private IEnumerator Dash()
     {
-        if (!canDash || isDashing) yield break; //Je vérifie si le joueur peut dasher et s'il n'est pas déjà en train de dasher
+        //Je vérifie si le joueur peut dasher et s'il n'est pas déjà en train de dasher
+        if (!canDash || isDashing) yield break;
 
         isDashing = true;
         canDash = false;
@@ -59,19 +62,18 @@ public class PlayerDash : MonoBehaviour
 
         Vector3 velocityLock = direction * dashForce;
 
-        DashEffectDirection(); //Je positionne mon effet de particule en fonction des inputs de déplacement de mon joueur
+        //Je positionne mon effet de particule en fonction des inputs de déplacement de mon joueur
+        DashEffectDirection();
 
-        while (dashTimer < dashDuration) //J'applique mon dash
+        //J'effectue mon dash
+        while (dashTimer < dashDuration)
         {
-            
             PlayerController.rb.velocity = new Vector3(PlayerController.rb.velocity.x, 0, PlayerController.rb.velocity.z);
 
             PlayerController.rb.AddForce(velocityLock, ForceMode.Force);
             dashTimer += Time.deltaTime;
 
             yield return null;
-
-
         }
 
         isDashing = false;
@@ -82,6 +84,12 @@ public class PlayerDash : MonoBehaviour
         canDash = true;
     }
 
+    /// <summary>
+    /// J'ai une classe qui contient des Propriétés nommées de type Vector3.
+    /// Ce sont des positions et des rotations.
+    /// 
+    /// Je fais un switch prenant tous les cas de figure des  déplacements de mon joueur afin de positionner le ParticleSystem du dash.
+    /// </summary>
     private void DashEffectDirection()
     {
         switch (PlayerController.verticalInput)
@@ -158,7 +166,7 @@ public class PlayerDash : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //Si le joueur entre en collision avec un objet pendant le dash, j'arrête le dash
+        //Si le joueur entre en collision avec un mu pendant le dash, j'arrête le dash
         if (collision.gameObject.tag == "Wall")
         {
             canDash = true;

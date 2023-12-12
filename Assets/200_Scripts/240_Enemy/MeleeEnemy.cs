@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 public class MeleeEnemy : MonoBehaviour
 {
+    #region Variables
     [Header("Monster Stats")]
     [SerializeField] private int meleeDamage = 10;
     [SerializeField] private float maxAttackCooldown = 2f;
@@ -33,6 +34,7 @@ public class MeleeEnemy : MonoBehaviour
     private Vector3 targetPos;
 
     private float distanceToPlayer;
+    #endregion
 
     void Start()
     {
@@ -45,6 +47,12 @@ public class MeleeEnemy : MonoBehaviour
         attackCooldown = -1f;
     }
 
+    /// <summary>
+    /// J'effectue la méthode DetectPlayer pour trouver un joueur.
+    /// Je compare la distance entre le joueur et l'ennemi, si elle est supérieur à la range de charge alors je déplace l'ennemi vers le joueur.
+    /// Si mon joueur est en range d'attaque, j'effectue la méthode AttackMelee.
+    /// Si mon joueur est en range de charge, je récupère la position de départ de l'ennemi et celle du joueur puis j'effectue la coroutine ChargeToPlayer.
+    /// </summary>
     void Update()
     {
         DetectPlayer();
@@ -73,28 +81,40 @@ public class MeleeEnemy : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Je crée une sphère de détection qui a pour limite de diamètre la variable playerDetectionRange.
+    /// Si une entité ayant le component PlayerController entre dans ma sphère, je set la variable player à son GameObject.
+    /// </summary>
     private void DetectPlayer()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, playerDetectionRange, playerLayer);
 
         foreach (Collider hitCollider in hitColliders)
         {
-            if (hitCollider.CompareTag("Player"))
+            if (hitCollider.TryGetComponent(out PlayerController _playerController))
             {
-                player = hitCollider.transform;
+                player = _playerController.transform;
                
-                return; // Arr�tez de chercher d�s que le joueur est trouv�
+                return;
             }
         }
         player = null;
     }
 
+    //J'appelle la méthode ApplyDamage du component HealthManager et je reset le cooldown.
     private void AttackMelee()
     {
         attackCooldown = maxAttackCooldown;
         playerHealth.ApplyDamage(meleeDamage);
     }
 
+    /// <summary>
+    /// Je crée une variable qui a pour durée la variable duration du ParticleSystem preChargeParticle.
+    /// Je joue la particule et j'attend le délai preChargeParticle avant d'effectuer la suite.
+    /// Je fais un Lerp de la position de départ de l'ennemi jusqu'à la position de départ du joueur avec comme ratio le temps passé sur la durée totale d'une charge.
+    /// Si jamais mon player sort de la range de détection de l'ennemi, j'annule la charge.
+    /// Pour finir, j'attend un coolodwn pour pouvoir effectuer de nouveau la charge.
+    /// </summary>
     private IEnumerator ChargeToPlayer()
     {
         float preChargeTimer = preChargeParticle.main.duration;

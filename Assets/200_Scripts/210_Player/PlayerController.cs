@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    #region Variables
     [SerializeField] private CheckpointManager checkpointManager;
 
     [Header("Movement")]
@@ -16,7 +17,6 @@ public class PlayerController : MonoBehaviour
     public float GroundDrag = 5;
     public bool AbruptWalk = false;
     public bool AbruptAirShift = false;
-    //[SerializeField] private int fallSpeedModifier = 5; (voir ligne 183)
 
     [Header("Jump")]
     public float JumpForce = 8;
@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public PlayerDash playerDash;
     [HideInInspector] public PlayerSlide playerSlide;
-
+    #endregion
     private void Start()
     {
         playerSlide = GetComponent<PlayerSlide>();
@@ -73,16 +73,14 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         coyotteShow = CanCoyotte;
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-            //Je reviens au dernier checkpoint
-            checkpointManager.ReturnToCheckpoint();
-        }
 
+        //Input de debug permettant revenir au dernier checkpoint
+        if (Input.GetKeyDown(KeyCode.F5))
+            checkpointManager.ReturnToCheckpoint();
+
+        //Input de debug permettant de reset le niveau
         if (Input.GetKeyDown(KeyCode.F8))
-        {
             SceneManager.LoadScene(1);
-        }
 
         //Je fais un Raycast qui part de mon personnage et qui va en direction du sol pour détecter s'il est en contact avec le sol
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
@@ -124,11 +122,13 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        //Je lance mon timer durant lequel j'ai le droit de coyotte
         if (!grounded)
-        _coyotteCoroutine = StartCoroutine(CoyotteLimit()); //Je lance mon timer durant lequel j'ai le droit de coyotte
+            _coyotteCoroutine = StartCoroutine(CoyotteLimit());
 
+        //Si je rentre en contact avec le sol, j'arrête de force ma coroutine
         else if (_coyotteCoroutine != null)
-            StopCoroutine(_coyotteCoroutine); //Si je rentre en contact avec le sol, j'arrête de force ma coroutine
+            StopCoroutine(_coyotteCoroutine);
     }
 
     private void MovePlayer()
@@ -140,32 +140,30 @@ public class PlayerController : MonoBehaviour
 
 
         //Je stop le joueur dès qu'il lâche ses inputs (seulement s'il est au sol)
-        if (AbruptWalk && horizontalInput == 0 && verticalInput == 0 && grounded && !PlayerSlide.sliding)
+        if (AbruptWalk && horizontalInput == 0 && verticalInput == 0 && grounded && !PlayerSlide.Sliding)
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
-        if (AbruptAirShift && horizontalInput == 0 && verticalInput == 0 && !grounded && !PlayerSlide.sliding)
+
+        //Je stop le joueur dès qu'il lâche ses inputs (seulement s'il est en l'air)
+        if (AbruptAirShift && horizontalInput == 0 && verticalInput == 0 && !grounded && !PlayerSlide.Sliding)
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
 
         //Je vérifie si le personnage est en contact avec un mur dans la direction vers laquelle is se déplace
         bool isTouchingWall = Physics.BoxCast(transform.position, capsuleCollider.bounds.extents, moveDirection, out RaycastHit hitInfo, transform.rotation, 1f, whatIsWall);
 
-    
-
         //Si le personnage est au sol, je dépalce le joueur et j'ignore l'adhérence avec un mur
         if (grounded)
         {
-
             if (!isTouchingWall)
             {
                 rb.AddForce(moveDirection.normalized * MoveSpeed * 10f, ForceMode.Force);
             }
             else
             {
-
                 Vector3 moveDirectionWithoutWall = Vector3.ProjectOnPlane(moveDirection, hitInfo.normal).normalized;
                 rb.AddForce(moveDirectionWithoutWall * MoveSpeed * 10f, ForceMode.Force);
             }
         }
-        else //J'ajoute la force en l'air en tenant compte de l'adhérence au mur
+        else
         {
             isWalking = false;
 
@@ -178,9 +176,6 @@ public class PlayerController : MonoBehaviour
                 Vector3 moveDirectionWithoutWall = Vector3.ProjectOnPlane(moveDirection, hitInfo.normal).normalized;
                 rb.AddForce(moveDirectionWithoutWall * MoveSpeed * 10f * AirMultiplier, ForceMode.Force);
             }
-
-            //J'augmente la vitesse de chute du joueur au moment où il commence à chuter (potentiellemnt une feature du style groundpound)
-            //if (!jumpGrounded && rb.velocity.y < 0 && rb.velocity.y > -fallSpeedModifier + 1) rb.velocity = new Vector3(rb.velocity.x, -fallSpeedModifier, rb.velocity.z);
         }
     }
 
@@ -193,13 +188,14 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector3(limitedVelHor.x, rb.velocity.y, limitedVelHor.z);
         }
 
-        //Je limite la vélocité max sur l'axe Y du joueur
+        //Je limite la vélocité max positive sur l'axe Y du joueur
         if (rb.velocity.y > JumpForce * 10)
         {
             Vector3 limitedVelVer = rb.velocity.normalized * JumpForce * 10;
             rb.velocity = new Vector3(rb.velocity.x,limitedVelVer.y, rb.velocity.z);
         }
 
+        //Et la négative ici
         if (rb.velocity.y < -JumpForce * 10)
         {
             Vector3 limitedVelVer = rb.velocity.normalized * -JumpForce * 10;
@@ -217,8 +213,6 @@ public class PlayerController : MonoBehaviour
 
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(transform.up * JumpForce, ForceMode.Impulse);
-
-
     }
 
     private void ResetJump()
@@ -240,11 +234,11 @@ public class PlayerController : MonoBehaviour
 
     public void WalkSound()
     {
-            AudioSource audioSource = GetComponent<AudioSource>();
-            int[] soundsIds = { 5, 6, 7, 8 };
-            int randomIndex = Random.Range(0, soundsIds.Length);
-            int randomSoundId = soundsIds[randomIndex];
-            AudioManager.Instance.PlaySound(randomSoundId, audioSource);
+        AudioSource audioSource = GetComponent<AudioSource>();
+        int[] soundsIds = { 5, 6, 7, 8 };
+        int randomIndex = Random.Range(0, soundsIds.Length);
+        int randomSoundId = soundsIds[randomIndex];
+        AudioManager.Instance.PlaySound(randomSoundId, audioSource);
     }
     
     public void PlayWalkSound()
@@ -254,7 +248,6 @@ public class PlayerController : MonoBehaviour
             WalkSound();
         }
     }
-                
 
     public void SetNewPosition(Transform _newPos)
     {
