@@ -234,6 +234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fullscreenToggle: {fileID: 0}
+  Level_1: Level_1
   panel: {fileID: 272264163}
 --- !u!114 &68439670
 MonoBehaviour:
@@ -1748,8 +1749,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baebd5779b669204b85caef757070b47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LoadingScreen: {fileID: 1274689399}
-  LoadingBarFill: {fileID: 0}
 --- !u!4 &567137599
 Transform:
   m_ObjectHideFlags: 0
@@ -2993,10 +2992,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 567137598}
-        m_TargetAssemblyTypeName: LoadScene, Assembly-CSharp
-        m_MethodName: LoadingScene
-        m_Mode: 3
+      - m_Target: {fileID: 68439669}
+        m_TargetAssemblyTypeName: ButtonManager, Assembly-CSharp
+        m_MethodName: LoadLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3185,7 +3184,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: -18.21112, z: 0, w: 19.425201}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
