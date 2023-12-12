@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class SlotColor : MonoBehaviour
 {
-    public List<Image> slots = new List<Image>(6);
+    public List<Image> slotsImages = new List<Image>(6);
 
     [SerializeField] private Barrel barrel;
 
@@ -13,7 +13,7 @@ public class SlotColor : MonoBehaviour
 
     void Start()
     {
-        foreach (Image slot in slots)
+        foreach (Image slot in slotsImages)
         {
             slot.color = Color.black;
 
@@ -24,21 +24,21 @@ public class SlotColor : MonoBehaviour
 
     void Update()
     {
-        for (int i = 0; i < slots.Count; i++)
+        for (int i = 0; i < slotsImages.Count; i++)
         {
             if (barrel.barrelStock.Count > i && barrel.barrelStock[i] != null)
             {
                 //Je met à jour la couleur de l'emplacement
-                slotColors[slots[i]] = barrel.barrelStock[i];
+                slotColors[slotsImages[i]] = barrel.barrelStock[i];
             }
             else
             {
-                //Je check si l'index n'existe plus dans barrel.barrelStock, alors je le met en noir
-                slotColors[slots[i]] = Color.black;
+                //Je check si l'index n'existe plus dans barrel.barrelStock, dans ce cas je le met en noir
+                slotColors[slotsImages[i]] = Color.black;
             }
 
             //J'applique la couleur à l'emplacement
-            slots[i].color = slotColors[slots[i]];
+            slotsImages[i].color = slotColors[slotsImages[i]];
         }
     }
 }

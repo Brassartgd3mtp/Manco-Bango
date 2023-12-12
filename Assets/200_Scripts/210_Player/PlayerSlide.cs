@@ -3,13 +3,14 @@ using UnityEngine;
 
 public class PlayerSlide : MonoBehaviour
 {
+    #region Variables
     [Header("Slide")]
     public float maxSlideTime;
     public float slideForce;
     public float slideYScale;
-    [HideInInspector] public static bool sliding;
     private float slideTimer;
     private float startYScale;
+    public static bool Sliding;
 
     [Header("FOV")]
     public int fovModifier;
@@ -22,6 +23,7 @@ public class PlayerSlide : MonoBehaviour
     [SerializeField] private float maxSlopeAngle;
 
     private PlayerDash dash;
+    #endregion
 
     private void Start()
     {
@@ -39,10 +41,8 @@ public class PlayerSlide : MonoBehaviour
     {
         if (PlayerController.moveDirection != new Vector3(0, 0, 0) && !dash.isDashing)
         {
-            if (Input.GetButtonDown("Slide"))
-            {
+            if (Input.GetButtonDown("Slide") && !Sliding)
                 StartSlide();
-            }
 
             if (OnSlope())
             {
@@ -55,18 +55,26 @@ public class PlayerSlide : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (sliding)
-            Sliding();
-
+        if (Sliding)
+            SlidingLogic();
     }
 
-    Vector3 direction;
+
+    /// <summary>
+    /// Fonctionnement du Slide
+    /// 
+    /// StartSlide :
+    /// Je stock dans une variable la direction dans laquelle va le joueur.
+    /// Je récupère son GameObject et je baisse sa taille.
+    /// Je set le timer à sa durée max.
+    /// </summary>
+    Vector3 _direction;
     private void StartSlide()
     {
         SlideSound(volume: 1.0f);
 
-        direction = new Vector3(PlayerController.moveDirection.x, 0, PlayerController.moveDirection.z);
-        sliding = true;
+        _direction = new Vector3(PlayerController.moveDirection.x, 0, PlayerController.moveDirection.z);
+        Sliding = true;
 
         Transform playerObj = gameObject.transform;
         playerObj.localScale = new Vector3(playerObj.localScale.x, slideYScale, playerObj.localScale.z);
@@ -75,15 +83,24 @@ public class PlayerSlide : MonoBehaviour
         slideTimer = maxSlideTime;
     }
 
-    private void Sliding()
+    /// <summary>
+    /// Fonctionnement du Slide
+    /// 
+    /// Sliding :
+    /// Il fonctionne en update.
+    /// Je regarde si je suis sur une slope (dans ce cas je pousse mon joueur vers le bas)
+    /// Je réduit la durée du slide, dès qu'elle atteint 0 (et si je ne suis pas sur une slope), j'arrête mon slide.
+    /// J'augmente mon FOV pour donner un effet de vitesse.
+    /// Le timer du FOV sert à limiter la valeur max du FOV quand elle augmente.
+    /// </summary>
+    private void SlidingLogic()
     {
-
         if (!OnSlope())
-            PlayerController.rb.AddForce(direction * slideForce, ForceMode.Force);
+            PlayerController.rb.AddForce(_direction * slideForce, ForceMode.Force);
         else
         {
-            direction = new Vector3(direction.x, -1, direction.z);
-            PlayerController.rb.AddForce(direction * slideForce, ForceMode.Force);
+            _direction = new Vector3(_direction.x, -1, _direction.z);
+            PlayerController.rb.AddForce(_direction * slideForce, ForceMode.Force);
         }
 
         slideTimer -= Time.deltaTime;
@@ -98,12 +115,20 @@ public class PlayerSlide : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Fonctionnement du Slide
+    /// 
+    /// StopSlide :
+    /// Je reset la taille de mon personnage.
+    /// Je réduit le FOV pour le remettre à sa valeur d'origine.
+    /// Je reset le timer du FOV.
+    /// </summary>
     private void StopSlide()
     {
         SlideSound(0.0f);
         float baseSlideForce = slideForce;
 
-        sliding = false;
+        Sliding = false;
 
         Transform playerObj = gameObject.transform;
         playerObj.localScale = new Vector3(playerObj.localScale.x, startYScale, playerObj.localScale.z);
@@ -148,7 +173,4 @@ public class PlayerSlide : MonoBehaviour
         audioSource.volume = volume;
         AudioManager.Instance.PlaySound(19, audioSource);
     }
-
-
-
 }

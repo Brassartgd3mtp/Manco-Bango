@@ -41,6 +41,7 @@ public class Barrel : MonoBehaviour
         }
     }
 
+    //Méthode permettant d'ajouter une balle dans le barillet
     public void AddStock(Color _color)
     {
         barrelStock[SelectedForReload] = _color;
@@ -48,6 +49,7 @@ public class Barrel : MonoBehaviour
         SelectedForReload++;
     }
 
+    //Méthode permettant de réinitialiser la balle actuelle et de passer à la prochaine
     public void NextBullet()
     {
        barrelStock[selectedBullet] = Color.black;
